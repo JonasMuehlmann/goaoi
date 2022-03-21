@@ -101,3 +101,31 @@ func AnyOfMap[TKey comparable, TValue comparable](haystack map[TKey]TValue, comp
 
 	return ComparisonError[TKey]{}
 }
+
+func NoneOfSlice[T comparable](haystack []T, comparator func(T) bool) error {
+	if len(haystack) == 0 {
+		return EmptyIterableError{}
+	}
+
+	for _, value := range haystack {
+		if comparator(value) {
+			return ComparisonError[int]{len(haystack) - 1}
+		}
+	}
+
+	return nil
+}
+
+func NoneOfMap[TKey comparable, TValue comparable](haystack map[TKey]TValue, comparator func(TValue) bool) error {
+	if len(haystack) == 0 {
+		return EmptyIterableError{}
+	}
+
+	for _, value := range haystack {
+		if comparator(value) {
+			return ComparisonError[TKey]{}
+		}
+	}
+
+	return nil
+}
