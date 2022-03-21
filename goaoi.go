@@ -3,6 +3,10 @@ package goaoi
 import "errors"
 
 func FindSlice[T comparable](haystack []T, needle T) (int, error) {
+	if len(haystack) == 0 {
+		return 0, EmptyIterableError{}
+	}
+
 	for i, value := range haystack {
 		if value == needle {
 			return i, nil
@@ -13,13 +17,18 @@ func FindSlice[T comparable](haystack []T, needle T) (int, error) {
 }
 
 func FindIfMap[TKey comparable, TValue comparable](haystack map[TKey]TValue, comparator func(TValue) bool) (TKey, error) {
+	var zeroVal TKey
+
+	if len(haystack) == 0 {
+		return zeroVal, EmptyIterableError{}
+	}
+
 	for key, value := range haystack {
 		if comparator(value) {
 			return key, nil
 		}
 	}
 
-	var zeroVal TKey
 	return zeroVal, errors.New("Could not find element")
 }
 
