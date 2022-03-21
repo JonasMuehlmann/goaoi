@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func Test_Find(t *testing.T) {
+func Test_FindSlice(t *testing.T) {
 	t.Parallel()
 
 	tcs := []struct {
@@ -23,7 +23,7 @@ func Test_Find(t *testing.T) {
 	}
 	for _, tc := range tcs {
 		t.Run(tc.name, func(t *testing.T) {
-			res, err := goaoi.Find(tc.haystack, tc.needle)
+			res, err := goaoi.FindSlice(tc.haystack, tc.needle)
 
 			assert.Equal(t, tc.exp, res)
 			assert.Equal(t, err != nil, tc.hasError)

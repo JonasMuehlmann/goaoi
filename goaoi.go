@@ -2,7 +2,7 @@ package goaoi
 
 import "errors"
 
-func Find[T comparable](haystack []T, needle T) (int, error) {
+func FindSlice[T comparable](haystack []T, needle T) (int, error) {
 	for i, value := range haystack {
 		if value == needle {
 			return i, nil
