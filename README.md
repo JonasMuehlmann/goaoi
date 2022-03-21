@@ -12,7 +12,7 @@ function's implementation. This list is subject to change at any time.
 
 ### Non-modifying sequence operations
 
-- [ ] all_of
+- [x] all_of
 - [ ] any_of
 - [ ] none_of
 
