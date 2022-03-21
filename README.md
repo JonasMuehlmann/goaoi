@@ -13,8 +13,8 @@ function's implementation. This list is subject to change at any time.
 ### Non-modifying sequence operations
 
 - [x] all_of
-- [ ] any_of
-- [ ] none_of
+- [x] any_of
+- [x] none_of
 
 
 - [ ] for_each
