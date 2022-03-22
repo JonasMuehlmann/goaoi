@@ -1,5 +1,7 @@
 package goaoi
 
+import "fmt"
+
 type ComparisonError[T comparable] struct {
 	BadItem T
 }
