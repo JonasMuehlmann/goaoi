@@ -32,3 +32,10 @@ type EqualIteratorsError struct {
 func (error EqualIteratorsError) Error() string {
 	return "Iterables are equal"
 }
+
+func min(x, y int) int {
+	if x < y {
+		return x
+	}
+	return y
+}
