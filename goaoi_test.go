@@ -209,3 +209,47 @@ func Test_NoneOfMap(t *testing.T) {
 		})
 	}
 }
+
+func Test_ForeachSlice(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		haystack   []int
+		comparator func(int) error
+		exp        error
+		name       string
+	}{
+		{[]int{1, 2}, func(i int) error { i++; return nil }, nil, "Found"},
+		{[]int{1, 2}, func(i int) error { return assert.AnError }, goaoi.ExecutionError[int]{0, assert.AnError}, "Not found"},
+		{[]int{}, func(i int) error { return nil }, goaoi.EmptyIterableError{}, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			err := goaoi.ForeachSlice(tc.haystack, tc.comparator)
+
+			assert.Equal(t, err, tc.exp)
+		})
+	}
+}
+
+func Test_ForeachMap(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		haystack   map[string]int
+		comparator func(int) error
+		exp        error
+		name       string
+	}{
+		{map[string]int{"a": 1, "b": 2}, func(i int) error { i++; return nil }, nil, "Found"},
+		{map[string]int{"a": 1, "b": 2}, func(i int) error { return assert.AnError }, goaoi.ExecutionError[string]{"a", assert.AnError}, "Not found"},
+		{map[string]int{}, func(i int) error { return nil }, goaoi.EmptyIterableError{}, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			err := goaoi.ForeachMap(tc.haystack, tc.comparator)
+
+			assert.Equal(t, err, tc.exp)
+		})
+	}
+}

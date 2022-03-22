@@ -129,3 +129,33 @@ func NoneOfMap[TKey comparable, TValue comparable](haystack map[TKey]TValue, com
 
 	return nil
 }
+
+func ForeachSlice[T comparable](haystack []T, comparator func(T) error) error {
+	if len(haystack) == 0 {
+		return EmptyIterableError{}
+	}
+
+	for i, value := range haystack {
+		err := comparator(value)
+		if err != nil {
+			return ExecutionError[int]{i, err}
+		}
+	}
+
+	return nil
+}
+
+func ForeachMap[TKey comparable, TValue comparable](haystack map[TKey]TValue, comparator func(TValue) error) error {
+	if len(haystack) == 0 {
+		return EmptyIterableError{}
+	}
+
+	for key, value := range haystack {
+		err := comparator(value)
+		if err != nil {
+			return ExecutionError[TKey]{key, err}
+		}
+	}
+
+	return nil
+}

@@ -19,8 +19,9 @@ func (error EmptyIterableError) Error() string {
 
 type ExecutionError[T comparable] struct {
 	BadItem T
+	Inner   error
 }
 
 func (error ExecutionError[T]) Error() string {
-	return fmt.Sprintf("Item at index %v returned error after application of function", error.BadItem)
+	return fmt.Sprintf("Item at index %v returned error after application of function: %v", error.BadItem, error.Inner)
 }
