@@ -1,4 +1,6 @@
 # goaoi
+![img](https://img.shields.io/badge/semver-2.0.0-green) [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
+
 Conventient algorithms for processing iterables, inspired by the algorithm header from the C++ standard template library (STL for short).
 
 Sister project: https://github.com/JonasMuehlmann/pyaoi
