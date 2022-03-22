@@ -26,7 +26,7 @@ func Test_FindSlice(t *testing.T) {
 			res, err := goaoi.FindSlice(tc.haystack, tc.needle)
 
 			assert.Equal(t, tc.exp, res)
-			assert.Equal(t, err != nil, tc.hasError)
+			assert.Equal(t, tc.hasError, err != nil)
 		})
 	}
 }
@@ -50,7 +50,7 @@ func Test_FindIfSlice(t *testing.T) {
 			res, err := goaoi.FindIfSlice(tc.haystack, tc.comparator)
 
 			assert.Equal(t, tc.exp, res)
-			assert.Equal(t, err != nil, tc.hasError)
+			assert.Equal(t, tc.hasError, err != nil)
 		})
 	}
 }
@@ -74,7 +74,7 @@ func Test_FindIfMap(t *testing.T) {
 			res, err := goaoi.FindIfMap(tc.haystack, tc.comparator)
 
 			assert.Equal(t, tc.exp, res)
-			assert.Equal(t, err != nil, tc.hasError)
+			assert.Equal(t, tc.hasError, err != nil)
 		})
 	}
 }
@@ -239,18 +239,18 @@ func Test_ForeachMap(t *testing.T) {
 	tcs := []struct {
 		haystack   map[string]int
 		comparator func(int) error
-		exp        error
+		hasError   bool
 		name       string
 	}{
-		{map[string]int{"a": 1, "b": 2}, func(i int) error { i++; return nil }, nil, "Found"},
-		{map[string]int{"a": 1, "b": 2}, func(i int) error { return assert.AnError }, goaoi.ExecutionError[string]{"a", assert.AnError}, "Not found"},
-		{map[string]int{}, func(i int) error { return nil }, goaoi.EmptyIterableError{}, "Empty"},
+		{map[string]int{"a": 1, "b": 2}, func(i int) error { i++; return nil }, false, "Found"},
+		{map[string]int{"a": 1, "b": 2}, func(i int) error { return assert.AnError }, true, "Not found"},
+		{map[string]int{}, func(i int) error { return nil }, true, "Empty"},
 	}
 	for _, tc := range tcs {
 		t.Run(tc.name, func(t *testing.T) {
 			err := goaoi.ForeachMap(tc.haystack, tc.comparator)
 
-			assert.Equal(t, err, tc.exp)
+			assert.Equal(t, err != nil, tc.hasError)
 		})
 	}
 }
@@ -274,7 +274,7 @@ func Test_CountSlice(t *testing.T) {
 			res, err := goaoi.CountSlice(tc.haystack, tc.wanted)
 
 			assert.Equal(t, tc.exp, res)
-			assert.Equal(t, err != nil, tc.hasError)
+			assert.Equal(t, tc.hasError, err != nil)
 		})
 	}
 }
@@ -298,7 +298,7 @@ func Test_CountMap(t *testing.T) {
 			res, err := goaoi.CountMap(tc.haystack, tc.wanted)
 
 			assert.Equal(t, tc.exp, res)
-			assert.Equal(t, err != nil, tc.hasError)
+			assert.Equal(t, tc.hasError, err != nil)
 		})
 	}
 }
@@ -322,7 +322,7 @@ func Test_CountIfSlice(t *testing.T) {
 			res, err := goaoi.CountIfSlice(tc.haystack, tc.comparator)
 
 			assert.Equal(t, tc.exp, res)
-			assert.Equal(t, err != nil, tc.hasError)
+			assert.Equal(t, tc.hasError, err != nil)
 		})
 	}
 }
