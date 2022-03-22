@@ -25,3 +25,10 @@ type ExecutionError[T comparable] struct {
 func (error ExecutionError[T]) Error() string {
 	return fmt.Sprintf("Item at index %v returned error after application of function: %v", error.BadItem, error.Inner)
 }
+
+type EqualIteratorsError struct {
+}
+
+func (error EqualIteratorsError) Error() string {
+	return "Iterables are equal"
+}
