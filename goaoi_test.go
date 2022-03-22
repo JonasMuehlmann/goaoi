@@ -30,6 +30,7 @@ func Test_FindSlice(t *testing.T) {
 		})
 	}
 }
+
 func Test_FindIfSlice(t *testing.T) {
 	t.Parallel()
 
@@ -250,6 +251,54 @@ func Test_ForeachMap(t *testing.T) {
 			err := goaoi.ForeachMap(tc.haystack, tc.comparator)
 
 			assert.Equal(t, err, tc.exp)
+		})
+	}
+}
+
+func Test_CountSlice(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		haystack []int
+		wanted   int
+		exp      int
+		hasError bool
+		name     string
+	}{
+		{[]int{1, 1}, 1, 2, false, "Found"},
+		{[]int{2, 2}, 1, 0, false, "Not found"},
+		{[]int{}, 1, 0, true, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			res, err := goaoi.CountSlice(tc.haystack, tc.wanted)
+
+			assert.Equal(t, tc.exp, res)
+			assert.Equal(t, err != nil, tc.hasError)
+		})
+	}
+}
+
+func Test_CountMap(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		haystack map[string]int
+		wanted   int
+		exp      int
+		hasError bool
+		name     string
+	}{
+		{map[string]int{"a": 1, "b": 1}, 1, 2, false, "Found"},
+		{map[string]int{"a": 2, "b": 2}, 1, 0, false, "Not found"},
+		{map[string]int{}, 1, 0, true, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			res, err := goaoi.CountMap(tc.haystack, tc.wanted)
+
+			assert.Equal(t, tc.exp, res)
+			assert.Equal(t, err != nil, tc.hasError)
 		})
 	}
 }

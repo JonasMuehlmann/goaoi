@@ -159,3 +159,33 @@ func ForeachMap[TKey comparable, TValue comparable](haystack map[TKey]TValue, co
 
 	return nil
 }
+
+func CountSlice[T comparable](haystack []T, wanted T) (int, error) {
+	if len(haystack) == 0 {
+		return 0, EmptyIterableError{}
+	}
+
+	counter := 0
+	for _, value := range haystack {
+		if value == wanted {
+			counter++
+		}
+	}
+
+	return counter, nil
+}
+
+func CountMap[TKey comparable, TValue comparable](haystack map[TKey]TValue, wanted TValue) (int, error) {
+	if len(haystack) == 0 {
+		return 0, EmptyIterableError{}
+	}
+
+	counter := 0
+	for _, value := range haystack {
+		if value == wanted {
+			counter++
+		}
+	}
+
+	return counter, nil
+}

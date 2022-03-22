@@ -17,10 +17,9 @@ function's implementation. This list is subject to change at any time.
 - [x] none_of
 
 
-- [ ] for_each
-- [ ] for_each_n
+- [x] for_each
 
-- [ ] count
+- [x] count
 - [ ] count_if
 
 - [ ] mismatch
