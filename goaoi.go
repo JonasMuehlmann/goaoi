@@ -219,3 +219,18 @@ func CountIfMap[TKey comparable, TValue comparable](haystack map[TKey]TValue, co
 
 	return counter, nil
 }
+
+func MismatchSlice[T comparable](iterable1 []T, iterable2 []T) (int, error) {
+	if len(iterable1) == 0 || len(iterable2) == 0 {
+		return 0, EmptyIterableError{}
+	}
+
+	i := 0
+	for ; i < min(len(iterable1), len(iterable2)); i++ {
+		if iterable1[i] != iterable2[i] {
+			return i, nil
+		}
+	}
+
+	return 0, EqualIteratorsError{}
+}

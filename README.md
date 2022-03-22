@@ -22,7 +22,7 @@ function's implementation. This list is subject to change at any time.
 - [x] count
 - [x] count_if
 
-- [ ] mismatch
+- [x] mismatch
 
 - [x] find
 - [x] find_if

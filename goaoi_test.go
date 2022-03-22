@@ -346,7 +346,31 @@ func Test_CountIfMap(t *testing.T) {
 			res, err := goaoi.CountIfMap(tc.haystack, tc.comparator)
 
 			assert.Equal(t, tc.exp, res)
-			assert.Equal(t, err != nil, tc.hasError)
+			assert.Equal(t, tc.hasError, err != nil)
+		})
+	}
+}
+
+func Test_MismatchSlice(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		iterable1 []int
+		iterable2 []int
+		exp       int
+		hasError  bool
+		name      string
+	}{
+		{[]int{1, 2, 3, 4}, []int{1, 1, 3, 4}, 1, false, "Found"},
+		{[]int{1, 2, 3, 4}, []int{1, 2, 3, 4}, 0, true, "Not found"},
+		{[]int{}, []int{1, 2}, 0, true, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			res, err := goaoi.MismatchSlice(tc.iterable1, tc.iterable2)
+
+			assert.Equal(t, tc.exp, res)
+			assert.Equal(t, tc.hasError, err != nil)
 		})
 	}
 }
