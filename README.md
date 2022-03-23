@@ -1,7 +1,20 @@
 # goaoi
+![img](https://img.shields.io/badge/semver-2.0.0-green) [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
+
 Conventient algorithms for processing iterables, inspired by the algorithm header from the C++ standard template library (STL for short).
 
+Please do not expect a stable API at this point.
+
 Sister project: https://github.com/JonasMuehlmann/pyaoi
+
+## Installation
+
+```go get github.com/JonasMuehlmann/goaoi/edit/main/README.md```
+
+## How to use
+
+All functions live in the ```goaoi``` namespace, you can import it with ```import "goaoi"``` and then call the functions
+like this: ```goaoi.AllOf()```
 
 ## Implemented functions
 
@@ -161,3 +174,8 @@ function's implementation. This list is subject to change at any time.
 - [ ] prev_permutation
 </p>
 </details>
+
+## License
+Copyright (C) 2021-2022 [Jonas Muehlmann](https://github.com/JonasMuehlmann)
+ 
+The project is licensed under the terms of the MIT license, you can view it [here](LICENSE.md).
