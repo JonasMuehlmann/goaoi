@@ -46,6 +46,23 @@ func FindIfSlice[T comparable](haystack []T, comparator func(T) bool) (int, erro
 	return 0, errors.New("Could not find element")
 }
 
+func FindEndSlice[T comparable](super []T, sub []T, comparator func(T, T) bool) (int, error) {
+	if len(super) == 0 || len(sub) == 0 {
+		return 0, EmptyIterableError{}
+	}
+OUTER:
+	for i := len(super) - 1; i >= len(sub)-1; i-- {
+		for j := 0; j < len(sub); j++ {
+			if !comparator(super[i-j], sub[len(sub)-1-j]) {
+				continue OUTER
+			}
+		}
+		return i - len(sub) + 1, nil
+	}
+
+	return 0, errors.New("Could not find element")
+}
+
 func AllOfSlice[T comparable](haystack []T, comparator func(T) bool) error {
 	if len(haystack) == 0 {
 		return EmptyIterableError{}
