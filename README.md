@@ -40,7 +40,7 @@ function's implementation. This list is subject to change at any time.
 - [x] find
 - [x] find_if
 - [x] find_end
-- [ ] find_first_of
+- [x] find_first_of
 - [ ] adjacent_find
 
 

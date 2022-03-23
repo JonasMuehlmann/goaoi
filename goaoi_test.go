@@ -90,7 +90,7 @@ func Test_FindEndSlice(t *testing.T) {
 		hasError   bool
 		name       string
 	}{
-		// {[]int{1, 2, 3, 4}, []int{3, 4}, goaoi.AreEqual[int], 2, false, "Found at end"},
+		{[]int{1, 2, 3, 4}, []int{3, 4}, goaoi.AreEqual[int], 2, false, "Found at end"},
 		{[]int{1, 2, 3, 4}, []int{1, 2}, goaoi.AreEqual[int], 0, false, "Found at beginning"},
 		{[]int{1, 2, 3, 4}, []int{2, 3}, goaoi.AreEqual[int], 1, false, "Found in middle"},
 		{[]int{1, 2, 3}, []int{1, 2, 3}, goaoi.AreEqual[int], 0, false, "Found equal"},
@@ -101,6 +101,64 @@ func Test_FindEndSlice(t *testing.T) {
 	for _, tc := range tcs {
 		t.Run(tc.name, func(t *testing.T) {
 			res, err := goaoi.FindEndSlice(tc.super, tc.sub, tc.comparator)
+
+			assert.Equal(t, tc.exp, res)
+			assert.Equal(t, tc.hasError, err != nil)
+		})
+	}
+}
+
+func Test_FindFirstOfSlice(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		haystack   []int
+		needles    []int
+		comparator func(int, int) bool
+		exp        int
+		hasError   bool
+		name       string
+	}{
+		{[]int{1, 2, 3, 4}, []int{4, 10}, goaoi.AreEqual[int], 3, false, "Found at end"},
+		{[]int{1, 2, 3, 4}, []int{1, 2}, goaoi.AreEqual[int], 0, false, "Found at beginning"},
+		{[]int{1, 2, 3, 4}, []int{3, 4}, goaoi.AreEqual[int], 2, false, "Found in middle"},
+		{[]int{1}, []int{1}, goaoi.AreEqual[int], 0, false, "Found equal"},
+		{[]int{1, 2, 3}, []int{4, 5}, goaoi.AreEqual[int], 0, true, "Not found"},
+		{[]int{}, []int{1, 2, 3}, goaoi.AreEqual[int], 0, true, "Super empty"},
+		{[]int{1, 2, 3}, []int{}, goaoi.AreEqual[int], 0, true, "Sub empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			res, err := goaoi.FindFirstOfSlice(tc.haystack, tc.needles, tc.comparator)
+
+			assert.Equal(t, tc.exp, res)
+			assert.Equal(t, tc.hasError, err != nil)
+		})
+	}
+}
+
+func Test_FindFirstOfMap(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		haystack   map[string]int
+		needles    []int
+		comparator func(int, int) bool
+		exp        string
+		hasError   bool
+		name       string
+	}{
+		{map[string]int{"a": 1, "b": 2, "c": 3, "d": 4}, []int{4, 10}, goaoi.AreEqual[int], "d", false, "Found at end"},
+		{map[string]int{"a": 1, "b": 2, "c": 3, "d": 4}, []int{1, 2}, goaoi.AreEqual[int], "a", false, "Found at beginning"},
+		{map[string]int{"a": 1, "b": 2, "c": 3, "d": 4}, []int{3, 4}, goaoi.AreEqual[int], "c", false, "Found in middle"},
+		{map[string]int{"a": 1}, []int{1}, goaoi.AreEqual[int], "a", false, "Found equal"},
+		{map[string]int{"a": 1, "b": 2, "c": 3}, []int{4, 5}, goaoi.AreEqual[int], "", true, "Not found"},
+		{map[string]int{}, []int{1, 2, 3}, goaoi.AreEqual[int], "", true, "Super empty"},
+		{map[string]int{"a": 1, "b": 2, "c": 3}, []int{}, goaoi.AreEqual[int], "", true, "Sub empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			res, err := goaoi.FindFirstOfMap(tc.haystack, tc.needles, tc.comparator)
 
 			assert.Equal(t, tc.exp, res)
 			assert.Equal(t, tc.hasError, err != nil)

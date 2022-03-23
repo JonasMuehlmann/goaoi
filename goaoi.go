@@ -63,6 +63,39 @@ OUTER:
 	return 0, errors.New("Could not find element")
 }
 
+func FindFirstOfSlice[T comparable](haystack []T, needles []T, comparator func(T, T) bool) (int, error) {
+	if len(haystack) == 0 || len(needles) == 0 {
+		return 0, EmptyIterableError{}
+	}
+
+	for i, haystackValue := range haystack {
+		for _, needleValue := range needles {
+			if comparator(haystackValue, needleValue) {
+				return i, nil
+			}
+		}
+	}
+
+	return 0, errors.New("Could not find element")
+}
+
+func FindFirstOfMap[TKey comparable, TValue comparable](haystack map[TKey]TValue, needles []TValue, comparator func(TValue, TValue) bool) (TKey, error) {
+	var zeroVal TKey
+	if len(haystack) == 0 || len(needles) == 0 {
+		return zeroVal, EmptyIterableError{}
+	}
+
+	for i, haystackValue := range haystack {
+		for _, needleValue := range needles {
+			if comparator(haystackValue, needleValue) {
+				return i, nil
+			}
+		}
+	}
+
+	return zeroVal, errors.New("Could not find element")
+}
+
 func AllOfSlice[T comparable](haystack []T, comparator func(T) bool) error {
 	if len(haystack) == 0 {
 		return EmptyIterableError{}
