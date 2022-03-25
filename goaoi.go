@@ -284,3 +284,17 @@ func MismatchSlice[T comparable](iterable1 []T, iterable2 []T) (int, error) {
 
 	return 0, EqualIteratorsError{}
 }
+
+func AdjacentFindSlice[T comparable](haystack []T, comparator func(T, T) bool) (int, error) {
+	if len(haystack) == 0 {
+		return 0, EmptyIterableError{}
+	}
+
+	for i := 0; i < len(haystack)-1; i++ {
+		if comparator(haystack[i], haystack[i+1]) {
+			return i, nil
+		}
+	}
+
+	return 0, errors.New("Could not find element")
+}

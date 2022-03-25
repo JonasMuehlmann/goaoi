@@ -41,7 +41,7 @@ function's implementation. This list is subject to change at any time.
 - [x] find_if
 - [x] find_end
 - [x] find_first_of
-- [ ] adjacent_find
+- [x] adjacent_find
 
 
 - [ ] search
