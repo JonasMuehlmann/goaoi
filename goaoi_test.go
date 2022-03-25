@@ -527,11 +527,61 @@ func Test_CopyReplaceMap(t *testing.T) {
 	}{
 		{map[string]int{"a": 1, "b": 2}, 1, 0, map[string]int{"a": 0, "b": 2}, false, "Found"},
 		{map[string]int{"a": 1, "b": 2}, -1, 0, map[string]int{"a": 1, "b": 2}, false, "Not Found"},
-		{map[string]int{}, 1, 0, map[string]int(nil), true, "Empty"},
+		{map[string]int{}, -1, 0, map[string]int(nil), true, "Empty"},
 	}
 	for _, tc := range tcs {
 		t.Run(tc.name, func(t *testing.T) {
 			res, err := goaoi.CopyReplaceMap(tc.original, tc.toReplace, tc.replacement)
+
+			assert.Equal(t, tc.exp, res)
+			assert.Equal(t, tc.hasError, err != nil)
+		})
+	}
+}
+
+func Test_CopyReplaceIfSlice(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		original    []int
+		comparator  func(int) bool
+		replacement int
+		exp         []int
+		hasError    bool
+		name        string
+	}{
+		{[]int{1, 2}, func(x int) bool { return x == 1 }, 0, []int{0, 2}, false, "Found"},
+		{[]int{1, 2}, func(x int) bool { return x == -1 }, 0, []int{1, 2}, false, "Not Found"},
+		{[]int{}, func(x int) bool { return x == -1 }, 0, []int(nil), true, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			res, err := goaoi.CopyReplaceIfSlice(tc.original, tc.comparator, tc.replacement)
+
+			assert.Equal(t, tc.exp, res)
+			assert.Equal(t, tc.hasError, err != nil)
+		})
+	}
+}
+
+func Test_CopyReplaceIfMap(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		original    map[string]int
+		comparator  func(int) bool
+		replacement int
+		exp         map[string]int
+		hasError    bool
+		name        string
+	}{
+		{map[string]int{"a": 1, "b": 2}, func(x int) bool { return x == 1 }, 0, map[string]int{"a": 0, "b": 2}, false, "Found"},
+		{map[string]int{"a": 1, "b": 2}, func(x int) bool { return x == -1 }, 0, map[string]int{"a": 1, "b": 2}, false, "Not Found"},
+		{map[string]int{}, func(x int) bool { return x == -1 }, 0, map[string]int(nil), true, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			res, err := goaoi.CopyReplaceIfMap(tc.original, tc.comparator, tc.replacement)
 
 			assert.Equal(t, tc.exp, res)
 			assert.Equal(t, tc.hasError, err != nil)

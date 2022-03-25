@@ -338,3 +338,43 @@ func CopyReplaceMap[TKey comparable, TValue comparable](original map[TKey]TValue
 
 	return newContainer, nil
 }
+
+func CopyReplaceIfSlice[T comparable](original []T, comparator func(T) bool, replacement T) ([]T, error) {
+	var zeroVal []T
+
+	if len(original) == 0 {
+		return zeroVal, EmptyIterableError{}
+	}
+
+	newContainer := make([]T, 0, len(original))
+
+	for _, value := range original {
+		if comparator(value) {
+			newContainer = append(newContainer, replacement)
+		} else {
+			newContainer = append(newContainer, value)
+		}
+	}
+
+	return newContainer, nil
+}
+
+func CopyReplaceIfMap[TKey comparable, TValue comparable](original map[TKey]TValue, comparator func(TValue) bool, replacement TValue) (map[TKey]TValue, error) {
+	var zeroVal map[TKey]TValue
+
+	if len(original) == 0 {
+		return zeroVal, EmptyIterableError{}
+	}
+
+	newContainer := make(map[TKey]TValue, len(original))
+
+	for key, value := range original {
+		if comparator(value) {
+			newContainer[key] = replacement
+		} else {
+			newContainer[key] = value
+		}
+	}
+
+	return newContainer, nil
+}
