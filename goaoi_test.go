@@ -638,3 +638,147 @@ func Test_CopyReplaceIfNotMap(t *testing.T) {
 		})
 	}
 }
+
+func Test_CopyExceptSlice(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		original  []int
+		toExclude int
+		exp       []int
+		hasError  bool
+		name      string
+	}{
+		{[]int{1, 2}, 1, []int{2}, false, "Found"},
+		{[]int{1, 2}, -1, []int{1, 2}, false, "Not Found"},
+		{[]int{}, 1, []int(nil), true, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			res, err := goaoi.CopyExceptSlice(tc.original, tc.toExclude)
+
+			assert.Equal(t, tc.exp, res)
+			assert.Equal(t, tc.hasError, err != nil)
+		})
+	}
+}
+
+func Test_CopyExceptMap(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		original  map[string]int
+		toExclude int
+		exp       map[string]int
+		hasError  bool
+		name      string
+	}{
+		{map[string]int{"a": 1, "b": 2}, 1, map[string]int{"b": 2}, false, "Found"},
+		{map[string]int{"a": 1, "b": 2}, -1, map[string]int{"a": 1, "b": 2}, false, "Not Found"},
+		{map[string]int{}, -1, map[string]int(nil), true, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			res, err := goaoi.CopyExceptMap(tc.original, tc.toExclude)
+
+			assert.Equal(t, tc.exp, res)
+			assert.Equal(t, tc.hasError, err != nil)
+		})
+	}
+}
+
+func Test_CopyExceptIfSlice(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		original   []int
+		comparator func(int) bool
+		exp        []int
+		hasError   bool
+		name       string
+	}{
+		{[]int{1, 2}, func(x int) bool { return x == 1 }, []int{2}, false, "Found"},
+		{[]int{1, 2}, func(x int) bool { return x == -1 }, []int{1, 2}, false, "Not Found"},
+		{[]int{}, func(x int) bool { return x == -1 }, []int(nil), true, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			res, err := goaoi.CopyExceptIfSlice(tc.original, tc.comparator)
+
+			assert.Equal(t, tc.exp, res)
+			assert.Equal(t, tc.hasError, err != nil)
+		})
+	}
+}
+
+func Test_CopyExceptIfMap(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		original   map[string]int
+		comparator func(int) bool
+		exp        map[string]int
+		hasError   bool
+		name       string
+	}{
+		{map[string]int{"a": 1, "b": 2}, func(x int) bool { return x == 1 }, map[string]int{"b": 2}, false, "Found"},
+		{map[string]int{"a": 1, "b": 2}, func(x int) bool { return x == -1 }, map[string]int{"a": 1, "b": 2}, false, "Not Found"},
+		{map[string]int{}, func(x int) bool { return x == -1 }, map[string]int(nil), true, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			res, err := goaoi.CopyExceptIfMap(tc.original, tc.comparator)
+
+			assert.Equal(t, tc.exp, res)
+			assert.Equal(t, tc.hasError, err != nil)
+		})
+	}
+}
+
+func Test_CopyExceptIfNotSlice(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		original   []int
+		comparator func(int) bool
+		exp        []int
+		hasError   bool
+		name       string
+	}{
+		{[]int{1, 2}, func(x int) bool { return x > 1 }, []int{2}, false, "Found"},
+		{[]int{1, 2}, func(x int) bool { return x > -1 }, []int{1, 2}, false, "Not Found"},
+		{[]int{}, func(x int) bool { return x > -1 }, []int(nil), true, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			res, err := goaoi.CopyExceptIfNotSlice(tc.original, tc.comparator)
+
+			assert.Equal(t, tc.exp, res)
+			assert.Equal(t, tc.hasError, err != nil)
+		})
+	}
+}
+
+func Test_CopyExceptIfNotMap(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		original   map[string]int
+		comparator func(int) bool
+		exp        map[string]int
+		hasError   bool
+		name       string
+	}{
+		{map[string]int{"a": 1, "b": 2}, func(x int) bool { return x > 1 }, map[string]int{"b": 2}, false, "Found"},
+		{map[string]int{"a": 1, "b": 2}, func(x int) bool { return x > -1 }, map[string]int{"a": 1, "b": 2}, false, "Not Found"},
+		{map[string]int{}, func(x int) bool { return x > -1 }, map[string]int(nil), true, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			res, err := goaoi.CopyExceptIfNotMap(tc.original, tc.comparator)
+
+			assert.Equal(t, tc.exp, res)
+			assert.Equal(t, tc.hasError, err != nil)
+		})
+	}
+}

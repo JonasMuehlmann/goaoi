@@ -418,3 +418,111 @@ func CopyReplaceIfNotMap[TKey comparable, TValue comparable](original map[TKey]T
 
 	return newContainer, nil
 }
+
+func CopyExceptSlice[T comparable](original []T, toExclude T) ([]T, error) {
+	var zeroVal []T
+
+	if len(original) == 0 {
+		return zeroVal, EmptyIterableError{}
+	}
+
+	newContainer := make([]T, 0, len(original))
+
+	for _, value := range original {
+		if value != toExclude {
+			newContainer = append(newContainer, value)
+		}
+	}
+
+	return newContainer, nil
+}
+
+func CopyExceptMap[TKey comparable, TValue comparable](original map[TKey]TValue, toExclude TValue) (map[TKey]TValue, error) {
+	var zeroVal map[TKey]TValue
+
+	if len(original) == 0 {
+		return zeroVal, EmptyIterableError{}
+	}
+
+	newContainer := make(map[TKey]TValue, len(original))
+
+	for key, value := range original {
+		if value != toExclude {
+			newContainer[key] = value
+		}
+	}
+
+	return newContainer, nil
+}
+
+func CopyExceptIfSlice[T comparable](original []T, comparator func(T) bool) ([]T, error) {
+	var zeroVal []T
+
+	if len(original) == 0 {
+		return zeroVal, EmptyIterableError{}
+	}
+
+	newContainer := make([]T, 0, len(original))
+
+	for _, value := range original {
+		if !comparator(value) {
+			newContainer = append(newContainer, value)
+		}
+	}
+
+	return newContainer, nil
+}
+
+func CopyExceptIfMap[TKey comparable, TValue comparable](original map[TKey]TValue, comparator func(TValue) bool) (map[TKey]TValue, error) {
+	var zeroVal map[TKey]TValue
+
+	if len(original) == 0 {
+		return zeroVal, EmptyIterableError{}
+	}
+
+	newContainer := make(map[TKey]TValue, len(original))
+
+	for key, value := range original {
+		if !comparator(value) {
+			newContainer[key] = value
+		}
+	}
+
+	return newContainer, nil
+}
+
+func CopyExceptIfNotSlice[T comparable](original []T, comparator func(T) bool) ([]T, error) {
+	var zeroVal []T
+
+	if len(original) == 0 {
+		return zeroVal, EmptyIterableError{}
+	}
+
+	newContainer := make([]T, 0, len(original))
+
+	for _, value := range original {
+		if comparator(value) {
+			newContainer = append(newContainer, value)
+		}
+	}
+
+	return newContainer, nil
+}
+
+func CopyExceptIfNotMap[TKey comparable, TValue comparable](original map[TKey]TValue, comparator func(TValue) bool) (map[TKey]TValue, error) {
+	var zeroVal map[TKey]TValue
+
+	if len(original) == 0 {
+		return zeroVal, EmptyIterableError{}
+	}
+
+	newContainer := make(map[TKey]TValue, len(original))
+
+	for key, value := range original {
+		if comparator(value) {
+			newContainer[key] = value
+		}
+	}
+
+	return newContainer, nil
+}
