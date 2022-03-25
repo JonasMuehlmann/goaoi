@@ -44,9 +44,6 @@ function's implementation. This list is subject to change at any time.
 - [x] adjacent_find
 
 
-- [ ] search
-- [ ] search_n
-  
 - [ ] copy_replace
 - [ ] copy_replace_if
 - [ ] copy_replace_if_not

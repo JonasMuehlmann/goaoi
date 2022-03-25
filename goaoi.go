@@ -298,3 +298,43 @@ func AdjacentFindSlice[T comparable](haystack []T, comparator func(T, T) bool) (
 
 	return 0, errors.New("Could not find element")
 }
+
+func CopyReplaceSlice[T comparable](original []T, toReplace T, replacement T) ([]T, error) {
+	var zeroVal []T
+
+	if len(original) == 0 {
+		return zeroVal, EmptyIterableError{}
+	}
+
+	newContainer := make([]T, 0, len(original))
+
+	for _, value := range original {
+		if value == toReplace {
+			newContainer = append(newContainer, replacement)
+		} else {
+			newContainer = append(newContainer, value)
+		}
+	}
+
+	return newContainer, nil
+}
+
+func CopyReplaceMap[TKey comparable, TValue comparable](original map[TKey]TValue, toReplace TValue, replacement TValue) (map[TKey]TValue, error) {
+	var zeroVal map[TKey]TValue
+
+	if len(original) == 0 {
+		return zeroVal, EmptyIterableError{}
+	}
+
+	newContainer := make(map[TKey]TValue, len(original))
+
+	for key, value := range original {
+		if value == toReplace {
+			newContainer[key] = replacement
+		} else {
+			newContainer[key] = value
+		}
+	}
+
+	return newContainer, nil
+}

@@ -488,3 +488,53 @@ func Test_AdjacentFind(t *testing.T) {
 		})
 	}
 }
+
+func Test_CopyReplaceSlice(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		original    []int
+		toReplace   int
+		replacement int
+		exp         []int
+		hasError    bool
+		name        string
+	}{
+		{[]int{1, 2}, 1, 0, []int{0, 2}, false, "Found"},
+		{[]int{1, 2}, -1, 0, []int{1, 2}, false, "Not Found"},
+		{[]int{}, 1, 0, []int(nil), true, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			res, err := goaoi.CopyReplaceSlice(tc.original, tc.toReplace, tc.replacement)
+
+			assert.Equal(t, tc.exp, res)
+			assert.Equal(t, tc.hasError, err != nil)
+		})
+	}
+}
+
+func Test_CopyReplaceMap(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		original    map[string]int
+		toReplace   int
+		replacement int
+		exp         map[string]int
+		hasError    bool
+		name        string
+	}{
+		{map[string]int{"a": 1, "b": 2}, 1, 0, map[string]int{"a": 0, "b": 2}, false, "Found"},
+		{map[string]int{"a": 1, "b": 2}, -1, 0, map[string]int{"a": 1, "b": 2}, false, "Not Found"},
+		{map[string]int{}, 1, 0, map[string]int(nil), true, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			res, err := goaoi.CopyReplaceMap(tc.original, tc.toReplace, tc.replacement)
+
+			assert.Equal(t, tc.exp, res)
+			assert.Equal(t, tc.hasError, err != nil)
+		})
+	}
+}
