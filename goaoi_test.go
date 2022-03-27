@@ -342,6 +342,48 @@ func Test_ForeachMap(t *testing.T) {
 	}
 }
 
+func Test_ForeachSliceUnsafe(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		haystack   []int
+		comparator func(int)
+		exp        error
+		name       string
+	}{
+		{[]int{1, 2}, func(i int) { i++ }, nil, "Found"},
+		{[]int{}, func(i int) {}, goaoi.EmptyIterableError{}, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			err := goaoi.ForeachSliceUnsafe(tc.haystack, tc.comparator)
+
+			assert.Equal(t, err, tc.exp)
+		})
+	}
+}
+
+func Test_ForeachMapUnsafe(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		haystack   map[string]int
+		comparator func(int)
+		hasError   bool
+		name       string
+	}{
+		{map[string]int{"a": 1, "b": 2}, func(i int) { i++ }, false, "Found"},
+		{map[string]int{}, func(i int) {}, true, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			err := goaoi.ForeachMapUnsafe(tc.haystack, tc.comparator)
+
+			assert.Equal(t, err != nil, tc.hasError)
+		})
+	}
+}
+
 func Test_CountSlice(t *testing.T) {
 	t.Parallel()
 
