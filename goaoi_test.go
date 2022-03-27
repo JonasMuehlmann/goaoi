@@ -828,3 +828,49 @@ func Test_TransformMap(t *testing.T) {
 		})
 	}
 }
+
+func Test_TransformSliceUnsafe(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		original    []int
+		transformer func(*int)
+		exp         []int
+		hasError    bool
+		name        string
+	}{
+		{[]int{1, 2}, func(i *int) { *i++ }, []int{2, 3}, false, "Found"},
+		{[]int{}, func(i *int) { *i++ }, []int{}, true, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			err := goaoi.TransformSliceUnsafe(tc.original, tc.transformer)
+
+			assert.Equal(t, tc.exp, tc.original)
+			assert.Equal(t, tc.hasError, err != nil)
+		})
+	}
+}
+
+func Test_TransformMapUnsafe(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		original    map[string]int
+		transformer func(int) int
+		exp         map[string]int
+		hasError    bool
+		name        string
+	}{
+		{map[string]int{"a": 1, "b": 2}, func(i int) int { return i + 1 }, map[string]int{"a": 2, "b": 3}, false, "Found"},
+		{map[string]int{}, func(i int) int { return i + 1 }, map[string]int{}, true, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			err := goaoi.TransformMapUnsafe(tc.original, tc.transformer)
+
+			assert.Equal(t, tc.exp, tc.original)
+			assert.Equal(t, tc.hasError, err != nil)
+		})
+	}
+}

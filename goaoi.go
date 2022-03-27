@@ -559,3 +559,27 @@ func TransformSlice[T comparable](container []T, transformer func(*T) error) err
 
 	return nil
 }
+
+func TransformMapUnsafe[TKey comparable, TValue comparable](container map[TKey]TValue, transformer func(TValue) TValue) error {
+	if len(container) == 0 {
+		return EmptyIterableError{}
+	}
+
+	for key := range container {
+		container[key] = transformer(container[key])
+	}
+
+	return nil
+}
+
+func TransformSliceUnsafe[T comparable](container []T, transformer func(*T)) error {
+	if len(container) == 0 {
+		return EmptyIterableError{}
+	}
+
+	for i := range container {
+		transformer(&container[i])
+	}
+
+	return nil
+}
