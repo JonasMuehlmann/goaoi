@@ -58,8 +58,7 @@ function's implementation. This list is subject to change at any time.
 - [ ] fill_n
 
 
-- [ ] transform
-- [ ] transform_n
+- [x] transform
 
 
 - [ ] rotate

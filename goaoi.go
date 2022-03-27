@@ -526,3 +526,36 @@ func CopyExceptIfNotMap[TKey comparable, TValue comparable](original map[TKey]TV
 
 	return newContainer, nil
 }
+
+func TransformMap[TKey comparable, TValue comparable](container map[TKey]TValue, transformer func(TValue) (TValue, error)) error {
+
+	if len(container) == 0 {
+		return EmptyIterableError{}
+	}
+
+	for key := range container {
+		newValue, err := transformer(container[key])
+		if err != nil {
+			return ExecutionError[TValue]{container[key], err}
+		}
+
+		container[key] = newValue
+	}
+
+	return nil
+}
+
+func TransformSlice[T comparable](container []T, transformer func(*T) error) error {
+	if len(container) == 0 {
+		return EmptyIterableError{}
+	}
+
+	for i, value := range container {
+		err := transformer(&container[i])
+		if err != nil {
+			return ExecutionError[T]{value, err}
+		}
+	}
+
+	return nil
+}
