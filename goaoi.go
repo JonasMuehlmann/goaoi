@@ -180,13 +180,13 @@ func NoneOfMap[TKey comparable, TValue comparable](haystack map[TKey]TValue, com
 	return nil
 }
 
-func ForeachSlice[T comparable](haystack []T, comparator func(T) error) error {
+func ForeachSlice[T comparable](haystack []T, action func(T) error) error {
 	if len(haystack) == 0 {
 		return EmptyIterableError{}
 	}
 
 	for i, value := range haystack {
-		err := comparator(value)
+		err := action(value)
 		if err != nil {
 			return ExecutionError[int]{i, err}
 		}
@@ -195,16 +195,40 @@ func ForeachSlice[T comparable](haystack []T, comparator func(T) error) error {
 	return nil
 }
 
-func ForeachMap[TKey comparable, TValue comparable](haystack map[TKey]TValue, comparator func(TValue) error) error {
+func ForeachMap[TKey comparable, TValue comparable](haystack map[TKey]TValue, action func(TValue) error) error {
 	if len(haystack) == 0 {
 		return EmptyIterableError{}
 	}
 
 	for key, value := range haystack {
-		err := comparator(value)
+		err := action(value)
 		if err != nil {
 			return ExecutionError[TKey]{key, err}
 		}
+	}
+
+	return nil
+}
+
+func ForeachSliceUnsafe[T comparable](haystack []T, action func(T)) error {
+	if len(haystack) == 0 {
+		return EmptyIterableError{}
+	}
+
+	for _, value := range haystack {
+		action(value)
+	}
+
+	return nil
+}
+
+func ForeachMapUnsafe[TKey comparable, TValue comparable](haystack map[TKey]TValue, action func(TValue)) error {
+	if len(haystack) == 0 {
+		return EmptyIterableError{}
+	}
+
+	for _, value := range haystack {
+		action(value)
 	}
 
 	return nil
