@@ -1,7 +1,5 @@
 package goaoi
 
-import "errors"
-
 func FindSlice[T comparable](haystack []T, needle T) (int, error) {
 	if len(haystack) == 0 {
 		return 0, EmptyIterableError{}
@@ -13,7 +11,7 @@ func FindSlice[T comparable](haystack []T, needle T) (int, error) {
 		}
 	}
 
-	return 0, errors.New("Could not find element")
+	return 0, ElementNotFoundError{}
 }
 
 func FindIfMap[TKey comparable, TValue comparable](haystack map[TKey]TValue, comparator func(TValue) bool) (TKey, error) {
@@ -29,7 +27,7 @@ func FindIfMap[TKey comparable, TValue comparable](haystack map[TKey]TValue, com
 		}
 	}
 
-	return zeroVal, errors.New("Could not find element")
+	return zeroVal, ElementNotFoundError{}
 }
 
 func FindIfSlice[T comparable](haystack []T, comparator func(T) bool) (int, error) {
@@ -43,7 +41,7 @@ func FindIfSlice[T comparable](haystack []T, comparator func(T) bool) (int, erro
 		}
 	}
 
-	return 0, errors.New("Could not find element")
+	return 0, ElementNotFoundError{}
 }
 
 func FindEndSlice[T comparable](super []T, sub []T, comparator func(T, T) bool) (int, error) {
@@ -60,7 +58,7 @@ OUTER:
 		return i - len(sub) + 1, nil
 	}
 
-	return 0, errors.New("Could not find element")
+	return 0, ElementNotFoundError{}
 }
 
 func FindFirstOfSlice[T comparable](haystack []T, needles []T, comparator func(T, T) bool) (int, error) {
@@ -76,7 +74,7 @@ func FindFirstOfSlice[T comparable](haystack []T, needles []T, comparator func(T
 		}
 	}
 
-	return 0, errors.New("Could not find element")
+	return 0, ElementNotFoundError{}
 }
 
 func FindFirstOfMap[TKey comparable, TValue comparable](haystack map[TKey]TValue, needles []TValue, comparator func(TValue, TValue) bool) (TKey, error) {
@@ -93,7 +91,7 @@ func FindFirstOfMap[TKey comparable, TValue comparable](haystack map[TKey]TValue
 		}
 	}
 
-	return zeroVal, errors.New("Could not find element")
+	return zeroVal, ElementNotFoundError{}
 }
 
 func AllOfSlice[T comparable](haystack []T, comparator func(T) bool) error {
@@ -320,7 +318,7 @@ func AdjacentFindSlice[T comparable](haystack []T, comparator func(T, T) bool) (
 		}
 	}
 
-	return 0, errors.New("Could not find element")
+	return 0, ElementNotFoundError{}
 }
 
 func CopyReplaceSlice[T comparable](original []T, toReplace T, replacement T) ([]T, error) {
