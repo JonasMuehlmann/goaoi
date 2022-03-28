@@ -62,15 +62,13 @@ func FindIfSlice[T comparable](haystack []T, unary_predicate func(T) bool) (int,
 	return 0, ElementNotFoundError{}
 }
 
-// TODO: Provide overload without predicate
-
-// FindEndSlice finds the beginning of the last occurrence of sub in super.
+// FindEndSlicePred finds the beginning of the last occurrence of sub in super.
 // The elements are compared with binary_predicate.
 //
 // Possible Error values:
 // - EmptyIterableError
 // - ElementNotFoundError
-func FindEndSlice[T comparable](super []T, sub []T, binary_predicate func(T, T) bool) (int, error) {
+func FindEndSlicePred[T comparable](super []T, sub []T, binary_predicate func(T, T) bool) (int, error) {
 	if len(super) == 0 || len(sub) == 0 {
 		return 0, EmptyIterableError{}
 	}
@@ -78,6 +76,28 @@ OUTER:
 	for i := len(super) - 1; i >= len(sub)-1; i-- {
 		for j := 0; j < len(sub); j++ {
 			if !binary_predicate(super[i-j], sub[len(sub)-1-j]) {
+				continue OUTER
+			}
+		}
+		return i - len(sub) + 1, nil
+	}
+
+	return 0, ElementNotFoundError{}
+}
+
+// FindEndSlice finds the beginning of the last occurrence of sub in super.
+//
+// Possible Error values:
+// - EmptyIterableError
+// - ElementNotFoundError
+func FindEndSlice[T comparable](super []T, sub []T) (int, error) {
+	if len(super) == 0 || len(sub) == 0 {
+		return 0, EmptyIterableError{}
+	}
+OUTER:
+	for i := len(super) - 1; i >= len(sub)-1; i-- {
+		for j := 0; j < len(sub); j++ {
+			if super[i-j] != sub[len(sub)-1-j] {
 				continue OUTER
 			}
 		}

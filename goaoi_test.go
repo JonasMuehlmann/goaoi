@@ -94,7 +94,7 @@ func Test_FindIfMap(t *testing.T) {
 	}
 }
 
-func Test_FindEndSlice(t *testing.T) {
+func Test_FindEndSlicePred(t *testing.T) {
 	t.Parallel()
 
 	tcs := []struct {
@@ -115,7 +115,40 @@ func Test_FindEndSlice(t *testing.T) {
 	}
 	for _, tc := range tcs {
 		t.Run(tc.name, func(t *testing.T) {
-			res, err := goaoi.FindEndSlice(tc.super, tc.sub, tc.comparator)
+			res, err := goaoi.FindEndSlicePred(tc.super, tc.sub, tc.comparator)
+
+			assert.Equal(t, tc.exp, res)
+			if tc.err == nil {
+				assert.Nil(t, err)
+			} else {
+				assert.ErrorAs(t, err, &tc.err)
+			}
+
+		})
+	}
+}
+
+func Test_FindEndSlice(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		super []int
+		sub   []int
+		exp   int
+		err   error
+		name  string
+	}{
+		{[]int{1, 2, 3, 4}, []int{3, 4}, 2, nil, "Found at end"},
+		{[]int{1, 2, 3, 4}, []int{1, 2}, 0, nil, "Found at beginning"},
+		{[]int{1, 2, 3, 4}, []int{2, 3}, 1, nil, "Found in middle"},
+		{[]int{1, 2, 3}, []int{1, 2, 3}, 0, nil, "Found equal"},
+		{[]int{1, 2, 3}, []int{1, 4}, 0, goaoi.ElementNotFoundError{}, "Not found"},
+		{[]int{}, []int{1, 2, 3}, 0, goaoi.EmptyIterableError{}, "Super empty"},
+		{[]int{1, 2, 3}, []int{}, 0, goaoi.EmptyIterableError{}, "Sub empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			res, err := goaoi.FindEndSlice(tc.super, tc.sub)
 
 			assert.Equal(t, tc.exp, res)
 			if tc.err == nil {
