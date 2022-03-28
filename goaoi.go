@@ -1,9 +1,5 @@
 package goaoi
 
-import (
-	"errors"
-)
-
 func FindSlice[T comparable](haystack []T, needle T) (int, error) {
 	if len(haystack) == 0 {
 		return 0, EmptyIterableError{}
@@ -15,7 +11,7 @@ func FindSlice[T comparable](haystack []T, needle T) (int, error) {
 		}
 	}
 
-	return 0, errors.New("Could not find element")
+	return 0, ElementNotFoundError{}
 }
 
 func FindIfMap[TKey comparable, TValue comparable](haystack map[TKey]TValue, comparator func(TValue) bool) (TKey, error) {
@@ -31,7 +27,7 @@ func FindIfMap[TKey comparable, TValue comparable](haystack map[TKey]TValue, com
 		}
 	}
 
-	return zeroVal, errors.New("Could not find element")
+	return zeroVal, ElementNotFoundError{}
 }
 
 func FindIfSlice[T comparable](haystack []T, comparator func(T) bool) (int, error) {
@@ -45,7 +41,7 @@ func FindIfSlice[T comparable](haystack []T, comparator func(T) bool) (int, erro
 		}
 	}
 
-	return 0, errors.New("Could not find element")
+	return 0, ElementNotFoundError{}
 }
 
 func FindEndSlice[T comparable](super []T, sub []T, comparator func(T, T) bool) (int, error) {
@@ -62,7 +58,7 @@ OUTER:
 		return i - len(sub) + 1, nil
 	}
 
-	return 0, errors.New("Could not find element")
+	return 0, ElementNotFoundError{}
 }
 
 func FindFirstOfSlice[T comparable](haystack []T, needles []T, comparator func(T, T) bool) (int, error) {
@@ -78,7 +74,7 @@ func FindFirstOfSlice[T comparable](haystack []T, needles []T, comparator func(T
 		}
 	}
 
-	return 0, errors.New("Could not find element")
+	return 0, ElementNotFoundError{}
 }
 
 func FindFirstOfMap[TKey comparable, TValue comparable](haystack map[TKey]TValue, needles []TValue, comparator func(TValue, TValue) bool) (TKey, error) {
@@ -95,7 +91,7 @@ func FindFirstOfMap[TKey comparable, TValue comparable](haystack map[TKey]TValue
 		}
 	}
 
-	return zeroVal, errors.New("Could not find element")
+	return zeroVal, ElementNotFoundError{}
 }
 
 func AllOfSlice[T comparable](haystack []T, comparator func(T) bool) error {
@@ -182,13 +178,13 @@ func NoneOfMap[TKey comparable, TValue comparable](haystack map[TKey]TValue, com
 	return nil
 }
 
-func ForeachSlice[T comparable](haystack []T, comparator func(T) error) error {
+func ForeachSlice[T comparable](haystack []T, action func(T) error) error {
 	if len(haystack) == 0 {
 		return EmptyIterableError{}
 	}
 
 	for i, value := range haystack {
-		err := comparator(value)
+		err := action(value)
 		if err != nil {
 			return ExecutionError[int]{i, err}
 		}
@@ -197,16 +193,40 @@ func ForeachSlice[T comparable](haystack []T, comparator func(T) error) error {
 	return nil
 }
 
-func ForeachMap[TKey comparable, TValue comparable](haystack map[TKey]TValue, comparator func(TValue) error) error {
+func ForeachMap[TKey comparable, TValue comparable](haystack map[TKey]TValue, action func(TValue) error) error {
 	if len(haystack) == 0 {
 		return EmptyIterableError{}
 	}
 
 	for key, value := range haystack {
-		err := comparator(value)
+		err := action(value)
 		if err != nil {
 			return ExecutionError[TKey]{key, err}
 		}
+	}
+
+	return nil
+}
+
+func ForeachSliceUnsafe[T comparable](haystack []T, action func(T)) error {
+	if len(haystack) == 0 {
+		return EmptyIterableError{}
+	}
+
+	for _, value := range haystack {
+		action(value)
+	}
+
+	return nil
+}
+
+func ForeachMapUnsafe[TKey comparable, TValue comparable](haystack map[TKey]TValue, action func(TValue)) error {
+	if len(haystack) == 0 {
+		return EmptyIterableError{}
+	}
+
+	for _, value := range haystack {
+		action(value)
 	}
 
 	return nil
@@ -298,7 +318,7 @@ func AdjacentFindSlice[T comparable](haystack []T, comparator func(T, T) bool) (
 		}
 	}
 
-	return 0, errors.New("Could not find element")
+	return 0, ElementNotFoundError{}
 }
 
 func CopyReplaceSlice[T comparable](original []T, toReplace T, replacement T) ([]T, error) {
@@ -541,4 +561,61 @@ func FillSlice[T comparable](arr *[]T, filler T) []T {
 	}
 
 	return *arr
+}
+
+func TransformMap[TKey comparable, TValue comparable](container map[TKey]TValue, transformer func(TValue) (TValue, error)) error {
+
+	if len(container) == 0 {
+		return EmptyIterableError{}
+	}
+
+	for key := range container {
+		newValue, err := transformer(container[key])
+		if err != nil {
+			return ExecutionError[TValue]{container[key], err}
+		}
+
+		container[key] = newValue
+	}
+
+	return nil
+}
+
+func TransformSlice[T comparable](container []T, transformer func(*T) error) error {
+	if len(container) == 0 {
+		return EmptyIterableError{}
+	}
+
+	for i, value := range container {
+		err := transformer(&container[i])
+		if err != nil {
+			return ExecutionError[T]{value, err}
+		}
+	}
+
+	return nil
+}
+
+func TransformMapUnsafe[TKey comparable, TValue comparable](container map[TKey]TValue, transformer func(TValue) TValue) error {
+	if len(container) == 0 {
+		return EmptyIterableError{}
+	}
+
+	for key := range container {
+		container[key] = transformer(container[key])
+	}
+
+	return nil
+}
+
+func TransformSliceUnsafe[T comparable](container []T, transformer func(*T)) error {
+	if len(container) == 0 {
+		return EmptyIterableError{}
+	}
+
+	for i := range container {
+		transformer(&container[i])
+	}
+
+	return nil
 }

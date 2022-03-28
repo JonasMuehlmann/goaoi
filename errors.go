@@ -32,3 +32,10 @@ type EqualIteratorsError struct {
 func (error EqualIteratorsError) Error() string {
 	return "Iterables are equal"
 }
+
+type ElementNotFoundError struct {
+}
+
+func (error ElementNotFoundError) Error() string {
+	return "Could not find element"
+}
