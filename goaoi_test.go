@@ -670,6 +670,36 @@ func Test_MismatchSlice(t *testing.T) {
 	}
 }
 
+func Test_MismatchSlicePred(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		iterable1  []int
+		iterable2  []int
+		comparator func(int, int) bool
+		exp        int
+		err        error
+		name       string
+	}{
+		{[]int{1, 2, 3, 4}, []int{1, 1, 3, 4}, goaoi.AreEqual[int], 1, nil, "Found"},
+		{[]int{1, 2, 3, 4}, []int{1, 2, 3, 4}, goaoi.AreEqual[int], 0, goaoi.ElementNotFoundError{}, "Not found"},
+		{[]int{}, []int{1, 2}, goaoi.AreEqual[int], 0, goaoi.EmptyIterableError{}, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			res, err := goaoi.MismatchSlicePred(tc.iterable1, tc.iterable2, tc.comparator)
+
+			assert.Equal(t, tc.exp, res)
+			if tc.err == nil {
+				assert.Nil(t, err)
+			} else {
+				assert.ErrorAs(t, err, &tc.err)
+			}
+
+		})
+	}
+}
+
 func Test_AdjacentFind(t *testing.T) {
 	t.Parallel()
 

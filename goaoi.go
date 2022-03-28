@@ -468,7 +468,25 @@ func CountIfMap[TKey comparable, TValue comparable](container map[TKey]TValue, u
 	return counter, nil
 }
 
-// TODO: implement function with predicate
+// MismatchSlicePred finds the first index i where binary_predicate(iterable1[i], iterable2[i] == false).
+//
+// Possible Error values:
+// - EmptyIterableError
+// - EqualIteratorsError
+func MismatchSlicePred[T comparable](iterable1 []T, iterable2 []T, binary_predicate func(T, T) bool) (int, error) {
+	if len(iterable1) == 0 || len(iterable2) == 0 {
+		return 0, EmptyIterableError{}
+	}
+
+	i := 0
+	for ; i < min(len(iterable1), len(iterable2)); i++ {
+		if !binary_predicate(iterable1[i], iterable2[i]) {
+			return i, nil
+		}
+	}
+
+	return 0, EqualIteratorsError{}
+}
 
 // MismatchSlice finds the first index i where iterable1[i] != iterable2[i].
 //
