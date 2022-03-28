@@ -2,8 +2,6 @@
 // It isinspired by the algorithm header from the C++ standard template library (STL for short).
 package goaoi
 
-// TODO: Document implications of unstable map iteration
-
 // FindSlice finds the first index i where haystack[i] == needle.
 //
 // Possible Error values:
@@ -24,6 +22,7 @@ func FindSlice[T comparable](haystack []T, needle T) (int, error) {
 }
 
 // FindIfMap finds the first key where unary_predicate(haystack[key]) == true.
+// Note that the iteration order of a map is not stable.
 //
 // Possible Error values:
 // - EmptyIterableError
@@ -113,6 +112,7 @@ func FindFirstOfSlice[T comparable](haystack []T, needles []T, binary_predicate 
 }
 
 // FindFirstOfMap finds the first key where an element of haystack is equal to any element in needles.
+// Note that the iteration order of a map is not stable.
 // The elements are compared with binary_predicate.
 //
 // Possible Error values:
@@ -155,6 +155,7 @@ func AllOfSlice[T comparable](container []T, unary_predicate func(T) bool) error
 }
 
 // AllOfMap checks that unary_predicate(val) == true for ALL val in container.
+// Note that the iteration order of a map is not stable.
 //
 // Possible Error values:
 // - EmptyIterableError
@@ -193,6 +194,7 @@ func AnyOfSlice[T comparable](container []T, unary_predicate func(T) bool) error
 }
 
 // AnyOfMap checks that unary_predicate(val) == true for ANY val in container.
+// Note that the iteration order of a map is not stable.
 //
 // Possible Error values:
 // - EmptyIterableError
@@ -231,6 +233,7 @@ func NoneOfSlice[T comparable](container []T, unary_predicate func(T) bool) erro
 }
 
 // NoneOfMap checks that unary_predicate(val) == true for NO val in container.
+// Note that the iteration order of a map is not stable.
 //
 // Possible Error values:
 // - EmptyIterableError
@@ -271,6 +274,7 @@ func ForeachSlice[T comparable](container []T, unary_func func(T) error) error {
 }
 
 // ForeachMap executes unary_func(val) for each val in container.
+// Note that the iteration order of a map is not stable.
 // Errors returned by unary_func are propagated to the caller of ForeachMap.
 //
 // Possible Error values:
@@ -308,6 +312,7 @@ func ForeachSliceUnsafe[T comparable](container []T, unary_func func(T)) error {
 }
 
 // ForeachMapUnsafe executes unary_func(val) for each val in container.
+// Note that the iteration order of a map is not stable.
 //
 // Possible Error values:
 // - EmptyIterableError
@@ -343,6 +348,7 @@ func CountSlice[T comparable](container []T, wanted T) (int, error) {
 }
 
 // CountMap counts how many elements of container are equal to wanted.
+// Note that the iteration order of a map is not stable.
 //
 // Possible Error values:
 // - EmptyIterableError
@@ -381,6 +387,7 @@ func CountIfSlice[T comparable](container []T, unary_predicate func(T) bool) (in
 }
 
 // CountIfMap counts for how many val of container unary_predicate(val) == true.
+// Note that the iteration order of a map is not stable.
 //
 // Possible Error values:
 // - EmptyIterableError
@@ -465,6 +472,7 @@ func CopyReplaceSlice[T comparable](original []T, toReplace T, replacement T) ([
 }
 
 // CopyReplaceMap returns a copy of original where each value of a key-value pair equal to toReplace is replaced with replacement.
+// Note that the iteration order of a map is not stable.
 //
 // Possible Error values:
 // - EmptyIterableError
@@ -513,6 +521,7 @@ func CopyReplaceIfSlice[T comparable](original []T, unary_predicate func(T) bool
 }
 
 // CopyReplaceIfMap returns a copy of original where each value of a key-value pair satisfying unary_predicate(value) == true is replaced with replacement.
+// Note that the iteration order of a map is not stable.
 //
 // Possible Error values:
 // - EmptyIterableError
@@ -561,6 +570,7 @@ func CopyReplaceIfNotSlice[T comparable](original []T, unary_predicate func(T) b
 }
 
 // CopyReplaceIfNotMap returns a copy of original where each element satisfying unary_predicate(element) != true is replaced with replacement.
+// Note that the iteration order of a map is not stable.
 //
 // Possible Error values:
 // - EmptyIterableError
@@ -607,6 +617,7 @@ func CopyExceptSlice[T comparable](original []T, toExclude T) ([]T, error) {
 }
 
 // CopyExceptMap returns a copy of original without all key-value pairs equal to toExclude.
+// Note that the iteration order of a map is not stable.
 //
 // Possible Error values:
 // - EmptyIterableError
@@ -651,6 +662,7 @@ func CopyExceptIfSlice[T comparable](original []T, unary_predicate func(T) bool)
 }
 
 // CopyExceptIfMap returns a copy of original without all key-value pairs satisfying unary_predicate(value) == true).
+// Note that the iteration order of a map is not stable.
 //
 // Possible Error values:
 // - EmptyIterableError
@@ -695,6 +707,7 @@ func CopyExceptIfNotSlice[T comparable](original []T, unary_predicate func(T) bo
 }
 
 // CopyExceptIfNotMap returns a copy of original without all key-value pairs satisfying unary_predicate(value) == false).
+// Note that the iteration order of a map is not stable.
 //
 // Possible Error values:
 // - EmptyIterableError
@@ -733,6 +746,7 @@ func FillSlice[T comparable](arr *[]T, filler T) []T {
 }
 
 // TransformMap applies transformer(value) for all key-value pairs in container and stores them at container[key].
+// Note that the iteration order of a map is not stable.
 // Errors returned by transformer are propagated to the caller of TransformMap.
 //
 // Possible Error values:
@@ -778,6 +792,7 @@ func TransformSlice[T comparable](container []T, transformer func(*T) error) err
 }
 
 // TransformMapUnsafe applies transformer(value) for all key-value pairs in container and stores them at container[key].
+// Note that the iteration order of a map is not stable.
 //
 // Possible Error values:
 // - EmptyIterableError
