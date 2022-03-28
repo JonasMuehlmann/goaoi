@@ -161,7 +161,7 @@ func Test_FindEndSlice(t *testing.T) {
 	}
 }
 
-func Test_FindFirstOfSlice(t *testing.T) {
+func Test_FindFirstOfSlicePred(t *testing.T) {
 	t.Parallel()
 
 	tcs := []struct {
@@ -182,7 +182,7 @@ func Test_FindFirstOfSlice(t *testing.T) {
 	}
 	for _, tc := range tcs {
 		t.Run(tc.name, func(t *testing.T) {
-			res, err := goaoi.FindFirstOfSlice(tc.haystack, tc.needles, tc.comparator)
+			res, err := goaoi.FindFirstOfSlicePred(tc.haystack, tc.needles, tc.comparator)
 
 			assert.Equal(t, tc.exp, res)
 			if tc.err == nil {
@@ -195,7 +195,7 @@ func Test_FindFirstOfSlice(t *testing.T) {
 	}
 }
 
-func Test_FindFirstOfMap(t *testing.T) {
+func Test_FindFirstOfMapPred(t *testing.T) {
 	t.Parallel()
 
 	tcs := []struct {
@@ -216,7 +216,73 @@ func Test_FindFirstOfMap(t *testing.T) {
 	}
 	for _, tc := range tcs {
 		t.Run(tc.name, func(t *testing.T) {
-			res, err := goaoi.FindFirstOfMap(tc.haystack, tc.needles, tc.comparator)
+			res, err := goaoi.FindFirstOfMapPred(tc.haystack, tc.needles, tc.comparator)
+
+			assert.Equal(t, tc.exp, res)
+			if tc.err == nil {
+				assert.Nil(t, err)
+			} else {
+				assert.ErrorAs(t, err, &tc.err)
+			}
+
+		})
+	}
+}
+
+func Test_FindFirstOfSlice(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		haystack []int
+		needles  []int
+		exp      int
+		err      error
+		name     string
+	}{
+		{[]int{1, 2, 3, 4}, []int{4, 10}, 3, nil, "Found at end"},
+		{[]int{1, 2, 3, 4}, []int{1, 2}, 0, nil, "Found at beginning"},
+		{[]int{1, 2, 3, 4}, []int{3, 4}, 2, nil, "Found in middle"},
+		{[]int{1}, []int{1}, 0, nil, "Found equal"},
+		{[]int{1, 2, 3}, []int{4, 5}, 0, goaoi.ElementNotFoundError{}, "Not found"},
+		{[]int{}, []int{1, 2, 3}, 0, goaoi.EmptyIterableError{}, "Super empty"},
+		{[]int{1, 2, 3}, []int{}, 0, goaoi.EmptyIterableError{}, "Sub empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			res, err := goaoi.FindFirstOfSlice(tc.haystack, tc.needles)
+
+			assert.Equal(t, tc.exp, res)
+			if tc.err == nil {
+				assert.Nil(t, err)
+			} else {
+				assert.ErrorAs(t, err, &tc.err)
+			}
+
+		})
+	}
+}
+
+func Test_FindFirstOfMap(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		haystack map[string]int
+		needles  []int
+		exp      string
+		err      error
+		name     string
+	}{
+		{map[string]int{"a": 1, "b": 2, "c": 3, "d": 4}, []int{4, 10}, "d", nil, "Found at end"},
+		{map[string]int{"a": 1, "b": 2, "c": 3, "d": 4}, []int{1, -1}, "a", nil, "Found at beginning"},
+		{map[string]int{"a": 1, "b": 2, "c": 3, "d": 4}, []int{3, 5}, "c", nil, "Found in middle"},
+		{map[string]int{"a": 1}, []int{1}, "a", nil, "Found equal"},
+		{map[string]int{"a": 1, "b": 2, "c": 3}, []int{4, 5}, "", goaoi.ElementNotFoundError{}, "Not found"},
+		{map[string]int{}, []int{1, 2, 3}, "", goaoi.EmptyIterableError{}, "Super empty"},
+		{map[string]int{"a": 1, "b": 2, "c": 3}, []int{}, "", goaoi.EmptyIterableError{}, "Sub empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			res, err := goaoi.FindFirstOfMap(tc.haystack, tc.needles)
 
 			assert.Equal(t, tc.exp, res)
 			if tc.err == nil {

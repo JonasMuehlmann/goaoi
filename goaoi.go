@@ -107,15 +107,13 @@ OUTER:
 	return 0, ElementNotFoundError{}
 }
 
-// TODO: Provide overload without predicate
-
-// FindFirstOfSlice finds the first index where an element of haystack is equal to any element in needles.
+// FindFirstOfSlicePred finds the first index where an element of haystack is equal to any element in needles.
 // The elements are compared with binary_predicate.
 //
 // Possible Error values:
 // - EmptyIterableError
 // - ElementNotFoundError
-func FindFirstOfSlice[T comparable](haystack []T, needles []T, binary_predicate func(T, T) bool) (int, error) {
+func FindFirstOfSlicePred[T comparable](haystack []T, needles []T, binary_predicate func(T, T) bool) (int, error) {
 	if len(haystack) == 0 || len(needles) == 0 {
 		return 0, EmptyIterableError{}
 	}
@@ -131,14 +129,14 @@ func FindFirstOfSlice[T comparable](haystack []T, needles []T, binary_predicate 
 	return 0, ElementNotFoundError{}
 }
 
-// FindFirstOfMap finds the first key where an element of haystack is equal to any element in needles.
+// FindFirstOfMapPred finds the first key where an element of haystack is equal to any element in needles.
 // Note that the iteration order of a map is not stable.
 // The elements are compared with binary_predicate.
 //
 // Possible Error values:
 // - EmptyIterableError
 // - ElementNotFoundError
-func FindFirstOfMap[TKey comparable, TValue comparable](haystack map[TKey]TValue, needles []TValue, binary_predicate func(TValue, TValue) bool) (TKey, error) {
+func FindFirstOfMapPred[TKey comparable, TValue comparable](haystack map[TKey]TValue, needles []TValue, binary_predicate func(TValue, TValue) bool) (TKey, error) {
 	var zeroVal TKey
 	if len(haystack) == 0 || len(needles) == 0 {
 		return zeroVal, EmptyIterableError{}
@@ -147,6 +145,50 @@ func FindFirstOfMap[TKey comparable, TValue comparable](haystack map[TKey]TValue
 	for i, haystackValue := range haystack {
 		for _, needleValue := range needles {
 			if binary_predicate(haystackValue, needleValue) {
+				return i, nil
+			}
+		}
+	}
+
+	return zeroVal, ElementNotFoundError{}
+}
+
+// FindFirstOfSlice finds the first index where an element of haystack is equal to any element in needles.
+//
+// Possible Error values:
+// - EmptyIterableError
+// - ElementNotFoundError
+func FindFirstOfSlice[T comparable](haystack []T, needles []T) (int, error) {
+	if len(haystack) == 0 || len(needles) == 0 {
+		return 0, EmptyIterableError{}
+	}
+
+	for i, haystackValue := range haystack {
+		for _, needleValue := range needles {
+			if haystackValue == needleValue {
+				return i, nil
+			}
+		}
+	}
+
+	return 0, ElementNotFoundError{}
+}
+
+// FindFirstOfMap finds the first key where an element of haystack is equal to any element in needles.
+// Note that the iteration order of a map is not stable.
+//
+// Possible Error values:
+// - EmptyIterableError
+// - ElementNotFoundError
+func FindFirstOfMap[TKey comparable, TValue comparable](haystack map[TKey]TValue, needles []TValue) (TKey, error) {
+	var zeroVal TKey
+	if len(haystack) == 0 || len(needles) == 0 {
+		return zeroVal, EmptyIterableError{}
+	}
+
+	for i, haystackValue := range haystack {
+		for _, needleValue := range needles {
+			if haystackValue == needleValue {
 				return i, nil
 			}
 		}
