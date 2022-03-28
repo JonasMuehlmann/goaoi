@@ -1,6 +1,8 @@
 package goaoi
 
-import "errors"
+import (
+	"errors"
+)
 
 func FindSlice[T comparable](haystack []T, needle T) (int, error) {
 	if len(haystack) == 0 {
@@ -525,4 +527,18 @@ func CopyExceptIfNotMap[TKey comparable, TValue comparable](original map[TKey]TV
 	}
 
 	return newContainer, nil
+}
+
+func FillSlice[T comparable](arr *[]T, filler T) []T {
+	for i := range *arr {
+		(*arr)[i] = filler
+	}
+
+	n_unfilled := cap(*arr) - len(*arr)
+
+	for i := 0; i < n_unfilled; i++ {
+		*arr = append(*arr, filler)
+	}
+
+	return *arr
 }

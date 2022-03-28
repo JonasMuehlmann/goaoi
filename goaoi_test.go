@@ -782,3 +782,26 @@ func Test_CopyExceptIfNotMap(t *testing.T) {
 		})
 	}
 }
+
+func Test_FillSlice(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		original []int
+		filler   int
+		exp      []int
+		name     string
+	}{
+		{make([]int, 4), 1, []int{1, 1, 1, 1}, "Found, len eq cap"},
+		{make([]int, 0, 4), 1, []int{1, 1, 1, 1}, "Found, len neq cap"},
+		{make([]int, 0), 1, []int{}, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			res := goaoi.FillSlice(&tc.original, tc.filler)
+
+			assert.Equal(t, tc.original, res)
+			assert.Equal(t, tc.exp, res)
+		})
+	}
+}
