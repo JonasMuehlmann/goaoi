@@ -9,12 +9,14 @@ Sister project: https://github.com/JonasMuehlmann/pyaoi
 
 ## Installation
 
-```go get github.com/JonasMuehlmann/goaoi/edit/main/README.md```
+```go get github.com/JonasMuehlmann/goaoi```
 
 ## How to use
 
 All functions live in the ```goaoi``` namespace, you can import it with ```import "goaoi"``` and then call the functions
 like this: ```goaoi.AllOf()```
+
+Documentation available at https://pkg.go.dev/github.com/JonasMuehlmann/goaoi.
 
 ## Implemented functions
 
