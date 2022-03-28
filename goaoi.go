@@ -508,12 +508,31 @@ func MismatchSlice[T comparable](iterable1 []T, iterable2 []T) (int, error) {
 	return 0, EqualIteratorsError{}
 }
 
-// AdjacentFindSlice finds the first index i where binary_predicate(container[i], container[i+1]) == true.
+// AdjacentFindSlice finds the first index i where container[i] == container[i+1]).
 //
 // Possible Error values:
 // - EmptyIterableError
 // - ElementNotFoundError
-func AdjacentFindSlice[T comparable](container []T, binary_predicate func(T, T) bool) (int, error) {
+func AdjacentFindSlice[T comparable](container []T) (int, error) {
+	if len(container) == 0 {
+		return 0, EmptyIterableError{}
+	}
+
+	for i := 0; i < len(container)-1; i++ {
+		if container[i] == container[i+1] {
+			return i, nil
+		}
+	}
+
+	return 0, ElementNotFoundError{}
+}
+
+// AdjacentFindSlicePred finds the first index i where binary_predicate(container[i], container[i+1]) == true.
+//
+// Possible Error values:
+// - EmptyIterableError
+// - ElementNotFoundError
+func AdjacentFindSlicePred[T comparable](container []T, binary_predicate func(T, T) bool) (int, error) {
 	if len(container) == 0 {
 		return 0, EmptyIterableError{}
 	}

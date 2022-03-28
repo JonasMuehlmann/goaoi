@@ -704,6 +704,37 @@ func Test_AdjacentFind(t *testing.T) {
 	t.Parallel()
 
 	tcs := []struct {
+		haystack []int
+		exp      int
+		err      error
+		name     string
+	}{
+		{[]int{1, 1, 2, 3}, 0, nil, "Found at beginning"},
+		{[]int{1, 2, 2}, 1, nil, "Found at end"},
+		{[]int{1, 2, 2, 3, 4}, 1, nil, "Found in middle"},
+		{[]int{1, 2, 3, 4}, 0, goaoi.ElementNotFoundError{}, "Not found"},
+		{[]int{}, 0, goaoi.EmptyIterableError{}, "Empty"},
+		{[]int{1}, 0, goaoi.ElementNotFoundError{}, "Only one element"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			res, err := goaoi.AdjacentFindSlice(tc.haystack)
+
+			assert.Equal(t, tc.exp, res)
+			if tc.err == nil {
+				assert.Nil(t, err)
+			} else {
+				assert.ErrorAs(t, err, &tc.err)
+			}
+
+		})
+	}
+}
+
+func Test_AdjacentFindPred(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
 		haystack   []int
 		comparator func(int, int) bool
 		exp        int
@@ -719,7 +750,7 @@ func Test_AdjacentFind(t *testing.T) {
 	}
 	for _, tc := range tcs {
 		t.Run(tc.name, func(t *testing.T) {
-			res, err := goaoi.AdjacentFindSlice(tc.haystack, tc.comparator)
+			res, err := goaoi.AdjacentFindSlicePred(tc.haystack, tc.comparator)
 
 			assert.Equal(t, tc.exp, res)
 			if tc.err == nil {
