@@ -1,5 +1,14 @@
+// Package goaoi implements conventient algorithms for processing iterables.
+// It isinspired by the algorithm header from the C++ standard template library (STL for short).
 package goaoi
 
+// TODO: Document implications of unstable map iteration
+
+// FindSlice finds the first index i where haystack[i] == needle.
+//
+// Possible Error values:
+// - EmptyIterableError
+// - ElementNotFoundError
 func FindSlice[T comparable](haystack []T, needle T) (int, error) {
 	if len(haystack) == 0 {
 		return 0, EmptyIterableError{}
@@ -14,6 +23,11 @@ func FindSlice[T comparable](haystack []T, needle T) (int, error) {
 	return 0, ElementNotFoundError{}
 }
 
+// FindIfMap finds the first key where unary_predicate(haystack[key]) == true.
+//
+// Possible Error values:
+// - EmptyIterableError
+// - ElementNotFoundError
 func FindIfMap[TKey comparable, TValue comparable](haystack map[TKey]TValue, unary_predicate func(TValue) bool) (TKey, error) {
 	var zeroVal TKey
 
@@ -30,6 +44,11 @@ func FindIfMap[TKey comparable, TValue comparable](haystack map[TKey]TValue, una
 	return zeroVal, ElementNotFoundError{}
 }
 
+// FindIfSlice finds the first index i where unary_predicate(haystack[i]) == true.
+//
+// Possible Error values:
+// - EmptyIterableError
+// - ElementNotFoundError
 func FindIfSlice[T comparable](haystack []T, unary_predicate func(T) bool) (int, error) {
 	if len(haystack) == 0 {
 		return 0, EmptyIterableError{}
@@ -44,6 +63,14 @@ func FindIfSlice[T comparable](haystack []T, unary_predicate func(T) bool) (int,
 	return 0, ElementNotFoundError{}
 }
 
+// TODO: Provide overload without predicate
+
+// FindEndSlice finds the beginning of the last occurrence of sub in super.
+// The elements are compared with binary_predicate.
+//
+// Possible Error values:
+// - EmptyIterableError
+// - ElementNotFoundError
 func FindEndSlice[T comparable](super []T, sub []T, binary_predicate func(T, T) bool) (int, error) {
 	if len(super) == 0 || len(sub) == 0 {
 		return 0, EmptyIterableError{}
@@ -61,6 +88,14 @@ OUTER:
 	return 0, ElementNotFoundError{}
 }
 
+// TODO: Provide overload without predicate
+
+// FindFirstOfSlice finds the first index where an element of haystack is equal to any element in needles.
+// The elements are compared with binary_predicate.
+//
+// Possible Error values:
+// - EmptyIterableError
+// - ElementNotFoundError
 func FindFirstOfSlice[T comparable](haystack []T, needles []T, binary_predicate func(T, T) bool) (int, error) {
 	if len(haystack) == 0 || len(needles) == 0 {
 		return 0, EmptyIterableError{}
@@ -77,6 +112,12 @@ func FindFirstOfSlice[T comparable](haystack []T, needles []T, binary_predicate 
 	return 0, ElementNotFoundError{}
 }
 
+// FindFirstOfMap finds the first key where an element of haystack is equal to any element in needles.
+// The elements are compared with binary_predicate.
+//
+// Possible Error values:
+// - EmptyIterableError
+// - ElementNotFoundError
 func FindFirstOfMap[TKey comparable, TValue comparable](haystack map[TKey]TValue, needles []TValue, binary_predicate func(TValue, TValue) bool) (TKey, error) {
 	var zeroVal TKey
 	if len(haystack) == 0 || len(needles) == 0 {
@@ -94,6 +135,11 @@ func FindFirstOfMap[TKey comparable, TValue comparable](haystack map[TKey]TValue
 	return zeroVal, ElementNotFoundError{}
 }
 
+// AllOfSlice checks that unary_predicate(val) == true for ALL val in container.
+//
+// Possible Error values:
+// - EmptyIterableError
+// - ComparisonError
 func AllOfSlice[T comparable](container []T, unary_predicate func(T) bool) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
@@ -108,6 +154,11 @@ func AllOfSlice[T comparable](container []T, unary_predicate func(T) bool) error
 	return nil
 }
 
+// AllOfMap checks that unary_predicate(val) == true for ALL val in container.
+//
+// Possible Error values:
+// - EmptyIterableError
+// - ComparisonError
 func AllOfMap[TKey comparable, TValue comparable](container map[TKey]TValue, unary_predicate func(TValue) bool) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
@@ -122,6 +173,11 @@ func AllOfMap[TKey comparable, TValue comparable](container map[TKey]TValue, una
 	return nil
 }
 
+// AnyOfSlice checks that unary_predicate(val) == true for ANY val in container.
+//
+// Possible Error values:
+// - EmptyIterableError
+// - ComparisonError
 func AnyOfSlice[T comparable](container []T, unary_predicate func(T) bool) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
@@ -136,6 +192,11 @@ func AnyOfSlice[T comparable](container []T, unary_predicate func(T) bool) error
 	return ComparisonError[int]{len(container) - 1}
 }
 
+// AnyOfMap checks that unary_predicate(val) == true for ANY val in container.
+//
+// Possible Error values:
+// - EmptyIterableError
+// - ComparisonError
 func AnyOfMap[TKey comparable, TValue comparable](container map[TKey]TValue, unary_predicate func(TValue) bool) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
@@ -150,6 +211,11 @@ func AnyOfMap[TKey comparable, TValue comparable](container map[TKey]TValue, una
 	return ComparisonError[TKey]{}
 }
 
+// NoneOfSlice checks that unary_predicate(val) == true for NO val in container.
+//
+// Possible Error values:
+// - EmptyIterableError
+// - ComparisonError
 func NoneOfSlice[T comparable](container []T, unary_predicate func(T) bool) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
@@ -164,6 +230,11 @@ func NoneOfSlice[T comparable](container []T, unary_predicate func(T) bool) erro
 	return nil
 }
 
+// NoneOfMap checks that unary_predicate(val) == true for NO val in container.
+//
+// Possible Error values:
+// - EmptyIterableError
+// - ComparisonError
 func NoneOfMap[TKey comparable, TValue comparable](container map[TKey]TValue, unary_predicate func(TValue) bool) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
@@ -178,6 +249,12 @@ func NoneOfMap[TKey comparable, TValue comparable](container map[TKey]TValue, un
 	return nil
 }
 
+// ForeachSlice executes unary_func(val) for each val in container.
+// Errors returned by unary_func are propagated to the caller of ForeachSlice.
+//
+// Possible Error values:
+// - EmptyIterableError
+// - ExecutionError
 func ForeachSlice[T comparable](container []T, unary_func func(T) error) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
@@ -193,6 +270,12 @@ func ForeachSlice[T comparable](container []T, unary_func func(T) error) error {
 	return nil
 }
 
+// ForeachMap executes unary_func(val) for each val in container.
+// Errors returned by unary_func are propagated to the caller of ForeachMap.
+//
+// Possible Error values:
+// - EmptyIterableError
+// - ExecutionError
 func ForeachMap[TKey comparable, TValue comparable](container map[TKey]TValue, unary_func func(TValue) error) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
@@ -208,6 +291,10 @@ func ForeachMap[TKey comparable, TValue comparable](container map[TKey]TValue, u
 	return nil
 }
 
+// ForeachSliceUnsafe executes unary_func(val) for each val in container.
+//
+// Possible Error values:
+// - EmptyIterableError
 func ForeachSliceUnsafe[T comparable](container []T, unary_func func(T)) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
@@ -220,6 +307,10 @@ func ForeachSliceUnsafe[T comparable](container []T, unary_func func(T)) error {
 	return nil
 }
 
+// ForeachMapUnsafe executes unary_func(val) for each val in container.
+//
+// Possible Error values:
+// - EmptyIterableError
 func ForeachMapUnsafe[TKey comparable, TValue comparable](container map[TKey]TValue, unary_func func(TValue)) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
@@ -232,6 +323,10 @@ func ForeachMapUnsafe[TKey comparable, TValue comparable](container map[TKey]TVa
 	return nil
 }
 
+// CountSlice counts how many elements of container are equal to wanted.
+//
+// Possible Error values:
+// - EmptyIterableError
 func CountSlice[T comparable](container []T, wanted T) (int, error) {
 	if len(container) == 0 {
 		return 0, EmptyIterableError{}
@@ -247,6 +342,10 @@ func CountSlice[T comparable](container []T, wanted T) (int, error) {
 	return counter, nil
 }
 
+// CountMap counts how many elements of container are equal to wanted.
+//
+// Possible Error values:
+// - EmptyIterableError
 func CountMap[TKey comparable, TValue comparable](container map[TKey]TValue, wanted TValue) (int, error) {
 	if len(container) == 0 {
 		return 0, EmptyIterableError{}
@@ -262,6 +361,10 @@ func CountMap[TKey comparable, TValue comparable](container map[TKey]TValue, wan
 	return counter, nil
 }
 
+// CountIfSlice counts for how many val of container unary_predicate(val) == true.
+//
+// Possible Error values:
+// - EmptyIterableError
 func CountIfSlice[T comparable](container []T, unary_predicate func(T) bool) (int, error) {
 	if len(container) == 0 {
 		return 0, EmptyIterableError{}
@@ -277,6 +380,10 @@ func CountIfSlice[T comparable](container []T, unary_predicate func(T) bool) (in
 	return counter, nil
 }
 
+// CountIfMap counts for how many val of container unary_predicate(val) == true.
+//
+// Possible Error values:
+// - EmptyIterableError
 func CountIfMap[TKey comparable, TValue comparable](container map[TKey]TValue, unary_predicate func(TValue) bool) (int, error) {
 	if len(container) == 0 {
 		return 0, EmptyIterableError{}
@@ -292,6 +399,13 @@ func CountIfMap[TKey comparable, TValue comparable](container map[TKey]TValue, u
 	return counter, nil
 }
 
+// TODO: implement function with predicate
+
+// MismatchSlice finds the first index i where iterable1[i] != iterable2[i].
+//
+// Possible Error values:
+// - EmptyIterableError
+// - EqualIteratorsError
 func MismatchSlice[T comparable](iterable1 []T, iterable2 []T) (int, error) {
 	if len(iterable1) == 0 || len(iterable2) == 0 {
 		return 0, EmptyIterableError{}
@@ -307,6 +421,11 @@ func MismatchSlice[T comparable](iterable1 []T, iterable2 []T) (int, error) {
 	return 0, EqualIteratorsError{}
 }
 
+// AdjacentFindSlice finds the first index i where binary_predicate(container[i], container[i+1]) == true.
+//
+// Possible Error values:
+// - EmptyIterableError
+// - ElementNotFoundError
 func AdjacentFindSlice[T comparable](container []T, binary_predicate func(T, T) bool) (int, error) {
 	if len(container) == 0 {
 		return 0, EmptyIterableError{}
@@ -321,6 +440,10 @@ func AdjacentFindSlice[T comparable](container []T, binary_predicate func(T, T) 
 	return 0, ElementNotFoundError{}
 }
 
+// CopyReplaceSlice returns a copy of original where each element equal to toReplace is replaced with replacement.
+//
+// Possible Error values:
+// - EmptyIterableError
 func CopyReplaceSlice[T comparable](original []T, toReplace T, replacement T) ([]T, error) {
 	var zeroVal []T
 
@@ -341,6 +464,10 @@ func CopyReplaceSlice[T comparable](original []T, toReplace T, replacement T) ([
 	return newContainer, nil
 }
 
+// CopyReplaceMap returns a copy of original where each value of a key-value pair equal to toReplace is replaced with replacement.
+//
+// Possible Error values:
+// - EmptyIterableError
 func CopyReplaceMap[TKey comparable, TValue comparable](original map[TKey]TValue, toReplace TValue, replacement TValue) (map[TKey]TValue, error) {
 	var zeroVal map[TKey]TValue
 
@@ -361,6 +488,10 @@ func CopyReplaceMap[TKey comparable, TValue comparable](original map[TKey]TValue
 	return newContainer, nil
 }
 
+// CopyReplaceIfSlice returns a copy of original where each element satisfying unary_predicate(element) == true is replaced with replacement.
+//
+// Possible Error values:
+// - EmptyIterableError
 func CopyReplaceIfSlice[T comparable](original []T, unary_predicate func(T) bool, replacement T) ([]T, error) {
 	var zeroVal []T
 
@@ -381,6 +512,10 @@ func CopyReplaceIfSlice[T comparable](original []T, unary_predicate func(T) bool
 	return newContainer, nil
 }
 
+// CopyReplaceIfMap returns a copy of original where each value of a key-value pair satisfying unary_predicate(value) == true is replaced with replacement.
+//
+// Possible Error values:
+// - EmptyIterableError
 func CopyReplaceIfMap[TKey comparable, TValue comparable](original map[TKey]TValue, unary_predicate func(TValue) bool, replacement TValue) (map[TKey]TValue, error) {
 	var zeroVal map[TKey]TValue
 
@@ -401,6 +536,10 @@ func CopyReplaceIfMap[TKey comparable, TValue comparable](original map[TKey]TVal
 	return newContainer, nil
 }
 
+// CopyReplaceIfNotSlice returns a copy of original where each element satisfying unary_predicate(element) != true is replaced with replacement.
+//
+// Possible Error values:
+// - EmptyIterableError
 func CopyReplaceIfNotSlice[T comparable](original []T, unary_predicate func(T) bool, replacement T) ([]T, error) {
 	var zeroVal []T
 
@@ -421,6 +560,10 @@ func CopyReplaceIfNotSlice[T comparable](original []T, unary_predicate func(T) b
 	return newContainer, nil
 }
 
+// CopyReplaceIfNotMap returns a copy of original where each element satisfying unary_predicate(element) != true is replaced with replacement.
+//
+// Possible Error values:
+// - EmptyIterableError
 func CopyReplaceIfNotMap[TKey comparable, TValue comparable](original map[TKey]TValue, unary_predicate func(TValue) bool, replacement TValue) (map[TKey]TValue, error) {
 	var zeroVal map[TKey]TValue
 
@@ -441,6 +584,10 @@ func CopyReplaceIfNotMap[TKey comparable, TValue comparable](original map[TKey]T
 	return newContainer, nil
 }
 
+// CopyExceptSlice returns a copy of original without all elements equal to toExclude.
+//
+// Possible Error values:
+// - EmptyIterableError
 func CopyExceptSlice[T comparable](original []T, toExclude T) ([]T, error) {
 	var zeroVal []T
 
@@ -459,6 +606,10 @@ func CopyExceptSlice[T comparable](original []T, toExclude T) ([]T, error) {
 	return newContainer, nil
 }
 
+// CopyExceptMap returns a copy of original without all key-value pairs equal to toExclude.
+//
+// Possible Error values:
+// - EmptyIterableError
 func CopyExceptMap[TKey comparable, TValue comparable](original map[TKey]TValue, toExclude TValue) (map[TKey]TValue, error) {
 	var zeroVal map[TKey]TValue
 
@@ -477,6 +628,10 @@ func CopyExceptMap[TKey comparable, TValue comparable](original map[TKey]TValue,
 	return newContainer, nil
 }
 
+// CopyExceptIfSlice returns a copy of original without all element satisfying unary_predicate(element) == true).
+//
+// Possible Error values:
+// - EmptyIterableError
 func CopyExceptIfSlice[T comparable](original []T, unary_predicate func(T) bool) ([]T, error) {
 	var zeroVal []T
 
@@ -495,6 +650,10 @@ func CopyExceptIfSlice[T comparable](original []T, unary_predicate func(T) bool)
 	return newContainer, nil
 }
 
+// CopyExceptIfMap returns a copy of original without all key-value pairs satisfying unary_predicate(value) == true).
+//
+// Possible Error values:
+// - EmptyIterableError
 func CopyExceptIfMap[TKey comparable, TValue comparable](original map[TKey]TValue, unary_predicate func(TValue) bool) (map[TKey]TValue, error) {
 	var zeroVal map[TKey]TValue
 
@@ -513,6 +672,10 @@ func CopyExceptIfMap[TKey comparable, TValue comparable](original map[TKey]TValu
 	return newContainer, nil
 }
 
+// CopyExceptIfNotSlice returns a copy of original without all element satisfying unary_predicate(element) == false).
+//
+// Possible Error values:
+// - EmptyIterableError
 func CopyExceptIfNotSlice[T comparable](original []T, unary_predicate func(T) bool) ([]T, error) {
 	var zeroVal []T
 
@@ -531,6 +694,10 @@ func CopyExceptIfNotSlice[T comparable](original []T, unary_predicate func(T) bo
 	return newContainer, nil
 }
 
+// CopyExceptIfNotMap returns a copy of original without all key-value pairs satisfying unary_predicate(value) == false).
+//
+// Possible Error values:
+// - EmptyIterableError
 func CopyExceptIfNotMap[TKey comparable, TValue comparable](original map[TKey]TValue, unary_predicate func(TValue) bool) (map[TKey]TValue, error) {
 	var zeroVal map[TKey]TValue
 
@@ -549,6 +716,8 @@ func CopyExceptIfNotMap[TKey comparable, TValue comparable](original map[TKey]TV
 	return newContainer, nil
 }
 
+// FillSlice fills the array pointed to by arr with filler.
+// all indices in the range [0, cap(*arr)[ are filled regardless of what len(*arr) is.
 func FillSlice[T comparable](arr *[]T, filler T) []T {
 	for i := range *arr {
 		(*arr)[i] = filler
@@ -563,6 +732,12 @@ func FillSlice[T comparable](arr *[]T, filler T) []T {
 	return *arr
 }
 
+// TransformMap applies transformer(value) for all key-value pairs in container and stores them at container[key].
+// Errors returned by transformer are propagated to the caller of TransformMap.
+//
+// Possible Error values:
+// - EmptyIterableError
+// - ExecutionError
 func TransformMap[TKey comparable, TValue comparable](container map[TKey]TValue, transformer func(TValue) (TValue, error)) error {
 
 	if len(container) == 0 {
@@ -581,6 +756,12 @@ func TransformMap[TKey comparable, TValue comparable](container map[TKey]TValue,
 	return nil
 }
 
+// TransformSlice applies transformer(&container[i]) for all i in [0, len(container)[ and stores them at container[i].
+// Errors returned by transformer are propagated to the caller of TransformSlice.
+//
+// Possible Error values:
+// - EmptyIterableError
+// - ExecutionError
 func TransformSlice[T comparable](container []T, transformer func(*T) error) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
@@ -596,6 +777,10 @@ func TransformSlice[T comparable](container []T, transformer func(*T) error) err
 	return nil
 }
 
+// TransformMapUnsafe applies transformer(value) for all key-value pairs in container and stores them at container[key].
+//
+// Possible Error values:
+// - EmptyIterableError
 func TransformMapUnsafe[TKey comparable, TValue comparable](container map[TKey]TValue, transformer func(TValue) TValue) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
@@ -608,6 +793,10 @@ func TransformMapUnsafe[TKey comparable, TValue comparable](container map[TKey]T
 	return nil
 }
 
+// TransformSliceUnsafe applies transformer(&container[i]) for all i in [0, len(container)[ and stores them at container[i].
+//
+// Possible Error values:
+// - EmptyIterableError
 func TransformSliceUnsafe[T comparable](container []T, transformer func(*T)) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
