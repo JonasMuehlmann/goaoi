@@ -1775,3 +1775,526 @@ func Test_MinMaxMapFloat(t *testing.T) {
 		})
 	}
 }
+
+func Test_MinElementSliceInt(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		haystack []int
+		exp      int
+		err      error
+		name     string
+	}{
+		{[]int{1, 2, 3}, 0, nil, "Found at beginning"},
+		{[]int{2, 3, 1}, 2, nil, "Found at end"},
+		{[]int{}, 0, goaoi.EmptyIterableError{}, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			res, err := goaoi.MinElementSliceInt(tc.haystack)
+
+			assert.Equal(t, tc.exp, res)
+			if tc.err == nil {
+				assert.Nil(t, err)
+			} else {
+				assert.ErrorAs(t, err, &tc.err)
+			}
+
+		})
+	}
+}
+
+func Test_MinElementMapInt(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		haystack map[string]int
+		exp      string
+		err      error
+		name     string
+	}{
+		{map[string]int{"a": 1, "b": 2, "c": 3}, "a", nil, "Found at beginning"},
+		{map[string]int{"a": 2, "b": 3, "c": 1}, "c", nil, "Found at end"},
+		{map[string]int{}, "", goaoi.EmptyIterableError{}, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			res, err := goaoi.MinElementMapInt(tc.haystack)
+
+			assert.Equal(t, tc.exp, res)
+			if tc.err == nil {
+				assert.Nil(t, err)
+			} else {
+				assert.ErrorAs(t, err, &tc.err)
+			}
+
+		})
+	}
+}
+
+func Test_MinElementSliceFloat(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		haystack []float32
+		exp      int
+		err      error
+		name     string
+	}{
+		{[]float32{1.0, 2.0, 3.0}, 0, nil, "Found at beginning"},
+		{[]float32{2.0, 3.0, 1.0}, 2, nil, "Found at end"},
+		{[]float32{}, 0, goaoi.EmptyIterableError{}, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			res, err := goaoi.MinElementSliceFloat(tc.haystack)
+
+			assert.Equal(t, tc.exp, res)
+			if tc.err == nil {
+				assert.Nil(t, err)
+			} else {
+				assert.ErrorAs(t, err, &tc.err)
+			}
+
+		})
+	}
+}
+
+func Test_MinElementMapFloat(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		haystack map[string]float32
+		exp      string
+		err      error
+		name     string
+	}{
+		{map[string]float32{"a": 1.0, "b": 2.0, "c": 3.0}, "a", nil, "Found at beginning"},
+		{map[string]float32{"a": 2.0, "b": 3.0, "c": 1.0}, "c", nil, "Found at end"},
+		{map[string]float32{}, "", goaoi.EmptyIterableError{}, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			res, err := goaoi.MinElementMapFloat(tc.haystack)
+
+			assert.Equal(t, tc.exp, res)
+			if tc.err == nil {
+				assert.Nil(t, err)
+			} else {
+				assert.ErrorAs(t, err, &tc.err)
+			}
+
+		})
+	}
+}
+
+func Test_MinElementSlicePred(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		haystack   []int
+		comparator func(int, int) bool
+		exp        int
+		err        error
+		name       string
+	}{
+		{[]int{1, 2, 3}, goaoi.IsLessThan[int], 0, nil, "Found at beginning"},
+		{[]int{2, 3, 1}, goaoi.IsLessThan[int], 2, nil, "Found at end"},
+		{[]int{}, goaoi.IsLessThan[int], 0, goaoi.EmptyIterableError{}, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			res, err := goaoi.MinElementSlicePred(tc.haystack, tc.comparator)
+
+			assert.Equal(t, tc.exp, res)
+			if tc.err == nil {
+				assert.Nil(t, err)
+			} else {
+				assert.ErrorAs(t, err, &tc.err)
+			}
+
+		})
+	}
+}
+
+func Test_MinElementMapPred(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		haystack   map[string]int
+		comparator func(int, int) bool
+		exp        string
+		err        error
+		name       string
+	}{
+		{map[string]int{"a": 1, "b": 2, "c": 3}, goaoi.IsLessThan[int], "a", nil, "Found at beginning"},
+		{map[string]int{"a": 2, "b": 3, "c": 1}, goaoi.IsLessThan[int], "c", nil, "Found at end"},
+		{map[string]int{}, goaoi.IsLessThan[int], "", goaoi.EmptyIterableError{}, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			res, err := goaoi.MinElementMapPred(tc.haystack, tc.comparator)
+
+			assert.Equal(t, tc.exp, res)
+			if tc.err == nil {
+				assert.Nil(t, err)
+			} else {
+				assert.ErrorAs(t, err, &tc.err)
+			}
+
+		})
+	}
+}
+
+func Test_MaxElementSliceInt(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		haystack []int
+		exp      int
+		err      error
+		name     string
+	}{
+		{[]int{1, 2, 3}, 2, nil, "Found at beginning"},
+		{[]int{2, 3, 1}, 1, nil, "Found at end"},
+		{[]int{}, 0, goaoi.EmptyIterableError{}, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			res, err := goaoi.MaxElementSliceInt(tc.haystack)
+
+			assert.Equal(t, tc.exp, res)
+			if tc.err == nil {
+				assert.Nil(t, err)
+			} else {
+				assert.ErrorAs(t, err, &tc.err)
+			}
+
+		})
+	}
+}
+
+func Test_MaxElementMapInt(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		haystack map[string]int
+		exp      string
+		err      error
+		name     string
+	}{
+		{map[string]int{"a": 1, "b": 2, "c": 3}, "c", nil, "Found at beginning"},
+		{map[string]int{"a": 2, "b": 3, "c": 1}, "b", nil, "Found at end"},
+		{map[string]int{}, "", goaoi.EmptyIterableError{}, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			res, err := goaoi.MaxElementMapInt(tc.haystack)
+
+			assert.Equal(t, tc.exp, res)
+			if tc.err == nil {
+				assert.Nil(t, err)
+			} else {
+				assert.ErrorAs(t, err, &tc.err)
+			}
+
+		})
+	}
+}
+
+func Test_MaxElementSlicePred(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		haystack   []int
+		comparator func(int, int) bool
+		exp        int
+		err        error
+		name       string
+	}{
+		{[]int{1, 2, 3}, goaoi.IsGreaterThan[int], 2, nil, "Found at beginning"},
+		{[]int{2, 3, 1}, goaoi.IsGreaterThan[int], 1, nil, "Found at end"},
+		{[]int{}, goaoi.IsGreaterThan[int], 0, goaoi.EmptyIterableError{}, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			res, err := goaoi.MaxElementSlicePred(tc.haystack, tc.comparator)
+
+			assert.Equal(t, tc.exp, res)
+			if tc.err == nil {
+				assert.Nil(t, err)
+			} else {
+				assert.ErrorAs(t, err, &tc.err)
+			}
+
+		})
+	}
+}
+
+func Test_MaxElementMapPred(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		haystack   map[string]int
+		comparator func(int, int) bool
+		exp        string
+		err        error
+		name       string
+	}{
+		{map[string]int{"a": 1, "b": 2, "c": 3}, goaoi.IsGreaterThan[int], "c", nil, "Found at beginning"},
+		{map[string]int{"a": 2, "b": 3, "c": 1}, goaoi.IsGreaterThan[int], "b", nil, "Found at end"},
+		{map[string]int{}, goaoi.IsGreaterThan[int], "", goaoi.EmptyIterableError{}, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			res, err := goaoi.MaxElementMapPred(tc.haystack, tc.comparator)
+
+			assert.Equal(t, tc.exp, res)
+			if tc.err == nil {
+				assert.Nil(t, err)
+			} else {
+				assert.ErrorAs(t, err, &tc.err)
+			}
+
+		})
+	}
+}
+
+func Test_MaxElementSliceFloat(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		haystack []float32
+		exp      int
+		err      error
+		name     string
+	}{
+		{[]float32{1.0, 2.0, 3.0}, 2, nil, "Found at beginning"},
+		{[]float32{2.0, 3.0, 1.0}, 1, nil, "Found at end"},
+		{[]float32{}, 0.0, goaoi.EmptyIterableError{}, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			res, err := goaoi.MaxElementSliceFloat(tc.haystack)
+
+			assert.Equal(t, tc.exp, res)
+			if tc.err == nil {
+				assert.Nil(t, err)
+			} else {
+				assert.ErrorAs(t, err, &tc.err)
+			}
+
+		})
+	}
+}
+
+func Test_MaxElementMapFloat(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		haystack map[string]float32
+		exp      string
+		err      error
+		name     string
+	}{
+		{map[string]float32{"a": 1.0, "b": 2.0, "c": 3.0}, "c", nil, "Found at beginning"},
+		{map[string]float32{"a": 2.0, "b": 3.0, "c": 1.0}, "b", nil, "Found at end"},
+		{map[string]float32{}, "", goaoi.EmptyIterableError{}, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			res, err := goaoi.MaxElementMapFloat(tc.haystack)
+
+			assert.Equal(t, tc.exp, res)
+			if tc.err == nil {
+				assert.Nil(t, err)
+			} else {
+				assert.ErrorAs(t, err, &tc.err)
+			}
+
+		})
+	}
+}
+
+func Test_MinMaxElementSliceInt(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		haystack []int
+		exp_min  int
+		exp_max  int
+		err      error
+		name     string
+	}{
+		{[]int{1, 2, 3}, 0, 2, nil, "Found at beginning"},
+		{[]int{2, 3, 1}, 2, 1, nil, "Found at end"},
+		{[]int{}, 0, 0, goaoi.EmptyIterableError{}, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			min, max, err := goaoi.MinMaxElementSliceInt(tc.haystack)
+
+			assert.Equal(t, tc.exp_min, min)
+			assert.Equal(t, tc.exp_max, max)
+			if tc.err == nil {
+				assert.Nil(t, err)
+			} else {
+				assert.ErrorAs(t, err, &tc.err)
+			}
+
+		})
+	}
+}
+
+func Test_MinMaxElementMapInt(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		haystack map[string]int
+		exp_min  string
+		exp_max  string
+		err      error
+		name     string
+	}{
+		{map[string]int{"a": 1, "b": 2, "c": 3}, "a", "c", nil, "Found at beginning"},
+		{map[string]int{"a": 2, "b": 3, "c": 1}, "c", "b", nil, "Found at end"},
+		{map[string]int{}, "", "", goaoi.EmptyIterableError{}, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			min, max, err := goaoi.MinMaxElementMapInt(tc.haystack)
+
+			assert.Equal(t, tc.exp_min, min)
+			assert.Equal(t, tc.exp_max, max)
+			if tc.err == nil {
+				assert.Nil(t, err)
+			} else {
+				assert.ErrorAs(t, err, &tc.err)
+			}
+
+		})
+	}
+}
+
+func Test_MinMaxElementSlicePred(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		haystack       []int
+		comparator_min func(int, int) bool
+		comparator_max func(int, int) bool
+		exp_min        int
+		exp_max        int
+		err            error
+		name           string
+	}{
+		{[]int{1, 2, 3}, goaoi.IsLessThan[int], goaoi.IsGreaterThan[int], 0, 2, nil, "Found at beginning"},
+		{[]int{2, 3, 1}, goaoi.IsLessThan[int], goaoi.IsGreaterThan[int], 2, 1, nil, "Found at end"},
+		{[]int{}, goaoi.IsLessThan[int], goaoi.IsGreaterThan[int], 0, 0, goaoi.EmptyIterableError{}, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			min, max, err := goaoi.MinMaxElementSlicePred(tc.haystack, tc.comparator_min, tc.comparator_max)
+
+			assert.Equal(t, tc.exp_min, min)
+			assert.Equal(t, tc.exp_max, max)
+			if tc.err == nil {
+				assert.Nil(t, err)
+			} else {
+				assert.ErrorAs(t, err, &tc.err)
+			}
+
+		})
+	}
+}
+
+func Test_MinMaxElementMapPred(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		haystack       map[string]int
+		comparator_min func(int, int) bool
+		comparator_max func(int, int) bool
+		exp_min        string
+		exp_max        string
+		err            error
+		name           string
+	}{
+		{map[string]int{"a": 1, "b": 2, "c": 3}, goaoi.IsLessThan[int], goaoi.IsGreaterThan[int], "a", "c", nil, "Found at beginning"},
+		{map[string]int{"a": 2, "b": 3, "c": 1}, goaoi.IsLessThan[int], goaoi.IsGreaterThan[int], "c", "b", nil, "Found at end"},
+		{map[string]int{}, goaoi.IsLessThan[int], goaoi.IsGreaterThan[int], "", "", goaoi.EmptyIterableError{}, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			min, max, err := goaoi.MinMaxElementMapPred(tc.haystack, tc.comparator_min, tc.comparator_max)
+
+			assert.Equal(t, tc.exp_min, min)
+			assert.Equal(t, tc.exp_max, max)
+			if tc.err == nil {
+				assert.Nil(t, err)
+			} else {
+				assert.ErrorAs(t, err, &tc.err)
+			}
+
+		})
+	}
+}
+
+func Test_MinMaxElementSliceFloat(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		haystack []float32
+		exp_min  int
+		exp_max  int
+		err      error
+		name     string
+	}{
+		{[]float32{1.0, 2.0, 3.0}, 0, 2, nil, "Found at beginning"},
+		{[]float32{2.0, 3.0, 1.0}, 2, 1, nil, "Found at end"},
+		{[]float32{}, 0.0, 0.0, goaoi.EmptyIterableError{}, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			min, max, err := goaoi.MinMaxElementSliceFloat(tc.haystack)
+
+			assert.Equal(t, tc.exp_min, min)
+			assert.Equal(t, tc.exp_max, max)
+			if tc.err == nil {
+				assert.Nil(t, err)
+			} else {
+				assert.ErrorAs(t, err, &tc.err)
+			}
+
+		})
+	}
+}
+
+func Test_MinMaxElementMapFloat(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		haystack map[string]float32
+		exp_min  string
+		exp_max  string
+		err      error
+		name     string
+	}{
+		{map[string]float32{"a": 1.0, "b": 2.0, "c": 3.0}, "a", "c", nil, "Found at beginning"},
+		{map[string]float32{"a": 2.0, "b": 3.0, "c": 1.0}, "c", "b", nil, "Found at end"},
+		{map[string]float32{}, "", "", goaoi.EmptyIterableError{}, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			min, max, err := goaoi.MinMaxElementMapFloat(tc.haystack)
+
+			assert.Equal(t, tc.exp_min, min)
+			assert.Equal(t, tc.exp_max, max)
+			if tc.err == nil {
+				assert.Nil(t, err)
+			} else {
+				assert.ErrorAs(t, err, &tc.err)
+			}
+		})
+	}
+}

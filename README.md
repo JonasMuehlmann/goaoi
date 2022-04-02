@@ -151,11 +151,11 @@ function's implementation. This list is subject to change at any time.
 ### Minimum/maximum operations
 
 - [x] max
-- [ ] max_element
+- [x] max_element
 - [x] min
-- [ ] min_element
+- [x] min_element
 - [x] minmax
-- [ ] minmax_element
+- [x] minmax_element
 
 
 - [ ] clamp
