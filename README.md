@@ -150,7 +150,7 @@ function's implementation. This list is subject to change at any time.
 
 ### Minimum/maximum operations
 
-- [ ] max
+- [x] max
 - [ ] max_element
 - [x] min
 - [ ] min_element
