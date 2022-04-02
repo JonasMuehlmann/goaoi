@@ -1075,20 +1075,20 @@ func MinMapPred[THaystack comparable, TValue constraints.Ordered](haystack map[T
 // Possible Error values:
 //    - EmptyIterableError
 func MaxSliceInt[T constraints.Integer](haystack []T) (T, error) {
-	var min T
+	var max T
 
 	if len(haystack) == 0 {
-		return min, EmptyIterableError{}
+		return max, EmptyIterableError{}
 	}
 
-	min = haystack[0]
+	max = haystack[0]
 	for _, val := range haystack {
-		if val > min {
-			min = val
+		if val > max {
+			max = val
 		}
 	}
 
-	return min, nil
+	return max, nil
 }
 
 // MaxSliceFloat finds the largest value in haystack.
@@ -1097,18 +1097,18 @@ func MaxSliceInt[T constraints.Integer](haystack []T) (T, error) {
 // Possible Error values:
 //    - EmptyIterableError
 func MaxSliceFloat[T constraints.Float](haystack []T) (T, error) {
-	var min T
+	var max T
 
 	if len(haystack) == 0 {
-		return min, EmptyIterableError{}
+		return max, EmptyIterableError{}
 	}
 
-	min = haystack[0]
+	max = haystack[0]
 	for _, val := range haystack {
-		min = T(math.Max(float64(min), float64(val)))
+		max = T(math.Max(float64(max), float64(val)))
 	}
 
-	return min, nil
+	return max, nil
 }
 
 // MaxSlicePred finds the largest value in haystack.
@@ -1117,20 +1117,20 @@ func MaxSliceFloat[T constraints.Float](haystack []T) (T, error) {
 // Possible Error values:
 //    - EmptyIterableError
 func MaxSlicePred[T constraints.Ordered](haystack []T, binary_predicate func(T, T) bool) (T, error) {
-	var min T
+	var max T
 
 	if len(haystack) == 0 {
-		return min, EmptyIterableError{}
+		return max, EmptyIterableError{}
 	}
 
-	min = haystack[0]
+	max = haystack[0]
 	for _, val := range haystack {
-		if binary_predicate(val, min) {
-			min = val
+		if binary_predicate(val, max) {
+			max = val
 		}
 	}
 
-	return min, nil
+	return max, nil
 }
 
 // MaxMapInt finds the largest value in haystack.
@@ -1139,24 +1139,24 @@ func MaxSlicePred[T constraints.Ordered](haystack []T, binary_predicate func(T, 
 // Possible Error values:
 //    - EmptyIterableError
 func MaxMapInt[THaystack comparable, TValue constraints.Integer](haystack map[THaystack]TValue) (TValue, error) {
-	var min TValue
+	var max TValue
 
 	for _, val := range haystack {
-		min = val
+		max = val
 		break
 	}
 
 	if len(haystack) == 0 {
-		return min, EmptyIterableError{}
+		return max, EmptyIterableError{}
 	}
 
 	for _, val := range haystack {
-		if val > min {
-			min = val
+		if val > max {
+			max = val
 		}
 	}
 
-	return min, nil
+	return max, nil
 }
 
 // MaxMapFloat finds the largest value in haystack.
@@ -1165,22 +1165,22 @@ func MaxMapInt[THaystack comparable, TValue constraints.Integer](haystack map[TH
 // Possible Error values:
 //    - EmptyIterableError
 func MaxMapFloat[THaystack comparable, TValue constraints.Float](haystack map[THaystack]TValue) (TValue, error) {
-	var min TValue
+	var max TValue
 
 	for _, val := range haystack {
-		min = val
+		max = val
 		break
 	}
 
 	if len(haystack) == 0 {
-		return min, EmptyIterableError{}
+		return max, EmptyIterableError{}
 	}
 
 	for _, val := range haystack {
-		min = TValue(math.Max(float64(min), float64(val)))
+		max = TValue(math.Max(float64(max), float64(val)))
 	}
 
-	return min, nil
+	return max, nil
 }
 
 // MaxMapPred finds the largest value in haystack.
@@ -1189,22 +1189,187 @@ func MaxMapFloat[THaystack comparable, TValue constraints.Float](haystack map[TH
 // Possible Error values:
 //    - EmptyIterableError
 func MaxMapPred[THaystack comparable, TValue constraints.Ordered](haystack map[THaystack]TValue, binary_predicate func(TValue, TValue) bool) (TValue, error) {
-	var min TValue
+	var max TValue
 
 	for _, val := range haystack {
-		min = val
+		max = val
 		break
 	}
 
 	if len(haystack) == 0 {
-		return min, EmptyIterableError{}
+		return max, EmptyIterableError{}
 	}
 
 	for _, val := range haystack {
-		if binary_predicate(val, min) {
-			min = val
+		if binary_predicate(val, max) {
+			max = val
 		}
 	}
 
-	return min, nil
+	return max, nil
+}
+
+// MinMaxSliceInt finds the smallest and largest value in haystack.
+// This funnction is optimized for integers.
+//
+// Possible Error values:
+//    - EmptyIterableError
+func MinMaxSliceInt[T constraints.Integer](haystack []T) (T, T, error) {
+	var min T
+	var max T
+
+	if len(haystack) == 0 {
+		return min, max, EmptyIterableError{}
+	}
+
+	min = haystack[0]
+	for _, val := range haystack {
+		if val < min {
+			min = val
+		}
+
+		if val > max {
+			max = val
+		}
+	}
+
+	return min, max, nil
+}
+
+// MinMaxSliceFloat finds the smallest and largest value in haystack.
+// This funnction uses math.MinMax for robustness.
+//
+// Possible Error values:
+//    - EmptyIterableError
+func MinMaxSliceFloat[T constraints.Float](haystack []T) (T, T, error) {
+	var min T
+	var max T
+
+	if len(haystack) == 0 {
+		return min, max, EmptyIterableError{}
+	}
+
+	min = haystack[0]
+	for _, val := range haystack {
+		min = T(math.Min(float64(min), float64(val)))
+		max = T(math.Max(float64(max), float64(val)))
+	}
+
+	return min, max, nil
+}
+
+// MinMaxSlicePred finds the smallest and largest value in haystack.
+// The elements are compared with binary_predicate.
+//
+// Possible Error values:
+//    - EmptyIterableError
+func MinMaxSlicePred[T constraints.Ordered](haystack []T, binary_predicate_min func(T, T) bool, binary_predicate_max func(T, T) bool) (T, T, error) {
+	var min T
+	var max T
+
+	if len(haystack) == 0 {
+		return min, max, EmptyIterableError{}
+	}
+
+	min = haystack[0]
+	for _, val := range haystack {
+		if binary_predicate_min(val, min) {
+			min = val
+		}
+		if binary_predicate_max(val, min) {
+			max = val
+		}
+	}
+
+	return min, max, nil
+}
+
+// MinMaxMapInt finds the smallest and largest value in haystack.
+// This funnction is optimized for integers.
+//
+// Possible Error values:
+//    - EmptyIterableError
+func MinMaxMapInt[THaystack comparable, TValue constraints.Integer](haystack map[THaystack]TValue) (TValue, TValue, error) {
+	var min TValue
+	var max TValue
+
+	for _, val := range haystack {
+		min = val
+		max = val
+		break
+	}
+
+	if len(haystack) == 0 {
+		return min, max, EmptyIterableError{}
+	}
+
+	for _, val := range haystack {
+		if val < min {
+			min = val
+		}
+
+		if val > max {
+			max = val
+		}
+	}
+
+	return min, max, nil
+}
+
+// MinMaxMapFloat finds the smallest and largest value in haystack.
+// This funnction uses math.MinMax for robustness.
+//
+// Possible Error values:
+//    - EmptyIterableError
+func MinMaxMapFloat[THaystack comparable, TValue constraints.Float](haystack map[THaystack]TValue) (TValue, TValue, error) {
+	var min TValue
+	var max TValue
+
+	for _, val := range haystack {
+		min = val
+		max = val
+		break
+	}
+
+	if len(haystack) == 0 {
+		return min, max, EmptyIterableError{}
+	}
+
+	for _, val := range haystack {
+		min = TValue(math.Min(float64(min), float64(val)))
+		max = TValue(math.Max(float64(max), float64(val)))
+	}
+
+	return min, max, nil
+}
+
+// MinMaxMapPred finds the smallest and largest value in haystack.
+// The elements are compared with binary_predicate.
+//
+// Possible Error values:
+//    - EmptyIterableError
+func MinMaxMapPred[THaystack comparable, TValue constraints.Ordered](haystack map[THaystack]TValue, binary_predicate_min func(TValue, TValue) bool, binary_predicate_max func(TValue, TValue) bool) (TValue, TValue, error) {
+	var min TValue
+	var max TValue
+
+	for _, val := range haystack {
+		min = val
+		max = val
+		break
+	}
+
+	if len(haystack) == 0 {
+		return min, max, EmptyIterableError{}
+	}
+
+	for _, val := range haystack {
+		if binary_predicate_min(val, min) {
+			min = val
+		}
+		if binary_predicate_max(val, max) {
+			max = val
+		}
+	}
+
+	return min, max, nil
 }
