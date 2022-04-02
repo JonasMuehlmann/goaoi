@@ -152,7 +152,7 @@ function's implementation. This list is subject to change at any time.
 
 - [ ] max
 - [ ] max_element
-- [ ] min
+- [x] min
 - [ ] min_element
 - [ ] minmax
 - [ ] minmax_element

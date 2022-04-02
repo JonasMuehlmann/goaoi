@@ -1251,3 +1251,117 @@ func Test_FillSlice(t *testing.T) {
 		})
 	}
 }
+
+func Test_MinSliceInt(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		haystack []int
+		exp      int
+		err      error
+		name     string
+	}{
+		{[]int{1, 2, 3}, 1, nil, "Found at beginning"},
+		{[]int{2, 3, 1}, 1, nil, "Found at end"},
+		{[]int{}, 0, goaoi.EmptyIterableError{}, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			res, err := goaoi.MinSliceInt(tc.haystack)
+
+			assert.Equal(t, tc.exp, res)
+			if tc.err == nil {
+				assert.Nil(t, err)
+			} else {
+				assert.ErrorAs(t, err, &tc.err)
+			}
+
+		})
+	}
+}
+
+func Test_MinMap(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		haystack map[string]int
+		exp      int
+		err      error
+		name     string
+	}{
+		{map[string]int{"a": 1, "b": 2, "c": 3}, 1, nil, "Found at beginning"},
+		{map[string]int{"a": 2, "b": 3, "c": 1}, 1, nil, "Found at end"},
+		{map[string]int{}, 0, goaoi.EmptyIterableError{}, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			res, err := goaoi.MinMapInt(tc.haystack)
+
+			assert.Equal(t, tc.exp, res)
+			if tc.err == nil {
+				assert.Nil(t, err)
+			} else {
+				assert.ErrorAs(t, err, &tc.err)
+			}
+
+		})
+	}
+}
+
+func Test_MinSlicePred(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		haystack   []int
+		comparator func(int, int) bool
+		exp        int
+		err        error
+		name       string
+	}{
+		{[]int{1, 2, 3}, goaoi.IsLessThan[int], 1, nil, "Found at beginning"},
+		{[]int{2, 3, 1}, goaoi.IsLessThan[int], 1, nil, "Found at end"},
+		{[]int{}, goaoi.IsLessThan[int], 0, goaoi.EmptyIterableError{}, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			res, err := goaoi.MinSlicePred(tc.haystack, tc.comparator)
+
+			assert.Equal(t, tc.exp, res)
+			if tc.err == nil {
+				assert.Nil(t, err)
+			} else {
+				assert.ErrorAs(t, err, &tc.err)
+			}
+
+		})
+	}
+}
+
+func Test_MinMapPred(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		haystack   map[string]int
+		comparator func(int, int) bool
+		exp        int
+		err        error
+		name       string
+	}{
+		{map[string]int{"a": 1, "b": 2, "c": 3}, goaoi.IsLessThan[int], 1, nil, "Found at beginning"},
+		{map[string]int{"a": 2, "b": 3, "c": 1}, goaoi.IsLessThan[int], 1, nil, "Found at end"},
+		{map[string]int{}, goaoi.IsLessThan[int], 0, goaoi.EmptyIterableError{}, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			res, err := goaoi.MinMapPred(tc.haystack, tc.comparator)
+
+			assert.Equal(t, tc.exp, res)
+			if tc.err == nil {
+				assert.Nil(t, err)
+			} else {
+				assert.ErrorAs(t, err, &tc.err)
+			}
+
+		})
+	}
+}

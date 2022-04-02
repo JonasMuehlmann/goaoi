@@ -2,6 +2,12 @@
 // It is inspired by the algorithm header from the C++ standard template library (STL for short).
 package goaoi
 
+import (
+	"math"
+
+	"golang.org/x/exp/constraints"
+)
+
 // FindSlice finds the first index i where haystack[i] == needle.
 //
 // Possible Error values:
@@ -921,4 +927,144 @@ func TransformSliceUnsafe[T comparable](container []T, transformer func(*T)) err
 	}
 
 	return nil
+}
+
+// MinSliceInt finds the smallest value in haystack.
+// This funnction is optimized for integers.
+//
+// Possible Error values:
+//    - EmptyIterableError
+func MinSliceInt[T constraints.Integer](haystack []T) (T, error) {
+	var min T
+
+	if len(haystack) == 0 {
+		return min, EmptyIterableError{}
+	}
+
+	min = haystack[0]
+	for _, val := range haystack {
+		if val < min {
+			min = val
+		}
+	}
+
+	return min, nil
+}
+
+// MinSliceFloat finds the smallest value in haystack.
+// This funnction uses math.Min for robustness.
+//
+// Possible Error values:
+//    - EmptyIterableError
+func MinSliceFloat[T constraints.Float](haystack []T) (T, error) {
+	var min T
+
+	if len(haystack) == 0 {
+		return min, EmptyIterableError{}
+	}
+
+	min = haystack[0]
+	for _, val := range haystack {
+		min = T(math.Min(float64(min), float64(val)))
+	}
+
+	return min, nil
+}
+
+// MinSlicePred finds the smallest value in haystack.
+// The elements are compared with binary_predicate.
+//
+// Possible Error values:
+//    - EmptyIterableError
+func MinSlicePred[T constraints.Ordered](haystack []T, binary_predicate func(T, T) bool) (T, error) {
+	var min T
+
+	if len(haystack) == 0 {
+		return min, EmptyIterableError{}
+	}
+
+	min = haystack[0]
+	for _, val := range haystack {
+		if binary_predicate(val, min) {
+			min = val
+		}
+	}
+
+	return min, nil
+}
+
+// MinMapInt finds the smallest value in haystack.
+// This funnction is optimized for integers.
+//
+// Possible Error values:
+//    - EmptyIterableError
+func MinMapInt[THaystack comparable, TValue constraints.Integer](haystack map[THaystack]TValue) (TValue, error) {
+	var min TValue
+
+	for _, val := range haystack {
+		min = val
+		break
+	}
+
+	if len(haystack) == 0 {
+		return min, EmptyIterableError{}
+	}
+
+	for _, val := range haystack {
+		if val < min {
+			min = val
+		}
+	}
+
+	return min, nil
+}
+
+// MinMapFloat finds the smallest value in haystack.
+// This funnction uses math.Min for robustness.
+//
+// Possible Error values:
+//    - EmptyIterableError
+func MinMapFloat[THaystack comparable, TValue constraints.Float](haystack map[THaystack]TValue) (TValue, error) {
+	var min TValue
+
+	for _, val := range haystack {
+		min = val
+		break
+	}
+
+	if len(haystack) == 0 {
+		return min, EmptyIterableError{}
+	}
+
+	for _, val := range haystack {
+		min = TValue(math.Min(float64(min), float64(val)))
+	}
+
+	return min, nil
+}
+
+// MinMapPred finds the smallest value in haystack.
+// The elements are compared with binary_predicate.
+//
+// Possible Error values:
+//    - EmptyIterableError
+func MinMapPred[THaystack comparable, TValue constraints.Ordered](haystack map[THaystack]TValue, binary_predicate func(TValue, TValue) bool) (TValue, error) {
+	var min TValue
+
+	for _, val := range haystack {
+		min = val
+		break
+	}
+
+	if len(haystack) == 0 {
+		return min, EmptyIterableError{}
+	}
+
+	for _, val := range haystack {
+		if binary_predicate(val, min) {
+			min = val
+		}
+	}
+
+	return min, nil
 }
