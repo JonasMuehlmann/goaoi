@@ -19,7 +19,7 @@ jobs:
         go-version: 1.18
 
     - name: Test
-      run: go test -coverprofile coverage.out -v ./test
+      run: go test -coverprofile coverage.out -v ./...
 
     - name: Report coverage
       uses: codecov/codecov-action@v2
