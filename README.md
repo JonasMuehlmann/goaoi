@@ -173,7 +173,7 @@ function's implementation. This list is subject to change at any time.
 - [ ] next_permutation
 - [ ] prev_permutation
 
-### Numeric operations (std::numeric)
+### Numeric operations (numeric header)
 
 - [ ] iota
 - [ ] accumulate
@@ -181,7 +181,6 @@ function's implementation. This list is subject to change at any time.
 - [ ] transform_reduce
 - [ ] inner_product
 - [ ] adjacent_difference
-- [ ] partial_sum
 - [ ] partial_sum
 - [ ] inclusive_scan
 - [ ] exclusive_scan
