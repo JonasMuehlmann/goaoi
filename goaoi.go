@@ -208,7 +208,7 @@ func FindFirstOfMap[TKey comparable, TValue comparable](haystack map[TKey]TValue
 // Possible Error values:
 //    - EmptyIterableError
 //    - ComparisonError
-func AllOfSlice[T comparable](container []T, unary_predicate func(T) bool) error {
+func AllOfSlice[T any](container []T, unary_predicate func(T) bool) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
 	}
@@ -247,7 +247,7 @@ func AllOfMap[TKey comparable, TValue comparable](container map[TKey]TValue, una
 // Possible Error values:
 //    - EmptyIterableError
 //    - ComparisonError
-func AnyOfSlice[T comparable](container []T, unary_predicate func(T) bool) error {
+func AnyOfSlice[T any](container []T, unary_predicate func(T) bool) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
 	}
@@ -286,7 +286,7 @@ func AnyOfMap[TKey comparable, TValue comparable](container map[TKey]TValue, una
 // Possible Error values:
 //    - EmptyIterableError
 //    - ComparisonError
-func NoneOfSlice[T comparable](container []T, unary_predicate func(T) bool) error {
+func NoneOfSlice[T any](container []T, unary_predicate func(T) bool) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
 	}
@@ -326,7 +326,7 @@ func NoneOfMap[TKey comparable, TValue comparable](container map[TKey]TValue, un
 // Possible Error values:
 //    - EmptyIterableError
 //    - ExecutionError
-func ForeachSlice[T comparable](container []T, unary_func func(T) error) error {
+func ForeachSlice[T any](container []T, unary_func func(T) error) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
 	}
@@ -367,7 +367,7 @@ func ForeachMap[TKey comparable, TValue comparable](container map[TKey]TValue, u
 //
 // Possible Error values:
 //    - EmptyIterableError
-func ForeachSliceUnsafe[T comparable](container []T, unary_func func(T)) error {
+func ForeachSliceUnsafe[T any](container []T, unary_func func(T)) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
 	}
@@ -836,7 +836,7 @@ func CopyExceptIfNotMap[TKey comparable, TValue comparable](original map[TKey]TV
 
 // FillSlice fills the array pointed to by arr with filler.
 // all indices in the range [0, cap(*arr)[ are filled regardless of what len(*arr) is.
-func FillSlice[T comparable](arr *[]T, filler T) []T {
+func FillSlice[T any](arr *[]T, filler T) []T {
 	for i := range *arr {
 		(*arr)[i] = filler
 	}
@@ -881,7 +881,7 @@ func TransformMap[TKey comparable, TValue comparable](container map[TKey]TValue,
 // Possible Error values:
 //    - EmptyIterableError
 //    - ExecutionError
-func TransformSlice[T comparable](container []T, transformer func(*T) error) error {
+func TransformSlice[T any](container []T, transformer func(*T) error) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
 	}
@@ -917,7 +917,7 @@ func TransformMapUnsafe[TKey comparable, TValue comparable](container map[TKey]T
 //
 // Possible Error values:
 //    - EmptyIterableError
-func TransformSliceUnsafe[T comparable](container []T, transformer func(*T)) error {
+func TransformSliceUnsafe[T any](container []T, transformer func(*T)) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
 	}

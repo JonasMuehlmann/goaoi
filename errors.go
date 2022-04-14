@@ -17,7 +17,7 @@ func (error EmptyIterableError) Error() string {
 	return "Iterable is empty"
 }
 
-type ExecutionError[T comparable] struct {
+type ExecutionError[T any] struct {
 	BadItem T
 	Inner   error
 }
