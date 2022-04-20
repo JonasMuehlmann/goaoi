@@ -552,7 +552,7 @@ func AdjacentFindSlicePred[T comparable](container []T, binary_predicate func(T,
 	return 0, ElementNotFoundError{}
 }
 
-// TakeWhileSlice returns a copy of original until the first elemen not satisfying unary_predicate(element) == true).
+// TakeWhileSlice returns a copy of original until the first element not satisfying unary_predicate(element) == true).
 //
 // Possible Error values:
 //    - EmptyIterableError
@@ -576,7 +576,7 @@ func TakeWhileSlice[T comparable](original []T, unary_predicate func(T) bool) ([
 	return newContainer, nil
 }
 
-// TakeWhileMap returns a copy of original until the first value no satisfying unary_predicate(value) == true).
+// TakeWhileMap returns a copy of original until the first value not satisfying unary_predicate(value) == true).
 // Note that the iteration order of a map is not stable.
 //
 // Possible Error values:
@@ -596,6 +596,59 @@ func TakeWhileMap[TKey comparable, TValue comparable](original map[TKey]TValue, 
 		}
 
 		newContainer[key] = value
+	}
+
+	return newContainer, nil
+}
+
+// DropWhileSlice returns a copy of original starting from first element not satisfying unary_predicate(element) == true).
+//
+// Possible Error values:
+//    - EmptyIterableError
+func DropWhileSlice[T comparable](original []T, unary_predicate func(T) bool) ([]T, error) {
+	var zeroVal []T
+
+	if len(original) == 0 {
+		return zeroVal, EmptyIterableError{}
+	}
+
+	newContainer := make([]T, 0, len(original))
+
+	i := 0
+	for _, value := range original {
+		if !unary_predicate(value) {
+			break
+		}
+
+		i++
+	}
+
+	for _, value := range original[i:] {
+		newContainer = append(newContainer, value)
+	}
+
+	return newContainer, nil
+}
+
+// DropWhileMap returns a copy of original starting from the first value not satisfying unary_predicate(value) == true).
+// Note that the iteration order of a map is not stable.
+//
+// Possible Error values:
+//    - EmptyIterableError
+func DropWhileMap[TKey comparable, TValue comparable](original map[TKey]TValue, unary_predicate func(TValue) bool) (map[TKey]TValue, error) {
+	var zeroVal map[TKey]TValue
+
+	if len(original) == 0 {
+		return zeroVal, EmptyIterableError{}
+	}
+
+	newContainer := make(map[TKey]TValue, len(original))
+
+	isDropping := true
+	for key, value := range original {
+		if !(unary_predicate(value) && isDropping) {
+			newContainer[key] = value
+		}
 	}
 
 	return newContainer, nil

@@ -823,6 +823,66 @@ func TestTakeWhileMap(t *testing.T) {
 	}
 }
 
+func Test_DropWhileSlice(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		original   []int
+		comparator func(int) bool
+		exp        []int
+		err        error
+		name       string
+	}{
+		{[]int{1, 2}, func(x int) bool { return x < 0 }, []int{1, 2}, nil, "Found"},
+		{[]int{1, 2}, func(x int) bool { return x == 1 }, []int{2}, nil, "Found 1"},
+		{[]int{1, 2}, func(x int) bool { return x < 10 }, []int{}, nil, "Not Found"},
+		{[]int{}, func(x int) bool { return x == -1 }, []int(nil), goaoi.EmptyIterableError{}, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			res, err := goaoi.DropWhileSlice(tc.original, tc.comparator)
+
+			assert.Equal(t, tc.exp, res)
+			if tc.err == nil {
+				assert.Nil(t, err)
+			} else {
+				assert.ErrorAs(t, err, &tc.err)
+			}
+
+		})
+	}
+}
+
+func TestDropWhileMap(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		original   map[string]int
+		comparator func(int) bool
+		exp        map[string]int
+		err        error
+		name       string
+	}{
+		{map[string]int{"a": 1, "b": 2}, func(x int) bool { return x < 0 }, map[string]int{"a": 1, "b": 2}, nil, "Found"},
+		{map[string]int{"a": 1, "b": 2}, func(x int) bool { return x == 1 }, map[string]int{"b": 2}, nil, "Found 1"},
+		{map[string]int{"a": 1, "b": 2}, func(x int) bool { return x != -1 }, map[string]int{}, nil, "Not Found"},
+		{map[string]int{}, func(x int) bool { return x == -1 }, map[string]int(nil), goaoi.EmptyIterableError{}, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			res, err := goaoi.DropWhileMap(tc.original, tc.comparator)
+
+			assert.Equal(t, tc.exp, res)
+			if tc.err == nil {
+				assert.Nil(t, err)
+			} else {
+				assert.ErrorAs(t, err, &tc.err)
+			}
+
+		})
+	}
+}
+
 func Test_CopyIfSlice(t *testing.T) {
 	t.Parallel()
 
