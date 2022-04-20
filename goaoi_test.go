@@ -763,6 +763,64 @@ func Test_AdjacentFindPred(t *testing.T) {
 	}
 }
 
+func Test_CopyIfSlice(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		original   []int
+		comparator func(int) bool
+		exp        []int
+		err        error
+		name       string
+	}{
+		{[]int{1, 2}, func(x int) bool { return x != 1 }, []int{2}, nil, "Found"},
+		{[]int{1, 2}, func(x int) bool { return x != -1 }, []int{1, 2}, nil, "Not Found"},
+		{[]int{}, func(x int) bool { return x != -1 }, []int(nil), goaoi.EmptyIterableError{}, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			res, err := goaoi.CopyIfSlice(tc.original, tc.comparator)
+
+			assert.Equal(t, tc.exp, res)
+			if tc.err == nil {
+				assert.Nil(t, err)
+			} else {
+				assert.ErrorAs(t, err, &tc.err)
+			}
+
+		})
+	}
+}
+
+func Test_CopyIfMap(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		original   map[string]int
+		comparator func(int) bool
+		exp        map[string]int
+		err        error
+		name       string
+	}{
+		{map[string]int{"a": 1, "b": 2}, func(x int) bool { return x != 1 }, map[string]int{"b": 2}, nil, "Found"},
+		{map[string]int{"a": 1, "b": 2}, func(x int) bool { return x != -1 }, map[string]int{"a": 1, "b": 2}, nil, "Not Found"},
+		{map[string]int{}, func(x int) bool { return x != -1 }, map[string]int(nil), goaoi.EmptyIterableError{}, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			res, err := goaoi.CopyIfMap(tc.original, tc.comparator)
+
+			assert.Equal(t, tc.exp, res)
+			if tc.err == nil {
+				assert.Nil(t, err)
+			} else {
+				assert.ErrorAs(t, err, &tc.err)
+			}
+
+		})
+	}
+}
+
 func Test_CopyReplaceSlice(t *testing.T) {
 	t.Parallel()
 

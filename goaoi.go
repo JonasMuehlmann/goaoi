@@ -552,6 +552,51 @@ func AdjacentFindSlicePred[T comparable](container []T, binary_predicate func(T,
 	return 0, ElementNotFoundError{}
 }
 
+// CopyIfSlice returns a copy of original with all element satisfying unary_predicate(element) == true).
+//
+// Possible Error values:
+//    - EmptyIterableError
+func CopyIfSlice[T comparable](original []T, unary_predicate func(T) bool) ([]T, error) {
+	var zeroVal []T
+
+	if len(original) == 0 {
+		return zeroVal, EmptyIterableError{}
+	}
+
+	newContainer := make([]T, 0, len(original))
+
+	for _, value := range original {
+		if unary_predicate(value) {
+			newContainer = append(newContainer, value)
+		}
+	}
+
+	return newContainer, nil
+}
+
+// CopyIfMap returns a copy of original with all key-value pairs satisfying unary_predicate(value) == true).
+// Note that the iteration order of a map is not stable.
+//
+// Possible Error values:
+//    - EmptyIterableError
+func CopyIfMap[TKey comparable, TValue comparable](original map[TKey]TValue, unary_predicate func(TValue) bool) (map[TKey]TValue, error) {
+	var zeroVal map[TKey]TValue
+
+	if len(original) == 0 {
+		return zeroVal, EmptyIterableError{}
+	}
+
+	newContainer := make(map[TKey]TValue, len(original))
+
+	for key, value := range original {
+		if unary_predicate(value) {
+			newContainer[key] = value
+		}
+	}
+
+	return newContainer, nil
+}
+
 // CopyReplaceSlice returns a copy of original where each element equal to toReplace is replaced with replacement.
 //
 // Possible Error values:
