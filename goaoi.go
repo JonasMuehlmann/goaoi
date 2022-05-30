@@ -1076,6 +1076,98 @@ func TransformSliceUnsafe[T any](container []T, transformer func(*T)) error {
 	return nil
 }
 
+// TransformCopyMap applies transformer(value) for all key-value pairs in container and and returns the newly created container.
+// Note that the iteration order of a map is not stable.
+// Note that the transformer can return a different type than it's input.
+// Errors returned by transformer are propagated to the caller of TransformCopyMap.
+//
+// Possible Error values:
+//    - EmptyIterableError
+//    - ExecutionError
+func TransformCopyMap[TKey comparable, TValue comparable, TValueOut any](container map[TKey]TValue, transformer func(TValue) (TValueOut, error)) (map[TKey]TValueOut, error) {
+	res := make(map[TKey]TValueOut)
+
+	if len(container) == 0 {
+		return res, EmptyIterableError{}
+	}
+
+	for key := range container {
+		newValue, err := transformer(container[key])
+		if err != nil {
+			return res, ExecutionError[TValue]{container[key], err}
+		}
+
+		res[key] = newValue
+	}
+
+	return res, nil
+}
+
+// TransformCopySlice applies transformer(container[i]) for all i in [0, len(container)[  and and returns the newly created container.
+// Note that the transformer can return a different type than it's input.
+// Errors returned by transformer are propagated to the caller of TransformCopySlice.
+//
+// Possible Error values:
+//    - EmptyIterableError
+//    - ExecutionError
+func TransformCopySlice[T any, TOut any](container []T, transformer func(T) (TOut, error)) ([]TOut, error) {
+	res := make([]TOut, 0, len(container))
+
+	if len(container) == 0 {
+		return res, EmptyIterableError{}
+	}
+
+	for i, value := range container {
+		newVal, err := transformer(container[i])
+		if err != nil {
+			return res, ExecutionError[T]{value, err}
+		}
+
+		res = append(res, newVal)
+	}
+
+	return res, nil
+}
+
+// TransformCopyMapUnsafe applies transformer(value) for all key-value pairs in container and and returns the newly created container.
+// Note that the transformer can return a different type than it's input.
+// Note that the iteration order of a map is not stable.
+//
+// Possible Error values:
+//    - EmptyIterableError
+func TransformCopyMapUnsafe[TKey comparable, TValue comparable, TValueOut any](container map[TKey]TValue, transformer func(TValue) TValueOut) (map[TKey]TValueOut, error) {
+	res := make(map[TKey]TValueOut)
+
+	if len(container) == 0 {
+		return res, EmptyIterableError{}
+	}
+
+	for key := range container {
+		res[key] = transformer(container[key])
+	}
+
+	return res, nil
+}
+
+// TransformCopySliceUnsafe applies transformer(container[i]) for all i in [0, len(container)[  and and returns the newly created container.
+// Note that the transformer can return a different type than it's input.
+//
+// Possible Error values:
+//    - EmptyIterableError
+func TransformCopySliceUnsafe[T any, TOut any](container []T, transformer func(T) TOut) ([]TOut, error) {
+	res := make([]TOut, 0, len(container))
+
+	if len(container) == 0 {
+		return res, EmptyIterableError{}
+	}
+
+	for i := range container {
+		res = append(res, transformer(container[i]))
+	}
+
+	return res, nil
+}
+
 // MinSliceInt finds the smallest value in haystack.
 // This funnction is optimized for integers.
 //

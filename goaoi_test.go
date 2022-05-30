@@ -1323,6 +1323,118 @@ func Test_TransformSlice(t *testing.T) {
 	}
 }
 
+func Test_TransformCopySlice(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		original    []int
+		transformer func(int) (float32, error)
+		exp         []float32
+		err         error
+		name        string
+	}{
+		{[]int{1, 2}, func(i int) (float32, error) { return float32(i) + 1.0, nil }, []float32{2.0, 3.0}, nil, "Found"},
+		{[]int{}, func(i int) (float32, error) { return float32(i) + 1.0, nil }, []float32{}, goaoi.EmptyIterableError{}, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			res, err := goaoi.TransformCopySlice(tc.original, tc.transformer)
+
+			assert.Equal(t, tc.exp, res)
+			if tc.err == nil {
+				assert.Nil(t, err)
+			} else {
+				assert.ErrorAs(t, err, &tc.err)
+			}
+
+		})
+	}
+}
+
+func Test_TransformMCopyap(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		original    map[string]int
+		transformer func(int) (float32, error)
+		exp         map[string]float32
+		err         error
+		name        string
+	}{
+		{map[string]int{"a": 1, "b": 2}, func(i int) (float32, error) { return float32(i) + 1, nil }, map[string]float32{"a": 2.0, "b": 3.0}, nil, "Found"},
+		{map[string]int{}, func(i int) (float32, error) { return float32(i) + 1, nil }, map[string]float32{}, goaoi.EmptyIterableError{}, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			res, err := goaoi.TransformCopyMap(tc.original, tc.transformer)
+
+			assert.Equal(t, tc.exp, res)
+			if tc.err == nil {
+				assert.Nil(t, err)
+			} else {
+				assert.ErrorAs(t, err, &tc.err)
+			}
+
+		})
+	}
+}
+
+func Test_TransformSCopyliceUnsafe(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		original    []int
+		transformer func(int) float32
+		exp         []float32
+		err         error
+		name        string
+	}{
+		{[]int{1, 2}, func(i int) float32 { return float32(i) + 1 }, []float32{2.0, 3.0}, nil, "Found"},
+		{[]int{}, func(i int) float32 { return float32(i) + 1 }, []float32{}, goaoi.EmptyIterableError{}, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			res, err := goaoi.TransformCopySliceUnsafe(tc.original, tc.transformer)
+
+			assert.Equal(t, tc.exp, res)
+			if tc.err == nil {
+				assert.Nil(t, err)
+			} else {
+				assert.ErrorAs(t, err, &tc.err)
+			}
+
+		})
+	}
+}
+
+func Test_TransformMCopyapUnsafe(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		original    map[string]int
+		transformer func(int) float32
+		exp         map[string]float32
+		err         error
+		name        string
+	}{
+		{map[string]int{"a": 1, "b": 2}, func(i int) float32 { return float32(i) + 1 }, map[string]float32{"a": 2.0, "b": 3.0}, nil, "Found"},
+		{map[string]int{}, func(i int) float32 { return float32(i) + 1 }, map[string]float32{}, goaoi.EmptyIterableError{}, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			res, err := goaoi.TransformCopyMapUnsafe(tc.original, tc.transformer)
+
+			assert.Equal(t, tc.exp, res)
+			if tc.err == nil {
+				assert.Nil(t, err)
+			} else {
+				assert.ErrorAs(t, err, &tc.err)
+			}
+
+		})
+	}
+}
+
 func Test_TransformMap(t *testing.T) {
 	t.Parallel()
 
