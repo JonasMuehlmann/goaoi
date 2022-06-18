@@ -215,7 +215,7 @@ func AllOfSlice[T any](container []T, unary_predicate func(T) bool) error {
 
 	for i, value := range container {
 		if !unary_predicate(value) {
-			return ComparisonError[int]{i}
+			return ComparisonError[int, T]{BadItemIndex: i, BadItem: value}
 		}
 	}
 
@@ -235,7 +235,7 @@ func AllOfMap[TKey comparable, TValue comparable](container map[TKey]TValue, una
 
 	for key, value := range container {
 		if !unary_predicate(value) {
-			return ComparisonError[TKey]{key}
+			return ComparisonError[TKey, TValue]{BadItemIndex: key, BadItem: value}
 		}
 	}
 
@@ -246,7 +246,7 @@ func AllOfMap[TKey comparable, TValue comparable](container map[TKey]TValue, una
 //
 // Possible Error values:
 //    - EmptyIterableError
-//    - ComparisonError
+//    - ElementNotFoundError
 func AnyOfSlice[T any](container []T, unary_predicate func(T) bool) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
@@ -258,7 +258,7 @@ func AnyOfSlice[T any](container []T, unary_predicate func(T) bool) error {
 		}
 	}
 
-	return ComparisonError[int]{len(container) - 1}
+	return ElementNotFoundError{}
 }
 
 // AnyOfMap checks that unary_predicate(val) == true for ANY val in container.
@@ -266,7 +266,7 @@ func AnyOfSlice[T any](container []T, unary_predicate func(T) bool) error {
 //
 // Possible Error values:
 //    - EmptyIterableError
-//    - ComparisonError
+//    - ElementNotFoundError
 func AnyOfMap[TKey comparable, TValue comparable](container map[TKey]TValue, unary_predicate func(TValue) bool) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
@@ -278,7 +278,7 @@ func AnyOfMap[TKey comparable, TValue comparable](container map[TKey]TValue, una
 		}
 	}
 
-	return ComparisonError[TKey]{}
+	return ElementNotFoundError{}
 }
 
 // NoneOfSlice checks that unary_predicate(val) == true for NO val in container.
@@ -291,9 +291,9 @@ func NoneOfSlice[T any](container []T, unary_predicate func(T) bool) error {
 		return EmptyIterableError{}
 	}
 
-	for _, value := range container {
+	for i, value := range container {
 		if unary_predicate(value) {
-			return ComparisonError[int]{len(container) - 1}
+			return ComparisonError[int, T]{BadItemIndex: i, BadItem: value}
 		}
 	}
 
@@ -311,9 +311,9 @@ func NoneOfMap[TKey comparable, TValue comparable](container map[TKey]TValue, un
 		return EmptyIterableError{}
 	}
 
-	for _, value := range container {
+	for key, value := range container {
 		if unary_predicate(value) {
-			return ComparisonError[TKey]{}
+			return ComparisonError[TKey, TValue]{BadItemIndex: key, BadItem: value}
 		}
 	}
 
@@ -334,7 +334,7 @@ func ForeachSlice[T any](container []T, unary_func func(T) error) error {
 	for i, value := range container {
 		err := unary_func(value)
 		if err != nil {
-			return ExecutionError[int]{i, err}
+			return ExecutionError[int, T]{BadItemIndex: i, BadItem: container[i], Inner: err}
 		}
 	}
 
@@ -356,7 +356,7 @@ func ForeachMap[TKey comparable, TValue comparable](container map[TKey]TValue, u
 	for key, value := range container {
 		err := unary_func(value)
 		if err != nil {
-			return ExecutionError[TKey]{key, err}
+			return ExecutionError[TKey, TValue]{BadItemIndex: key, BadItem: value, Inner: err}
 		}
 	}
 
@@ -1013,7 +1013,7 @@ func TransformMap[TKey comparable, TValue comparable](container map[TKey]TValue,
 	for key := range container {
 		newValue, err := transformer(container[key])
 		if err != nil {
-			return ExecutionError[TValue]{container[key], err}
+			return ExecutionError[TKey, TValue]{BadItemIndex: key, BadItem: container[key], Inner: err}
 		}
 
 		container[key] = newValue
@@ -1036,7 +1036,7 @@ func TransformSlice[T any](container []T, transformer func(*T) error) error {
 	for i, value := range container {
 		err := transformer(&container[i])
 		if err != nil {
-			return ExecutionError[T]{value, err}
+			return ExecutionError[int, T]{BadItemIndex: i, BadItem: value, Inner: err}
 		}
 	}
 
@@ -1094,7 +1094,7 @@ func TransformCopyMap[TKey comparable, TValue comparable, TValueOut any](contain
 	for key := range container {
 		newValue, err := transformer(container[key])
 		if err != nil {
-			return res, ExecutionError[TValue]{container[key], err}
+			return res, ExecutionError[TKey, TValue]{BadItemIndex: key, BadItem: container[key], Inner: err}
 		}
 
 		res[key] = newValue
@@ -1120,7 +1120,7 @@ func TransformCopySlice[T any, TOut any](container []T, transformer func(T) (TOu
 	for i, value := range container {
 		newVal, err := transformer(container[i])
 		if err != nil {
-			return res, ExecutionError[T]{value, err}
+			return res, ExecutionError[int, T]{BadItemIndex: i, BadItem: value, Inner: err}
 		}
 
 		res = append(res, newVal)

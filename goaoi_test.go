@@ -305,7 +305,7 @@ func Test_AllOfSlice(t *testing.T) {
 		name       string
 	}{
 		{[]int{1, 2}, func(i int) bool { return i > 0 }, nil, "Found"},
-		{[]int{1, 2}, func(i int) bool { return i < 0 }, goaoi.ComparisonError[int]{}, "Not found"},
+		{[]int{1, 2}, func(i int) bool { return i < 0 }, goaoi.ComparisonError[int, int]{0, 1}, "Not found"},
 		{[]int{}, func(i int) bool { return i > 0 }, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
@@ -327,7 +327,7 @@ func Test_AllOfMap(t *testing.T) {
 		name       string
 	}{
 		{map[string]int{"a": 1, "b": 2}, func(i int) bool { return i > 0 }, nil, "Found"},
-		{map[string]int{"a": 1, "b": 2}, func(i int) bool { return i < 0 }, goaoi.ComparisonError[string]{}, "Not found"},
+		{map[string]int{"a": 1, "b": 2}, func(i int) bool { return i < 0 }, goaoi.ComparisonError[string, int]{}, "Not found"},
 		{map[string]int{}, func(i int) bool { return i > 0 }, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
@@ -353,7 +353,7 @@ func Test_AnyOfSlice(t *testing.T) {
 		name       string
 	}{
 		{[]int{1, 2}, func(i int) bool { return i > 0 }, nil, "Found"},
-		{[]int{1, 2}, func(i int) bool { return i < 0 }, goaoi.ComparisonError[int]{1}, "Not found"},
+		{[]int{1, 2}, func(i int) bool { return i < 0 }, goaoi.ElementNotFoundError{}, "Not found"},
 		{[]int{}, func(i int) bool { return i > 0 }, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
@@ -375,7 +375,7 @@ func Test_AnyOfMap(t *testing.T) {
 		name       string
 	}{
 		{map[string]int{"a": 1, "b": 2}, func(i int) bool { return i > 0 }, nil, "Found"},
-		{map[string]int{"a": 1, "b": 2}, func(i int) bool { return i < 0 }, goaoi.ComparisonError[string]{}, "Not found"},
+		{map[string]int{"a": 1, "b": 2}, func(i int) bool { return i < 0 }, goaoi.ElementNotFoundError{}, "Not found"},
 		{map[string]int{}, func(i int) bool { return i > 0 }, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
@@ -397,7 +397,7 @@ func Test_NoneOfSlice(t *testing.T) {
 		name       string
 	}{
 		{[]int{1, 2}, func(i int) bool { return i < 0 }, nil, "Found"},
-		{[]int{1, 2}, func(i int) bool { return i > 0 }, goaoi.ComparisonError[int]{1}, "Not found"},
+		{[]int{1, 2}, func(i int) bool { return i > 0 }, goaoi.ComparisonError[int, int]{0, 1}, "Not found"},
 		{[]int{}, func(i int) bool { return i > 0 }, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
@@ -419,7 +419,7 @@ func Test_NoneOfMap(t *testing.T) {
 		name       string
 	}{
 		{map[string]int{"a": 1, "b": 2}, func(i int) bool { return i < 0 }, nil, "Found"},
-		{map[string]int{"a": 1, "b": 2}, func(i int) bool { return i > 0 }, goaoi.ComparisonError[string]{}, "Not found"},
+		{map[string]int{"a": 1, "b": 2}, func(i int) bool { return i > 0 }, goaoi.ComparisonError[string, int]{"a", 1}, "Not found"},
 		{map[string]int{}, func(i int) bool { return i > 0 }, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
@@ -441,7 +441,7 @@ func Test_ForeachSlice(t *testing.T) {
 		name       string
 	}{
 		{[]int{1, 2}, func(i int) error { i++; return nil }, nil, "Found"},
-		{[]int{1, 2}, func(i int) error { return assert.AnError }, goaoi.ExecutionError[int]{0, assert.AnError}, "Not found"},
+		{[]int{1, 2}, func(i int) error { return assert.AnError }, goaoi.ExecutionError[int, int]{0, 1, assert.AnError}, "Not found"},
 		{[]int{}, func(i int) error { return nil }, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {

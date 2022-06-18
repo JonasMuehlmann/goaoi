@@ -2,39 +2,38 @@ package goaoi
 
 import "fmt"
 
-type ComparisonError[T comparable] struct {
-	BadItem T
+type ComparisonError[TIndex comparable, TItem any] struct {
+	BadItemIndex TIndex
+	BadItem      TItem
 }
 
-func (error ComparisonError[T]) Error() string {
-	return fmt.Sprintf("Item at index %v did not satisfy comparison", error.BadItem)
+func (error ComparisonError[TIndex, TItem]) Error() string {
+	return fmt.Sprintf("Item at index %v did not satisfy comparison", error.BadItemIndex)
 }
 
-type EmptyIterableError struct {
-}
+type EmptyIterableError struct{}
 
 func (error EmptyIterableError) Error() string {
 	return "Iterable is empty"
 }
 
-type ExecutionError[T any] struct {
-	BadItem T
-	Inner   error
+type ExecutionError[TIndex, TItem any] struct {
+	BadItemIndex TIndex
+	BadItem      TItem
+	Inner        error
 }
 
-func (error ExecutionError[T]) Error() string {
-	return fmt.Sprintf("Item at index %v returned error after application of function: %v", error.BadItem, error.Inner)
+func (error ExecutionError[TIndex, TItem]) Error() string {
+	return fmt.Sprintf("Item at index %v returned error after application of function: %v", error.BadItemIndex, error.Inner)
 }
 
-type EqualIteratorsError struct {
-}
+type EqualIteratorsError struct{}
 
 func (error EqualIteratorsError) Error() string {
 	return "Iterables are equal"
 }
 
-type ElementNotFoundError struct {
-}
+type ElementNotFoundError struct{}
 
 func (error ElementNotFoundError) Error() string {
 	return "Could not find element"
