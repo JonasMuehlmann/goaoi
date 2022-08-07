@@ -1,3 +1,4 @@
+[![codecov](https://codecov.io/gh/JonasMuehlmann/goaoi/branch/main/graph/badge.svg?token=0J2P8OAJ6Y)](https://codecov.io/gh/JonasMuehlmann/goaoi)
 # goaoi
 ![img](https://img.shields.io/badge/semver-2.0.0-green) [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
 
