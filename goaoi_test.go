@@ -167,39 +167,6 @@ func Test_FindFirstOfMapPred(t *testing.T) {
 	}
 }
 
-func Test_FindFirstOfMap(t *testing.T) {
-	t.Parallel()
-
-	tcs := []struct {
-		haystack map[string]int
-		needles  []int
-		exp      string
-		err      error
-		name     string
-	}{
-		{map[string]int{"a": 1, "b": 2, "c": 3, "d": 4}, []int{4, 10}, "d", nil, "Found at end"},
-		{map[string]int{"a": 1, "b": 2, "c": 3, "d": 4}, []int{1, -1}, "a", nil, "Found at beginning"},
-		{map[string]int{"a": 1, "b": 2, "c": 3, "d": 4}, []int{3, 5}, "c", nil, "Found in middle"},
-		{map[string]int{"a": 1}, []int{1}, "a", nil, "Found equal"},
-		{map[string]int{"a": 1, "b": 2, "c": 3}, []int{4, 5}, "", goaoi.ElementNotFoundError{}, "Not found"},
-		{map[string]int{}, []int{1, 2, 3}, "", goaoi.EmptyIterableError{}, "Super empty"},
-		{map[string]int{"a": 1, "b": 2, "c": 3}, []int{}, "", goaoi.EmptyIterableError{}, "Sub empty"},
-	}
-	for _, tc := range tcs {
-		t.Run(tc.name, func(t *testing.T) {
-			res, err := goaoi.FindFirstOfMap(tc.haystack, tc.needles)
-
-			assert.Equal(t, tc.exp, res)
-			if tc.err == nil {
-				assert.Nil(t, err)
-			} else {
-				assert.ErrorAs(t, err, &tc.err)
-			}
-
-		})
-	}
-}
-
 func Test_AllOfSlice(t *testing.T) {
 	t.Parallel()
 
@@ -580,36 +547,6 @@ func Test_TakeWhileSlice(t *testing.T) {
 	}
 }
 
-func TestTakeWhileMap(t *testing.T) {
-	t.Parallel()
-
-	tcs := []struct {
-		original   map[string]int
-		comparator func(int) bool
-		exp        map[string]int
-		err        error
-		name       string
-	}{
-		{map[string]int{"a": 1, "b": 2}, func(x int) bool { return x > 0 }, map[string]int{"a": 1, "b": 2}, nil, "Found"},
-		{map[string]int{"a": 1, "b": 2}, func(x int) bool { return x == 1 }, map[string]int{"a": 1}, nil, "Found 1"},
-		{map[string]int{"a": 1, "b": 2}, func(x int) bool { return x == -1 }, map[string]int{}, nil, "Not Found"},
-		{map[string]int{}, func(x int) bool { return x == -1 }, map[string]int(nil), goaoi.EmptyIterableError{}, "Empty"},
-	}
-	for _, tc := range tcs {
-		t.Run(tc.name, func(t *testing.T) {
-			res, err := goaoi.TakeWhileMap(tc.original, tc.comparator)
-
-			assert.Equal(t, tc.exp, res)
-			if tc.err == nil {
-				assert.Nil(t, err)
-			} else {
-				assert.ErrorAs(t, err, &tc.err)
-			}
-
-		})
-	}
-}
-
 func Test_DropWhileSlice(t *testing.T) {
 	t.Parallel()
 
@@ -628,36 +565,6 @@ func Test_DropWhileSlice(t *testing.T) {
 	for _, tc := range tcs {
 		t.Run(tc.name, func(t *testing.T) {
 			res, err := goaoi.DropWhileSlice(tc.original, tc.comparator)
-
-			assert.Equal(t, tc.exp, res)
-			if tc.err == nil {
-				assert.Nil(t, err)
-			} else {
-				assert.ErrorAs(t, err, &tc.err)
-			}
-
-		})
-	}
-}
-
-func TestDropWhileMap(t *testing.T) {
-	t.Parallel()
-
-	tcs := []struct {
-		original   map[string]int
-		comparator func(int) bool
-		exp        map[string]int
-		err        error
-		name       string
-	}{
-		{map[string]int{"a": 1, "b": 2}, func(x int) bool { return x < 0 }, map[string]int{"a": 1, "b": 2}, nil, "Found"},
-		{map[string]int{"a": 1, "b": 2}, func(x int) bool { return x == 1 }, map[string]int{"b": 2}, nil, "Found 1"},
-		{map[string]int{"a": 1, "b": 2}, func(x int) bool { return x != -1 }, map[string]int{}, nil, "Not Found"},
-		{map[string]int{}, func(x int) bool { return x == -1 }, map[string]int(nil), goaoi.EmptyIterableError{}, "Empty"},
-	}
-	for _, tc := range tcs {
-		t.Run(tc.name, func(t *testing.T) {
-			res, err := goaoi.DropWhileMap(tc.original, tc.comparator)
 
 			assert.Equal(t, tc.exp, res)
 			if tc.err == nil {
@@ -1227,7 +1134,7 @@ func Test_MinSlicePred(t *testing.T) {
 	}
 	for _, tc := range tcs {
 		t.Run(tc.name, func(t *testing.T) {
-			res, err := goaoi.MinSlicePred(tc.haystack, tc.comparator)
+			_, res, err := goaoi.MinSlicePred(tc.haystack, tc.comparator)
 
 			assert.Equal(t, tc.exp, res)
 			if tc.err == nil {
@@ -1256,7 +1163,7 @@ func Test_MinMapPred(t *testing.T) {
 	}
 	for _, tc := range tcs {
 		t.Run(tc.name, func(t *testing.T) {
-			res, err := goaoi.MinMapPred(tc.haystack, tc.comparator)
+			_, res, err := goaoi.MinMapPred(tc.haystack, tc.comparator)
 
 			assert.Equal(t, tc.exp, res)
 			if tc.err == nil {
@@ -1285,7 +1192,7 @@ func Test_MaxSlicePred(t *testing.T) {
 	}
 	for _, tc := range tcs {
 		t.Run(tc.name, func(t *testing.T) {
-			res, err := goaoi.MaxSlicePred(tc.haystack, tc.comparator)
+			_, res, err := goaoi.MaxSlicePred(tc.haystack, tc.comparator)
 
 			assert.Equal(t, tc.exp, res)
 			if tc.err == nil {
@@ -1314,7 +1221,7 @@ func Test_MaxMapPred(t *testing.T) {
 	}
 	for _, tc := range tcs {
 		t.Run(tc.name, func(t *testing.T) {
-			res, err := goaoi.MaxMapPred(tc.haystack, tc.comparator)
+			_, res, err := goaoi.MaxMapPred(tc.haystack, tc.comparator)
 
 			assert.Equal(t, tc.exp, res)
 			if tc.err == nil {
@@ -1345,7 +1252,7 @@ func Test_MinMaxSlicePred(t *testing.T) {
 	}
 	for _, tc := range tcs {
 		t.Run(tc.name, func(t *testing.T) {
-			min, max, err := goaoi.MinMaxSlicePred(tc.haystack, tc.comparator_min, tc.comparator_max)
+			_, _, min, max, err := goaoi.MinMaxSlicePred(tc.haystack, tc.comparator_min, tc.comparator_max)
 
 			assert.Equal(t, tc.exp_min, min)
 			assert.Equal(t, tc.exp_max, max)
@@ -1377,187 +1284,7 @@ func Test_MinMaxMapPred(t *testing.T) {
 	}
 	for _, tc := range tcs {
 		t.Run(tc.name, func(t *testing.T) {
-			min, max, err := goaoi.MinMaxMapPred(tc.haystack, tc.comparator_min, tc.comparator_max)
-
-			assert.Equal(t, tc.exp_min, min)
-			assert.Equal(t, tc.exp_max, max)
-			if tc.err == nil {
-				assert.Nil(t, err)
-			} else {
-				assert.ErrorAs(t, err, &tc.err)
-			}
-
-		})
-	}
-}
-
-func Test_MinElementSlicePred(t *testing.T) {
-	t.Parallel()
-
-	tcs := []struct {
-		haystack   []int
-		comparator func(int, int) bool
-		exp        int
-		err        error
-		name       string
-	}{
-		{[]int{1, 2, 3}, goaoi.IsLessThan[int], 0, nil, "Found at beginning"},
-		{[]int{2, 3, 1}, goaoi.IsLessThan[int], 2, nil, "Found at end"},
-		{[]int{}, goaoi.IsLessThan[int], 0, goaoi.EmptyIterableError{}, "Empty"},
-	}
-	for _, tc := range tcs {
-		t.Run(tc.name, func(t *testing.T) {
-			res, err := goaoi.MinElementSlicePred(tc.haystack, tc.comparator)
-
-			assert.Equal(t, tc.exp, res)
-			if tc.err == nil {
-				assert.Nil(t, err)
-			} else {
-				assert.ErrorAs(t, err, &tc.err)
-			}
-
-		})
-	}
-}
-
-func Test_MinElementMapPred(t *testing.T) {
-	t.Parallel()
-
-	tcs := []struct {
-		haystack   map[string]int
-		comparator func(int, int) bool
-		exp        string
-		err        error
-		name       string
-	}{
-		{map[string]int{"a": 1, "b": 2, "c": 3}, goaoi.IsLessThan[int], "a", nil, "Found at beginning"},
-		{map[string]int{"a": 2, "b": 3, "c": 1}, goaoi.IsLessThan[int], "c", nil, "Found at end"},
-		{map[string]int{}, goaoi.IsLessThan[int], "", goaoi.EmptyIterableError{}, "Empty"},
-	}
-	for _, tc := range tcs {
-		t.Run(tc.name, func(t *testing.T) {
-			res, err := goaoi.MinElementMapPred(tc.haystack, tc.comparator)
-
-			assert.Equal(t, tc.exp, res)
-			if tc.err == nil {
-				assert.Nil(t, err)
-			} else {
-				assert.ErrorAs(t, err, &tc.err)
-			}
-
-		})
-	}
-}
-
-func Test_MaxElementSlicePred(t *testing.T) {
-	t.Parallel()
-
-	tcs := []struct {
-		haystack   []int
-		comparator func(int, int) bool
-		exp        int
-		err        error
-		name       string
-	}{
-		{[]int{1, 2, 3}, goaoi.IsGreaterThan[int], 2, nil, "Found at beginning"},
-		{[]int{2, 3, 1}, goaoi.IsGreaterThan[int], 1, nil, "Found at end"},
-		{[]int{}, goaoi.IsGreaterThan[int], 0, goaoi.EmptyIterableError{}, "Empty"},
-	}
-	for _, tc := range tcs {
-		t.Run(tc.name, func(t *testing.T) {
-			res, err := goaoi.MaxElementSlicePred(tc.haystack, tc.comparator)
-
-			assert.Equal(t, tc.exp, res)
-			if tc.err == nil {
-				assert.Nil(t, err)
-			} else {
-				assert.ErrorAs(t, err, &tc.err)
-			}
-
-		})
-	}
-}
-
-func Test_MaxElementMapPred(t *testing.T) {
-	t.Parallel()
-
-	tcs := []struct {
-		haystack   map[string]int
-		comparator func(int, int) bool
-		exp        string
-		err        error
-		name       string
-	}{
-		{map[string]int{"a": 1, "b": 2, "c": 3}, goaoi.IsGreaterThan[int], "c", nil, "Found at beginning"},
-		{map[string]int{"a": 2, "b": 3, "c": 1}, goaoi.IsGreaterThan[int], "b", nil, "Found at end"},
-		{map[string]int{}, goaoi.IsGreaterThan[int], "", goaoi.EmptyIterableError{}, "Empty"},
-	}
-	for _, tc := range tcs {
-		t.Run(tc.name, func(t *testing.T) {
-			res, err := goaoi.MaxElementMapPred(tc.haystack, tc.comparator)
-
-			assert.Equal(t, tc.exp, res)
-			if tc.err == nil {
-				assert.Nil(t, err)
-			} else {
-				assert.ErrorAs(t, err, &tc.err)
-			}
-
-		})
-	}
-}
-
-func Test_MinMaxElementSlicePred(t *testing.T) {
-	t.Parallel()
-
-	tcs := []struct {
-		haystack       []int
-		comparator_min func(int, int) bool
-		comparator_max func(int, int) bool
-		exp_min        int
-		exp_max        int
-		err            error
-		name           string
-	}{
-		{[]int{1, 2, 3}, goaoi.IsLessThan[int], goaoi.IsGreaterThan[int], 0, 2, nil, "Found at beginning"},
-		{[]int{2, 3, 1}, goaoi.IsLessThan[int], goaoi.IsGreaterThan[int], 2, 1, nil, "Found at end"},
-		{[]int{}, goaoi.IsLessThan[int], goaoi.IsGreaterThan[int], 0, 0, goaoi.EmptyIterableError{}, "Empty"},
-	}
-	for _, tc := range tcs {
-		t.Run(tc.name, func(t *testing.T) {
-			min, max, err := goaoi.MinMaxElementSlicePred(tc.haystack, tc.comparator_min, tc.comparator_max)
-
-			assert.Equal(t, tc.exp_min, min)
-			assert.Equal(t, tc.exp_max, max)
-			if tc.err == nil {
-				assert.Nil(t, err)
-			} else {
-				assert.ErrorAs(t, err, &tc.err)
-			}
-
-		})
-	}
-}
-
-func Test_MinMaxElementMapPred(t *testing.T) {
-	t.Parallel()
-
-	tcs := []struct {
-		haystack       map[string]int
-		comparator_min func(int, int) bool
-		comparator_max func(int, int) bool
-		exp_min        string
-		exp_max        string
-		err            error
-		name           string
-	}{
-		{map[string]int{"a": 1, "b": 2, "c": 3}, goaoi.IsLessThan[int], goaoi.IsGreaterThan[int], "a", "c", nil, "Found at beginning"},
-		{map[string]int{"a": 2, "b": 3, "c": 1}, goaoi.IsLessThan[int], goaoi.IsGreaterThan[int], "c", "b", nil, "Found at end"},
-		{map[string]int{}, goaoi.IsLessThan[int], goaoi.IsGreaterThan[int], "", "", goaoi.EmptyIterableError{}, "Empty"},
-	}
-	for _, tc := range tcs {
-		t.Run(tc.name, func(t *testing.T) {
-			min, max, err := goaoi.MinMaxElementMapPred(tc.haystack, tc.comparator_min, tc.comparator_max)
+			_, _, min, max, err := goaoi.MinMaxMapPred(tc.haystack, tc.comparator_min, tc.comparator_max)
 
 			assert.Equal(t, tc.exp_min, min)
 			assert.Equal(t, tc.exp_max, max)
