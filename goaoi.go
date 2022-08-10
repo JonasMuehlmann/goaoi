@@ -1057,7 +1057,18 @@ func CopyReplaceIfString(original string, unaryPredicate func(rune) bool, replac
 	return out.String(), nil
 }
 
-// TODO: implement CopyReplaceIfIterator
+// CopyReplaceIfIterator returns a copy of original with all element satisfying unaryPredicate(element) == true).
+//
+// Possible Error values:
+//    - EmptyIterableError
+func CopyReplaceIfIterator[TKey any, TValue any](original ds.ReadForIndexIterator[TKey, TValue], unaryPredicate func(TValue) bool, replacement TValue) (ds.ReadForIndexIterator[TKey, TValue], error) {
+
+	if original.IsEnd() {
+		return original, EmptyIterableError{}
+	}
+
+	return iteratoradapters.NewCopyReplaceIf[TKey, TValue](original, unaryPredicate, replacement), nil
+}
 
 // TODO: All not functions should be implemented in terms of a negated unaryPredicate and the original function
 
