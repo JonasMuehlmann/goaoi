@@ -895,7 +895,17 @@ func DropWhileString(original string, unary_predicate func(rune) bool) (string, 
 	return "", nil
 }
 
-// TODO: implement DropWhileIterator
+// DropWhileIterator returns a copy of original until the first element satisfying unary_predicate(element) == true).
+//
+// Possible Error values:
+//    - EmptyIterableError
+func DropWhileIterator[TKey any, TValue any](original compounditerators.ReadForIndexIterator[TKey, TValue], unaryPredicate func(TValue) bool) (compounditerators.ReadForIndexIterator[TKey, TValue], error) {
+	if original.IsEnd() {
+		return original, EmptyIterableError{}
+	}
+
+	return iteratoradapters.NewDropWhile[TKey, TValue](original, unaryPredicate), nil
+}
 
 // CopyIfSlice returns a copy of original with all element satisfying unary_predicate(element) == true).
 //
