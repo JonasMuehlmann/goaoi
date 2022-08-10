@@ -49,3 +49,11 @@ func IsGreaterThanEqual[T constraints.Ordered](a T, b T) bool {
 func IsGreaterThanEqualPartial[T constraints.Ordered](fixedComparee T) func(T) bool {
 	return func(comparee T) bool { return comparee >= fixedComparee }
 }
+
+func NegateUnaryPredicate[T any](f func(T) bool) func(T) bool {
+	return func(t T) bool { return !f(t) }
+}
+
+func NegateBinaryPredicate[T any](f func(T, T) bool) func(T, T) bool {
+	return func(t1 T, t2 T) bool { return !f(t1, t2) }
+}
