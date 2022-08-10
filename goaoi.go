@@ -1086,8 +1086,6 @@ func FillSlice[T any](arr *[]T, filler T) []T {
 	return *arr
 }
 
-// TODO: implement FillIterator
-
 // TransformMap applies transformer(value) for all key-value pairs in container and stores them at container[key].
 // Note that the iteration order of a map is not stable.
 // Errors returned by transformer are propagated to the caller of TransformMap.
@@ -1134,7 +1132,19 @@ func TransformSlice[T any](container []T, transformer func(*T) error) error {
 	return nil
 }
 
-// TODO: implement TransformIterator
+// TransformIterator applies transformer(&container[i]) for all i in [0, len(container)[ and stores them at container[i].
+// Errors returned by transformer are propagated to the caller of TransformSlice.
+//
+// Possible Error values:
+//    - EmptyIterableError
+//    - ExecutionError
+func TransformIterator[TKey any, TValue any](container ds.ReadForIndexIterator[TKey, TValue], transformer func(TValue) (TValue, error)) (ds.ReadForIndexIterator[TKey, TValue], error) {
+	if container.IsEnd() {
+		return container, EmptyIterableError{}
+	}
+
+	return iteratoradapters.NewTransformIterator[TKey, TValue](container, transformer), nil
+}
 
 // TransformMapUnsafe applies transformer(value) for all key-value pairs in container and stores them at container[key].
 // Note that the iteration order of a map is not stable.

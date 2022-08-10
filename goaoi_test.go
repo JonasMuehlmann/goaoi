@@ -852,6 +852,36 @@ func Test_TransformSlice(t *testing.T) {
 	}
 }
 
+func Test_TransformIterator(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		original    []int
+		transformer func(int) (int, error)
+		exp         []int
+		err         error
+		name        string
+	}{
+		{[]int{1, 2}, func(i int) (int, error) { return i + 1, nil }, []int{2, 3}, nil, "Found"},
+		{[]int{}, func(i int) (int, error) { return i + 1, nil }, []int{}, goaoi.EmptyIterableError{}, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			it := arraylist.NewFromSlice(tc.original).Begin()
+			outIter, err := goaoi.TransformIterator[int, int](it, tc.transformer)
+			res := arraylist.NewFromIterator[int](outIter).GetSlice()
+
+			assert.Equal(t, tc.exp, res)
+			if tc.err == nil {
+				assert.Nil(t, err)
+			} else {
+				assert.ErrorAs(t, err, &tc.err)
+			}
+
+		})
+	}
+}
+
 func Test_TransformCopySlice(t *testing.T) {
 	t.Parallel()
 
