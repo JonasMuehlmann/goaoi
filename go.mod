@@ -3,7 +3,8 @@ module github.com/JonasMuehlmann/goaoi
 go 1.18
 
 require (
-	github.com/JonasMuehlmann/datastructures.go v0.20.0
+	github.com/JonasMuehlmann/datastructures.go v0.23.0
+	github.com/barweiss/go-tuple v1.0.2
 	github.com/stretchr/testify v1.8.0
 	golang.org/x/exp v0.0.0-20220706164943-b4a6d9510983
 )

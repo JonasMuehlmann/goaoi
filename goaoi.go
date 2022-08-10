@@ -5,7 +5,8 @@ package goaoi
 import (
 	"bytes"
 
-	"github.com/JonasMuehlmann/datastructures.go/ds"
+	compounditerators "github.com/JonasMuehlmann/goaoi/compound_iterators"
+	iteratoradapters "github.com/JonasMuehlmann/goaoi/iterator_adapters"
 	"golang.org/x/exp/constraints"
 )
 
@@ -74,7 +75,7 @@ func FindIfString(haystack string, unary_predicate func(rune) bool) (int, error)
 // Possible Error values:
 //    - EmptyIterableError
 //    - ElementNotFoundError
-func FindIfIterator[T comparable](haystack ds.ReadCompForIndexIterator[T], unary_predicate func(T) bool) (int, error) {
+func FindIfIterator[TKey any, TValue comparable](haystack compounditerators.ReadForIndexIterator[TKey, TValue], unary_predicate func(TValue) bool) (int, error) {
 	if haystack.IsEnd() {
 		return 0, EmptyIterableError{}
 	}
@@ -270,7 +271,7 @@ func AllOfString(container string, unary_predicate func(rune) bool) error {
 // Possible Error values:
 //    - EmptyIterableError
 //    - ComparisonError
-func AllOfIterator[T any](container ds.ReadCompForIndexIterator[T], unary_predicate func(T) bool) error {
+func AllOfIterator[TKey any, TValue any](container compounditerators.ReadForIndexIterator[TKey, TValue], unary_predicate func(TValue) bool) error {
 	if container.IsEnd() {
 		return EmptyIterableError{}
 	}
@@ -279,7 +280,7 @@ func AllOfIterator[T any](container ds.ReadCompForIndexIterator[T], unary_predic
 		value, _ := container.Get()
 		if !unary_predicate(value) {
 			i, _ := container.Index()
-			return ComparisonError[int, T]{BadItemIndex: i, BadItem: value}
+			return ComparisonError[int, TValue]{BadItemIndex: i, BadItem: value}
 		}
 	}
 
@@ -349,7 +350,7 @@ func AnyOfString(container string, unary_predicate func(rune) bool) error {
 // Possible Error values:
 //    - EmptyIterableError
 //    - ElementNotFoundError
-func AnyOfIterator[T any](container ds.ReadCompForIndexIterator[T], unary_predicate func(T) bool) error {
+func AnyOfIterator[TKey any, TValue any](container compounditerators.ReadForIndexIterator[TKey, TValue], unary_predicate func(TValue) bool) error {
 	if container.IsEnd() {
 		return EmptyIterableError{}
 	}
@@ -427,7 +428,7 @@ func NoneOfString(container string, unary_predicate func(rune) bool) error {
 // Possible Error values:
 //    - EmptyIterableError
 //    - ComparisonError
-func NoneOfIterator[T any](container ds.ReadCompForIndexIterator[T], unary_predicate func(T) bool) error {
+func NoneOfIterator[TKey any, TValue any](container compounditerators.ReadForIndexIterator[TKey, TValue], unary_predicate func(TValue) bool) error {
 	if container.IsEnd() {
 		return EmptyIterableError{}
 	}
@@ -436,7 +437,7 @@ func NoneOfIterator[T any](container ds.ReadCompForIndexIterator[T], unary_predi
 		value, _ := container.Get()
 		if unary_predicate(value) {
 			i, _ := container.Index()
-			return ComparisonError[int, T]{BadItemIndex: i, BadItem: value}
+			return ComparisonError[int, TValue]{BadItemIndex: i, BadItem: value}
 		}
 	}
 
@@ -513,7 +514,7 @@ func ForeachString(container string, unary_func func(rune) error) error {
 // Possible Error values:
 //    - EmptyIterableError
 //    - ExecutionError
-func ForeachIterator[T any](container ds.ReadCompForIndexIterator[T], unary_func func(T) error) error {
+func ForeachIterator[TKey any, TValue any](container compounditerators.ReadForIndexIterator[TKey, TValue], unary_func func(TValue) error) error {
 	if container.IsEnd() {
 		return EmptyIterableError{}
 	}
@@ -523,7 +524,7 @@ func ForeachIterator[T any](container ds.ReadCompForIndexIterator[T], unary_func
 		err := unary_func(value)
 		if err != nil {
 			i, _ := container.Index()
-			return ExecutionError[int, T]{BadItemIndex: i, BadItem: value, Inner: err}
+			return ExecutionError[int, TValue]{BadItemIndex: i, BadItem: value, Inner: err}
 		}
 	}
 
@@ -586,7 +587,7 @@ func ForeachStringUnsafe(container string, unary_func func(rune)) error {
 // Possible Error values:
 //    - EmptyIterableError
 //    - ExecutionError
-func ForeachIteratorUnsafe[T any](container ds.ReadCompForIndexIterator[T], unary_func func(T)) error {
+func ForeachIteratorUnsafe[TKey any, TValue any](container compounditerators.ReadForIndexIterator[TKey, TValue], unary_func func(TValue)) error {
 	if container.IsEnd() {
 		return EmptyIterableError{}
 	}
@@ -661,7 +662,7 @@ func CountIfString(container string, unary_predicate func(rune) bool) (int, erro
 //
 // Possible Error values:
 //    - EmptyIterableError
-func CountIfIterator[T comparable](container ds.ReadCompForIndexIterator[T], unary_predicate func(T) bool) (int, error) {
+func CountIfIterator[TKey any, TValue comparable](container compounditerators.ReadForIndexIterator[TKey, TValue], unary_predicate func(TValue) bool) (int, error) {
 	if container.IsEnd() {
 		return 0, EmptyIterableError{}
 	}
@@ -762,12 +763,12 @@ func AdjacentFindStringPred(container string, binary_predicate func(byte, byte) 
 // Possible Error values:
 //    - EmptyIterableError
 //    - ElementNotFoundError
-func AdjacentFindIteratorPred[T comparable](container ds.ReadCompForIndexIterator[T], binary_predicate func(T, T) bool) (int, error) {
+func AdjacentFindIteratorPred[TKey any, TValue comparable](container compounditerators.ReadForIndexIterator[TKey, TValue], binary_predicate func(TValue, TValue) bool) (int, error) {
 	if container.IsEnd() {
 		return 0, EmptyIterableError{}
 	}
 
-	var cur T
+	var cur TValue
 	prev, _ := container.Get()
 	container.Next()
 
@@ -833,7 +834,17 @@ func TakeWhileString(original string, unary_predicate func(rune) bool) (string, 
 	return out.String(), nil
 }
 
-// TODO: implement TakeWhileIterator
+// TakeWhileIterator returns a copy of original until the first element not satisfying unary_predicate(element) == true).
+//
+// Possible Error values:
+//    - EmptyIterableError
+func TakeWhileIterator[TKey any, TValue any](original compounditerators.ReadForIndexIterator[TKey, TValue], unaryPredicate func(TValue) bool) (compounditerators.ReadForIndexIterator[TKey, TValue], error) {
+	if original.IsEnd() {
+		return original, EmptyIterableError{}
+	}
+
+	return iteratoradapters.NewTakeWhile[TKey, TValue](original, unaryPredicate), nil
+}
 
 // DropWhileSlice returns a copy of original starting from first element not satisfying unary_predicate(element) == true).
 //

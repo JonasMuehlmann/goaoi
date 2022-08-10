@@ -1,5 +1,13 @@
 github.com/JonasMuehlmann/datastructures.go v0.20.0 h1:lT3XhR8HxYikYv+ZKq2ypLSDaa3YwRO7O9SyvIiu+rk=
 github.com/JonasMuehlmann/datastructures.go v0.20.0/go.mod h1:l+PPRcCt4npIvdf1Oo8z6n8f53EjdcE3TFK8NWEp/e8=
+github.com/JonasMuehlmann/datastructures.go v0.21.0 h1:lCds+ivlCAoOLAmI65BQHd1ZkGaPvATXyOwsoaaHggA=
+github.com/JonasMuehlmann/datastructures.go v0.21.0/go.mod h1:l+PPRcCt4npIvdf1Oo8z6n8f53EjdcE3TFK8NWEp/e8=
+github.com/JonasMuehlmann/datastructures.go v0.22.0 h1:t3xWhRY2/1NFAxV1JnGjI02V+z6+Wp+fkVkNEMLTXDg=
+github.com/JonasMuehlmann/datastructures.go v0.22.0/go.mod h1:l+PPRcCt4npIvdf1Oo8z6n8f53EjdcE3TFK8NWEp/e8=
+github.com/JonasMuehlmann/datastructures.go v0.23.0 h1:NlRwsA6zuNrvCiGe/88z+UTIsOEAU41h37gf1usl58k=
+github.com/JonasMuehlmann/datastructures.go v0.23.0/go.mod h1:l+PPRcCt4npIvdf1Oo8z6n8f53EjdcE3TFK8NWEp/e8=
+github.com/barweiss/go-tuple v1.0.2 h1:RFUKJf8BaALDgX4WIS1fgmAeEFLQo9h+n/QrbIQrdSo=
+github.com/barweiss/go-tuple v1.0.2/go.mod h1:oX3AtZyuGnCuK3B4PlUIfR9spxyJ42bgTSqCI9GkPB0=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
