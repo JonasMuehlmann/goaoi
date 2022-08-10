@@ -642,7 +642,7 @@ func Test_DropWhileIterator(t *testing.T) {
 	}
 }
 
-func Test_CopyIfSlice(t *testing.T) {
+func Test_TakeIfSlice(t *testing.T) {
 	t.Parallel()
 
 	tcs := []struct {
@@ -658,7 +658,7 @@ func Test_CopyIfSlice(t *testing.T) {
 	}
 	for _, tc := range tcs {
 		t.Run(tc.name, func(t *testing.T) {
-			res, err := goaoi.CopyIfSlice(tc.original, tc.comparator)
+			res, err := goaoi.TakeIfSlice(tc.original, tc.comparator)
 
 			assert.Equal(t, tc.exp, res)
 			if tc.err == nil {
@@ -671,7 +671,7 @@ func Test_CopyIfSlice(t *testing.T) {
 	}
 }
 
-func Test_CopyIfMap(t *testing.T) {
+func Test_TakeIfMap(t *testing.T) {
 	t.Parallel()
 
 	tcs := []struct {
@@ -687,7 +687,7 @@ func Test_CopyIfMap(t *testing.T) {
 	}
 	for _, tc := range tcs {
 		t.Run(tc.name, func(t *testing.T) {
-			res, err := goaoi.CopyIfMap(tc.original, tc.comparator)
+			res, err := goaoi.TakeIfMap(tc.original, tc.comparator)
 
 			assert.Equal(t, tc.exp, res)
 			if tc.err == nil {
@@ -700,7 +700,7 @@ func Test_CopyIfMap(t *testing.T) {
 	}
 }
 
-func Test_CopyIfIterator(t *testing.T) {
+func Test_TakeIfIterator(t *testing.T) {
 	t.Parallel()
 
 	tcs := []struct {
@@ -718,7 +718,7 @@ func Test_CopyIfIterator(t *testing.T) {
 	for _, tc := range tcs {
 		t.Run(tc.name, func(t *testing.T) {
 			it := arraylist.NewFromSlice(tc.original).Begin()
-			outIter, err := goaoi.CopyIfIterator[int, int](it, tc.comparator)
+			outIter, err := goaoi.TakeIfIterator[int, int](it, tc.comparator)
 			res := arraylist.NewFromIterator[int](outIter).GetSlice()
 
 			assert.Equal(t, tc.exp, res)
@@ -733,7 +733,7 @@ func Test_CopyIfIterator(t *testing.T) {
 	}
 }
 
-func Test_CopyReplaceIfSlice(t *testing.T) {
+func Test_ReplaceIfSlice(t *testing.T) {
 	t.Parallel()
 
 	tcs := []struct {
@@ -750,7 +750,7 @@ func Test_CopyReplaceIfSlice(t *testing.T) {
 	}
 	for _, tc := range tcs {
 		t.Run(tc.name, func(t *testing.T) {
-			res, err := goaoi.CopyReplaceIfSlice(tc.original, tc.comparator, tc.replacement)
+			res, err := goaoi.ReplaceIfSlice(tc.original, tc.comparator, tc.replacement)
 
 			assert.Equal(t, tc.exp, res)
 			if tc.err == nil {
@@ -763,7 +763,7 @@ func Test_CopyReplaceIfSlice(t *testing.T) {
 	}
 }
 
-func Test_CopyReplaceIfMap(t *testing.T) {
+func Test_ReplaceIfMap(t *testing.T) {
 	t.Parallel()
 
 	tcs := []struct {
@@ -780,7 +780,7 @@ func Test_CopyReplaceIfMap(t *testing.T) {
 	}
 	for _, tc := range tcs {
 		t.Run(tc.name, func(t *testing.T) {
-			res, err := goaoi.CopyReplaceIfMap(tc.original, tc.comparator, tc.replacement)
+			res, err := goaoi.ReplaceIfMap(tc.original, tc.comparator, tc.replacement)
 
 			assert.Equal(t, tc.exp, res)
 			if tc.err == nil {
@@ -792,7 +792,7 @@ func Test_CopyReplaceIfMap(t *testing.T) {
 		})
 	}
 }
-func Test_CopyReplaceIfIterator(t *testing.T) {
+func Test_ReplaceIfIterator(t *testing.T) {
 	t.Parallel()
 
 	tcs := []struct {
@@ -810,7 +810,7 @@ func Test_CopyReplaceIfIterator(t *testing.T) {
 	for _, tc := range tcs {
 		t.Run(tc.name, func(t *testing.T) {
 			it := arraylist.NewFromSlice(tc.original).Begin()
-			outIter, err := goaoi.CopyReplaceIfIterator[int, int](it, tc.comparator, tc.replacement)
+			outIter, err := goaoi.ReplaceIfIterator[int, int](it, tc.comparator, tc.replacement)
 			res := arraylist.NewFromIterator[int](outIter).GetSlice()
 
 			assert.Equal(t, tc.exp, res)

@@ -908,11 +908,11 @@ func DropWhileIterator[TKey any, TValue any](original compounditerators.ReadForI
 	return iteratoradapters.NewDropWhile[TKey, TValue](original, unaryPredicate), nil
 }
 
-// CopyIfSlice returns a copy of original with all element satisfying unaryPredicate(element) == true).
+// TakeIfSlice returns a copy of original with all element satisfying unaryPredicate(element) == true).
 //
 // Possible Error values:
 //    - EmptyIterableError
-func CopyIfSlice[T comparable](original []T, unaryPredicate func(T) bool) ([]T, error) {
+func TakeIfSlice[T comparable](original []T, unaryPredicate func(T) bool) ([]T, error) {
 	var zeroVal []T
 
 	if len(original) == 0 {
@@ -930,12 +930,12 @@ func CopyIfSlice[T comparable](original []T, unaryPredicate func(T) bool) ([]T, 
 	return newContainer, nil
 }
 
-// CopyIfMap returns a copy of original with all key-value pairs satisfying unaryPredicate(value) == true).
+// TakeIfMap returns a copy of original with all key-value pairs satisfying unaryPredicate(value) == true).
 // Note that the iteration order of a map is not stable.
 //
 // Possible Error values:
 //    - EmptyIterableError
-func CopyIfMap[TKey comparable, TValue comparable](original map[TKey]TValue, unaryPredicate func(TValue) bool) (map[TKey]TValue, error) {
+func TakeIfMap[TKey comparable, TValue comparable](original map[TKey]TValue, unaryPredicate func(TValue) bool) (map[TKey]TValue, error) {
 	var zeroVal map[TKey]TValue
 
 	if len(original) == 0 {
@@ -953,11 +953,11 @@ func CopyIfMap[TKey comparable, TValue comparable](original map[TKey]TValue, una
 	return newContainer, nil
 }
 
-// CopyIfString returns a copy of original with all element satisfying unaryPredicate(element) == true).
+// TakeIfString returns a copy of original with all element satisfying unaryPredicate(element) == true).
 //
 // Possible Error values:
 //    - EmptyIterableError
-func CopyIfString(original string, unaryPredicate func(rune) bool) (string, error) {
+func TakeIfString(original string, unaryPredicate func(rune) bool) (string, error) {
 	var out bytes.Buffer
 
 	if len(original) == 0 {
@@ -973,24 +973,24 @@ func CopyIfString(original string, unaryPredicate func(rune) bool) (string, erro
 	return out.String(), nil
 }
 
-// CopyIfString returns a copy of original with all element satisfying unaryPredicate(element) == true).
+// TakeIfString returns a copy of original with all element satisfying unaryPredicate(element) == true).
 //
 // Possible Error values:
 //    - EmptyIterableError
-func CopyIfIterator[TKey any, TValue any](original ds.ReadForIndexIterator[TKey, TValue], unaryPredicate func(TValue) bool) (ds.ReadForIndexIterator[TKey, TValue], error) {
+func TakeIfIterator[TKey any, TValue any](original ds.ReadForIndexIterator[TKey, TValue], unaryPredicate func(TValue) bool) (ds.ReadForIndexIterator[TKey, TValue], error) {
 
 	if original.IsEnd() {
 		return original, EmptyIterableError{}
 	}
 
-	return iteratoradapters.NewCopyIf[TKey, TValue](original, unaryPredicate), nil
+	return iteratoradapters.NewTakeIf[TKey, TValue](original, unaryPredicate), nil
 }
 
-// CopyReplaceIfSlice returns a copy of original where each element satisfying unaryPredicate(element) == true is replaced with replacement.
+// ReplaceIfSlice returns a copy of original where each element satisfying unaryPredicate(element) == true is replaced with replacement.
 //
 // Possible Error values:
 //    - EmptyIterableError
-func CopyReplaceIfSlice[T comparable](original []T, unaryPredicate func(T) bool, replacement T) ([]T, error) {
+func ReplaceIfSlice[T comparable](original []T, unaryPredicate func(T) bool, replacement T) ([]T, error) {
 	var zeroVal []T
 
 	if len(original) == 0 {
@@ -1010,12 +1010,12 @@ func CopyReplaceIfSlice[T comparable](original []T, unaryPredicate func(T) bool,
 	return newContainer, nil
 }
 
-// CopyReplaceIfMap returns a copy of original where each value of a key-value pair satisfying unaryPredicate(value) == true is replaced with replacement.
+// ReplaceIfMap returns a copy of original where each value of a key-value pair satisfying unaryPredicate(value) == true is replaced with replacement.
 // Note that the iteration order of a map is not stable.
 //
 // Possible Error values:
 //    - EmptyIterableError
-func CopyReplaceIfMap[TKey comparable, TValue comparable](original map[TKey]TValue, unaryPredicate func(TValue) bool, replacement TValue) (map[TKey]TValue, error) {
+func ReplaceIfMap[TKey comparable, TValue comparable](original map[TKey]TValue, unaryPredicate func(TValue) bool, replacement TValue) (map[TKey]TValue, error) {
 	var zeroVal map[TKey]TValue
 
 	if len(original) == 0 {
@@ -1035,11 +1035,11 @@ func CopyReplaceIfMap[TKey comparable, TValue comparable](original map[TKey]TVal
 	return newContainer, nil
 }
 
-// CopyReplaceIfString returns a copy of original with all element satisfying unaryPredicate(element) == true).
+// ReplaceIfString returns a copy of original with all element satisfying unaryPredicate(element) == true).
 //
 // Possible Error values:
 //    - EmptyIterableError
-func CopyReplaceIfString(original string, unaryPredicate func(rune) bool, replacement rune) (string, error) {
+func ReplaceIfString(original string, unaryPredicate func(rune) bool, replacement rune) (string, error) {
 	var out bytes.Buffer
 
 	if len(original) == 0 {
@@ -1057,17 +1057,17 @@ func CopyReplaceIfString(original string, unaryPredicate func(rune) bool, replac
 	return out.String(), nil
 }
 
-// CopyReplaceIfIterator returns a copy of original with all element satisfying unaryPredicate(element) == true).
+// ReplaceIfIterator returns a copy of original with all element satisfying unaryPredicate(element) == true).
 //
 // Possible Error values:
 //    - EmptyIterableError
-func CopyReplaceIfIterator[TKey any, TValue any](original ds.ReadForIndexIterator[TKey, TValue], unaryPredicate func(TValue) bool, replacement TValue) (ds.ReadForIndexIterator[TKey, TValue], error) {
+func ReplaceIfIterator[TKey any, TValue any](original ds.ReadForIndexIterator[TKey, TValue], unaryPredicate func(TValue) bool, replacement TValue) (ds.ReadForIndexIterator[TKey, TValue], error) {
 
 	if original.IsEnd() {
 		return original, EmptyIterableError{}
 	}
 
-	return iteratoradapters.NewCopyReplaceIf[TKey, TValue](original, unaryPredicate, replacement), nil
+	return iteratoradapters.NewReplaceIf[TKey, TValue](original, unaryPredicate, replacement), nil
 }
 
 // FillSlice fills the array pointed to by arr with filler.

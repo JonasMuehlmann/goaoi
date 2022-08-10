@@ -4,7 +4,7 @@ import (
 	compounditerators "github.com/JonasMuehlmann/goaoi/compound_iterators"
 )
 
-type CopyIf[TKey any, TValue any] struct {
+type TakeIf[TKey any, TValue any] struct {
 	compounditerators.ReadForIndexIterator[TKey, TValue]
 	unaryPredicate func(value TValue) bool
 	index          int
@@ -12,8 +12,8 @@ type CopyIf[TKey any, TValue any] struct {
 	done           bool
 }
 
-func NewCopyIf[TKey any, TValue any](inner compounditerators.ReadForIndexIterator[TKey, TValue], unaryPredicate func(TValue) bool) compounditerators.ReadForIndexIterator[TKey, TValue] {
-	return &CopyIf[TKey, TValue]{
+func NewTakeIf[TKey any, TValue any](inner compounditerators.ReadForIndexIterator[TKey, TValue], unaryPredicate func(TValue) bool) compounditerators.ReadForIndexIterator[TKey, TValue] {
+	return &TakeIf[TKey, TValue]{
 		ReadForIndexIterator: inner,
 		unaryPredicate:       unaryPredicate,
 		index:                -1,
@@ -21,31 +21,31 @@ func NewCopyIf[TKey any, TValue any](inner compounditerators.ReadForIndexIterato
 	}
 }
 
-func (it *CopyIf[TKey, TValue]) IsBegin() bool {
+func (it *TakeIf[TKey, TValue]) IsBegin() bool {
 	return it.index == -1
 }
 
-func (it *CopyIf[TKey, TValue]) IsEnd() bool {
+func (it *TakeIf[TKey, TValue]) IsEnd() bool {
 	return it.done || it.ReadForIndexIterator.IsEnd()
 }
 
-func (it *CopyIf[TKey, TValue]) IsFirst() bool {
+func (it *TakeIf[TKey, TValue]) IsFirst() bool {
 	return it.index == 0
 }
 
-func (it *CopyIf[TKey, TValue]) IsLast() bool {
+func (it *TakeIf[TKey, TValue]) IsLast() bool {
 	return it.index == it.size-1
 }
 
-func (it *CopyIf[TKey, TValue]) IsValid() bool {
+func (it *TakeIf[TKey, TValue]) IsValid() bool {
 	return !it.IsBegin() && !it.IsEnd()
 }
 
-func (it *CopyIf[TKey, TValue]) Get() (value TValue, found bool) {
+func (it *TakeIf[TKey, TValue]) Get() (value TValue, found bool) {
 	return it.ReadForIndexIterator.Get()
 }
 
-func (it *CopyIf[TKey, TValue]) Next() bool {
+func (it *TakeIf[TKey, TValue]) Next() bool {
 	if it.ReadForIndexIterator.IsEnd() {
 		it.done = true
 
@@ -67,7 +67,7 @@ func (it *CopyIf[TKey, TValue]) Next() bool {
 	return found
 }
 
-func (it *CopyIf[TKey, TValue]) NextN(n int) bool {
+func (it *TakeIf[TKey, TValue]) NextN(n int) bool {
 	if !it.IsValid() {
 		return false
 	}
@@ -83,10 +83,10 @@ func (it *CopyIf[TKey, TValue]) NextN(n int) bool {
 	return true
 }
 
-func (it *CopyIf[TKey, TValue]) Size() int {
+func (it *TakeIf[TKey, TValue]) Size() int {
 	return it.size
 }
 
-func (it *CopyIf[TKey, TValue]) Index() (int, bool) {
+func (it *TakeIf[TKey, TValue]) Index() (int, bool) {
 	return it.index, it.IsValid()
 }
