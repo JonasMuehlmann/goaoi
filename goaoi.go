@@ -5,18 +5,19 @@ package goaoi
 import (
 	"bytes"
 
+	"github.com/JonasMuehlmann/datastructures.go/ds"
 	compounditerators "github.com/JonasMuehlmann/goaoi/compound_iterators"
 	iteratoradapters "github.com/JonasMuehlmann/goaoi/iterator_adapters"
 	"golang.org/x/exp/constraints"
 )
 
-// FindIfMap finds the first key where unary_predicate(haystack[key]) == true.
+// FindIfMap finds the first key where unaryPredicate(haystack[key]) == true.
 // Note that the iteration order of a map is not stable.
 //
 // Possible Error values:
 //    - EmptyIterableError
 //    - ElementNotFoundError
-func FindIfMap[TKey comparable, TValue comparable](haystack map[TKey]TValue, unary_predicate func(TValue) bool) (TKey, error) {
+func FindIfMap[TKey comparable, TValue comparable](haystack map[TKey]TValue, unaryPredicate func(TValue) bool) (TKey, error) {
 	var zeroVal TKey
 
 	if len(haystack) == 0 {
@@ -24,7 +25,7 @@ func FindIfMap[TKey comparable, TValue comparable](haystack map[TKey]TValue, una
 	}
 
 	for key, value := range haystack {
-		if unary_predicate(value) {
+		if unaryPredicate(value) {
 			return key, nil
 		}
 	}
@@ -32,18 +33,18 @@ func FindIfMap[TKey comparable, TValue comparable](haystack map[TKey]TValue, una
 	return zeroVal, ElementNotFoundError{}
 }
 
-// FindIfSlice finds the first index i where unary_predicate(haystack[i]) == true.
+// FindIfSlice finds the first index i where unaryPredicate(haystack[i]) == true.
 //
 // Possible Error values:
 //    - EmptyIterableError
 //    - ElementNotFoundError
-func FindIfSlice[T comparable](haystack []T, unary_predicate func(T) bool) (int, error) {
+func FindIfSlice[T comparable](haystack []T, unaryPredicate func(T) bool) (int, error) {
 	if len(haystack) == 0 {
 		return 0, EmptyIterableError{}
 	}
 
 	for i, value := range haystack {
-		if unary_predicate(value) {
+		if unaryPredicate(value) {
 			return i, nil
 		}
 	}
@@ -51,18 +52,18 @@ func FindIfSlice[T comparable](haystack []T, unary_predicate func(T) bool) (int,
 	return 0, ElementNotFoundError{}
 }
 
-// FindIfString finds the first index i where unary_predicate(haystack[i]) == true.
+// FindIfString finds the first index i where unaryPredicate(haystack[i]) == true.
 //
 // Possible Error values:
 //    - EmptyIterableError
 //    - ElementNotFoundError
-func FindIfString(haystack string, unary_predicate func(rune) bool) (int, error) {
+func FindIfString(haystack string, unaryPredicate func(rune) bool) (int, error) {
 	if len(haystack) == 0 {
 		return 0, EmptyIterableError{}
 	}
 
 	for i, value := range haystack {
-		if unary_predicate(value) {
+		if unaryPredicate(value) {
 			return i, nil
 		}
 	}
@@ -70,19 +71,19 @@ func FindIfString(haystack string, unary_predicate func(rune) bool) (int, error)
 	return 0, ElementNotFoundError{}
 }
 
-// FindIfIterator finds the first index i where unary_predicate(haystack[i]) == true.
+// FindIfIterator finds the first index i where unaryPredicate(haystack[i]) == true.
 //
 // Possible Error values:
 //    - EmptyIterableError
 //    - ElementNotFoundError
-func FindIfIterator[TKey any, TValue comparable](haystack compounditerators.ReadForIndexIterator[TKey, TValue], unary_predicate func(TValue) bool) (int, error) {
+func FindIfIterator[TKey any, TValue comparable](haystack compounditerators.ReadForIndexIterator[TKey, TValue], unaryPredicate func(TValue) bool) (int, error) {
 	if haystack.IsEnd() {
 		return 0, EmptyIterableError{}
 	}
 
 	for haystack.Next() {
 		value, _ := haystack.Get()
-		if unary_predicate(value) {
+		if unaryPredicate(value) {
 			i, _ := haystack.Index()
 
 			return i, nil
@@ -208,18 +209,18 @@ func FindFirstOfStringPred(haystack string, needles string, binary_predicate fun
 	return 0, ElementNotFoundError{}
 }
 
-// AllOfSlice checks that unary_predicate(val) == true for ALL val in container.
+// AllOfSlice checks that unaryPredicate(val) == true for ALL val in container.
 //
 // Possible Error values:
 //    - EmptyIterableError
 //    - ComparisonError
-func AllOfSlice[T any](container []T, unary_predicate func(T) bool) error {
+func AllOfSlice[T any](container []T, unaryPredicate func(T) bool) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
 	}
 
 	for i, value := range container {
-		if !unary_predicate(value) {
+		if !unaryPredicate(value) {
 			return ComparisonError[int, T]{BadItemIndex: i, BadItem: value}
 		}
 	}
@@ -227,19 +228,19 @@ func AllOfSlice[T any](container []T, unary_predicate func(T) bool) error {
 	return nil
 }
 
-// AllOfMap checks that unary_predicate(val) == true for ALL val in container.
+// AllOfMap checks that unaryPredicate(val) == true for ALL val in container.
 // Note that the iteration order of a map is not stable.
 //
 // Possible Error values:
 //    - EmptyIterableError
 //    - ComparisonError
-func AllOfMap[TKey comparable, TValue comparable](container map[TKey]TValue, unary_predicate func(TValue) bool) error {
+func AllOfMap[TKey comparable, TValue comparable](container map[TKey]TValue, unaryPredicate func(TValue) bool) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
 	}
 
 	for key, value := range container {
-		if !unary_predicate(value) {
+		if !unaryPredicate(value) {
 			return ComparisonError[TKey, TValue]{BadItemIndex: key, BadItem: value}
 		}
 	}
@@ -247,18 +248,18 @@ func AllOfMap[TKey comparable, TValue comparable](container map[TKey]TValue, una
 	return nil
 }
 
-// AllOfString checks that unary_predicate(val) == true for ALL val in container.
+// AllOfString checks that unaryPredicate(val) == true for ALL val in container.
 //
 // Possible Error values:
 //    - EmptyIterableError
 //    - ComparisonError
-func AllOfString(container string, unary_predicate func(rune) bool) error {
+func AllOfString(container string, unaryPredicate func(rune) bool) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
 	}
 
 	for i, value := range container {
-		if !unary_predicate(value) {
+		if !unaryPredicate(value) {
 			return ComparisonError[int, rune]{BadItemIndex: i, BadItem: value}
 		}
 	}
@@ -266,19 +267,19 @@ func AllOfString(container string, unary_predicate func(rune) bool) error {
 	return nil
 }
 
-// AllOfIterator checks that unary_predicate(val) == true for ALL val in container.
+// AllOfIterator checks that unaryPredicate(val) == true for ALL val in container.
 //
 // Possible Error values:
 //    - EmptyIterableError
 //    - ComparisonError
-func AllOfIterator[TKey any, TValue any](container compounditerators.ReadForIndexIterator[TKey, TValue], unary_predicate func(TValue) bool) error {
+func AllOfIterator[TKey any, TValue any](container compounditerators.ReadForIndexIterator[TKey, TValue], unaryPredicate func(TValue) bool) error {
 	if container.IsEnd() {
 		return EmptyIterableError{}
 	}
 
 	for container.Next() {
 		value, _ := container.Get()
-		if !unary_predicate(value) {
+		if !unaryPredicate(value) {
 			i, _ := container.Index()
 			return ComparisonError[int, TValue]{BadItemIndex: i, BadItem: value}
 		}
@@ -287,18 +288,18 @@ func AllOfIterator[TKey any, TValue any](container compounditerators.ReadForInde
 	return nil
 }
 
-// AnyOfSlice checks that unary_predicate(val) == true for ANY val in container.
+// AnyOfSlice checks that unaryPredicate(val) == true for ANY val in container.
 //
 // Possible Error values:
 //    - EmptyIterableError
 //    - ElementNotFoundError
-func AnyOfSlice[T any](container []T, unary_predicate func(T) bool) error {
+func AnyOfSlice[T any](container []T, unaryPredicate func(T) bool) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
 	}
 
 	for _, value := range container {
-		if unary_predicate(value) {
+		if unaryPredicate(value) {
 			return nil
 		}
 	}
@@ -306,19 +307,19 @@ func AnyOfSlice[T any](container []T, unary_predicate func(T) bool) error {
 	return ElementNotFoundError{}
 }
 
-// AnyOfMap checks that unary_predicate(val) == true for ANY val in container.
+// AnyOfMap checks that unaryPredicate(val) == true for ANY val in container.
 // Note that the iteration order of a map is not stable.
 //
 // Possible Error values:
 //    - EmptyIterableError
 //    - ElementNotFoundError
-func AnyOfMap[TKey comparable, TValue comparable](container map[TKey]TValue, unary_predicate func(TValue) bool) error {
+func AnyOfMap[TKey comparable, TValue comparable](container map[TKey]TValue, unaryPredicate func(TValue) bool) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
 	}
 
 	for _, value := range container {
-		if unary_predicate(value) {
+		if unaryPredicate(value) {
 			return nil
 		}
 	}
@@ -326,18 +327,18 @@ func AnyOfMap[TKey comparable, TValue comparable](container map[TKey]TValue, una
 	return ElementNotFoundError{}
 }
 
-// AnyOfString checks that unary_predicate(val) == true for ANY val in container.
+// AnyOfString checks that unaryPredicate(val) == true for ANY val in container.
 //
 // Possible Error values:
 //    - EmptyIterableError
 //    - ElementNotFoundError
-func AnyOfString(container string, unary_predicate func(rune) bool) error {
+func AnyOfString(container string, unaryPredicate func(rune) bool) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
 	}
 
 	for _, value := range container {
-		if unary_predicate(value) {
+		if unaryPredicate(value) {
 			return nil
 		}
 	}
@@ -345,19 +346,19 @@ func AnyOfString(container string, unary_predicate func(rune) bool) error {
 	return ElementNotFoundError{}
 }
 
-// AnyOfIterator checks that unary_predicate(val) == true for ANY val in container.
+// AnyOfIterator checks that unaryPredicate(val) == true for ANY val in container.
 //
 // Possible Error values:
 //    - EmptyIterableError
 //    - ElementNotFoundError
-func AnyOfIterator[TKey any, TValue any](container compounditerators.ReadForIndexIterator[TKey, TValue], unary_predicate func(TValue) bool) error {
+func AnyOfIterator[TKey any, TValue any](container compounditerators.ReadForIndexIterator[TKey, TValue], unaryPredicate func(TValue) bool) error {
 	if container.IsEnd() {
 		return EmptyIterableError{}
 	}
 
 	for container.Next() {
 		value, _ := container.Get()
-		if unary_predicate(value) {
+		if unaryPredicate(value) {
 			return nil
 		}
 	}
@@ -365,18 +366,18 @@ func AnyOfIterator[TKey any, TValue any](container compounditerators.ReadForInde
 	return ElementNotFoundError{}
 }
 
-// NoneOfSlice checks that unary_predicate(val) == true for NO val in container.
+// NoneOfSlice checks that unaryPredicate(val) == true for NO val in container.
 //
 // Possible Error values:
 //    - EmptyIterableError
 //    - ComparisonError
-func NoneOfSlice[T any](container []T, unary_predicate func(T) bool) error {
+func NoneOfSlice[T any](container []T, unaryPredicate func(T) bool) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
 	}
 
 	for i, value := range container {
-		if unary_predicate(value) {
+		if unaryPredicate(value) {
 			return ComparisonError[int, T]{BadItemIndex: i, BadItem: value}
 		}
 	}
@@ -384,19 +385,19 @@ func NoneOfSlice[T any](container []T, unary_predicate func(T) bool) error {
 	return nil
 }
 
-// NoneOfMap checks that unary_predicate(val) == true for NO val in container.
+// NoneOfMap checks that unaryPredicate(val) == true for NO val in container.
 // Note that the iteration order of a map is not stable.
 //
 // Possible Error values:
 //    - EmptyIterableError
 //    - ComparisonError
-func NoneOfMap[TKey comparable, TValue comparable](container map[TKey]TValue, unary_predicate func(TValue) bool) error {
+func NoneOfMap[TKey comparable, TValue comparable](container map[TKey]TValue, unaryPredicate func(TValue) bool) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
 	}
 
 	for key, value := range container {
-		if unary_predicate(value) {
+		if unaryPredicate(value) {
 			return ComparisonError[TKey, TValue]{BadItemIndex: key, BadItem: value}
 		}
 	}
@@ -404,18 +405,18 @@ func NoneOfMap[TKey comparable, TValue comparable](container map[TKey]TValue, un
 	return nil
 }
 
-// NoneOfString checks that unary_predicate(val) == true for NO val in container.
+// NoneOfString checks that unaryPredicate(val) == true for NO val in container.
 //
 // Possible Error values:
 //    - EmptyIterableError
 //    - ComparisonError
-func NoneOfString(container string, unary_predicate func(rune) bool) error {
+func NoneOfString(container string, unaryPredicate func(rune) bool) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
 	}
 
 	for i, value := range container {
-		if unary_predicate(value) {
+		if unaryPredicate(value) {
 			return ComparisonError[int, rune]{BadItemIndex: i, BadItem: value}
 		}
 	}
@@ -423,19 +424,19 @@ func NoneOfString(container string, unary_predicate func(rune) bool) error {
 	return nil
 }
 
-// NoneOfIterator checks that unary_predicate(val) == true for ALL val in container.
+// NoneOfIterator checks that unaryPredicate(val) == true for ALL val in container.
 //
 // Possible Error values:
 //    - EmptyIterableError
 //    - ComparisonError
-func NoneOfIterator[TKey any, TValue any](container compounditerators.ReadForIndexIterator[TKey, TValue], unary_predicate func(TValue) bool) error {
+func NoneOfIterator[TKey any, TValue any](container compounditerators.ReadForIndexIterator[TKey, TValue], unaryPredicate func(TValue) bool) error {
 	if container.IsEnd() {
 		return EmptyIterableError{}
 	}
 
 	for container.Next() {
 		value, _ := container.Get()
-		if unary_predicate(value) {
+		if unaryPredicate(value) {
 			i, _ := container.Index()
 			return ComparisonError[int, TValue]{BadItemIndex: i, BadItem: value}
 		}
@@ -600,18 +601,18 @@ func ForeachIteratorUnsafe[TKey any, TValue any](container compounditerators.Rea
 	return nil
 }
 
-// CountIfSlice counts for how many val of container unary_predicate(val) == true.
+// CountIfSlice counts for how many val of container unaryPredicate(val) == true.
 //
 // Possible Error values:
 //    - EmptyIterableError
-func CountIfSlice[T comparable](container []T, unary_predicate func(T) bool) (int, error) {
+func CountIfSlice[T comparable](container []T, unaryPredicate func(T) bool) (int, error) {
 	if len(container) == 0 {
 		return 0, EmptyIterableError{}
 	}
 
 	counter := 0
 	for _, value := range container {
-		if unary_predicate(value) {
+		if unaryPredicate(value) {
 			counter++
 		}
 	}
@@ -619,19 +620,19 @@ func CountIfSlice[T comparable](container []T, unary_predicate func(T) bool) (in
 	return counter, nil
 }
 
-// CountIfMap counts for how many val of container unary_predicate(val) == true.
+// CountIfMap counts for how many val of container unaryPredicate(val) == true.
 // Note that the iteration order of a map is not stable.
 //
 // Possible Error values:
 //    - EmptyIterableError
-func CountIfMap[TKey comparable, TValue comparable](container map[TKey]TValue, unary_predicate func(TValue) bool) (int, error) {
+func CountIfMap[TKey comparable, TValue comparable](container map[TKey]TValue, unaryPredicate func(TValue) bool) (int, error) {
 	if len(container) == 0 {
 		return 0, EmptyIterableError{}
 	}
 
 	counter := 0
 	for _, value := range container {
-		if unary_predicate(value) {
+		if unaryPredicate(value) {
 			counter++
 		}
 	}
@@ -639,18 +640,18 @@ func CountIfMap[TKey comparable, TValue comparable](container map[TKey]TValue, u
 	return counter, nil
 }
 
-// CountIfString counts for how many val of container unary_predicate(val) == true.
+// CountIfString counts for how many val of container unaryPredicate(val) == true.
 //
 // Possible Error values:
 //    - EmptyIterableError
-func CountIfString(container string, unary_predicate func(rune) bool) (int, error) {
+func CountIfString(container string, unaryPredicate func(rune) bool) (int, error) {
 	if len(container) == 0 {
 		return 0, EmptyIterableError{}
 	}
 
 	counter := 0
 	for _, value := range container {
-		if unary_predicate(value) {
+		if unaryPredicate(value) {
 			counter++
 		}
 	}
@@ -658,11 +659,11 @@ func CountIfString(container string, unary_predicate func(rune) bool) (int, erro
 	return counter, nil
 }
 
-// CountIfIterator counts for how many val of container unary_predicate(val) == true.
+// CountIfIterator counts for how many val of container unaryPredicate(val) == true.
 //
 // Possible Error values:
 //    - EmptyIterableError
-func CountIfIterator[TKey any, TValue comparable](container compounditerators.ReadForIndexIterator[TKey, TValue], unary_predicate func(TValue) bool) (int, error) {
+func CountIfIterator[TKey any, TValue comparable](container compounditerators.ReadForIndexIterator[TKey, TValue], unaryPredicate func(TValue) bool) (int, error) {
 	if container.IsEnd() {
 		return 0, EmptyIterableError{}
 	}
@@ -670,7 +671,7 @@ func CountIfIterator[TKey any, TValue comparable](container compounditerators.Re
 	counter := 0
 	for container.Next() {
 		value, _ := container.Get()
-		if unary_predicate(value) {
+		if unaryPredicate(value) {
 			counter++
 		}
 	}
@@ -786,11 +787,11 @@ func AdjacentFindIteratorPred[TKey any, TValue comparable](container compoundite
 	return 0, ElementNotFoundError{}
 }
 
-// TakeWhileSlice returns a copy of original until the first element not satisfying unary_predicate(element) == true).
+// TakeWhileSlice returns a copy of original until the first element not satisfying unaryPredicate(element) == true).
 //
 // Possible Error values:
 //    - EmptyIterableError
-func TakeWhileSlice[T comparable](original []T, unary_predicate func(T) bool) ([]T, error) {
+func TakeWhileSlice[T comparable](original []T, unaryPredicate func(T) bool) ([]T, error) {
 	var zeroVal []T
 
 	if len(original) == 0 {
@@ -800,7 +801,7 @@ func TakeWhileSlice[T comparable](original []T, unary_predicate func(T) bool) ([
 	newContainer := make([]T, 0, len(original))
 
 	for _, value := range original {
-		if !unary_predicate(value) {
+		if !unaryPredicate(value) {
 			return newContainer, nil
 		}
 
@@ -810,11 +811,11 @@ func TakeWhileSlice[T comparable](original []T, unary_predicate func(T) bool) ([
 	return newContainer, nil
 }
 
-// TakeWhileString returns a copy of original until the first element not satisfying unary_predicate(element) == true).
+// TakeWhileString returns a copy of original until the first element not satisfying unaryPredicate(element) == true).
 //
 // Possible Error values:
 //    - EmptyIterableError
-func TakeWhileString(original string, unary_predicate func(rune) bool) (string, error) {
+func TakeWhileString(original string, unaryPredicate func(rune) bool) (string, error) {
 	var out bytes.Buffer
 
 	if len(original) == 0 {
@@ -824,7 +825,7 @@ func TakeWhileString(original string, unary_predicate func(rune) bool) (string, 
 	var i int
 	var value rune
 	for i, value = range original {
-		if !unary_predicate(value) {
+		if !unaryPredicate(value) {
 			return original[:i], nil
 		}
 
@@ -834,7 +835,7 @@ func TakeWhileString(original string, unary_predicate func(rune) bool) (string, 
 	return out.String(), nil
 }
 
-// TakeWhileIterator returns a copy of original until the first element not satisfying unary_predicate(element) == true).
+// TakeWhileIterator returns a copy of original until the first element not satisfying unaryPredicate(element) == true).
 //
 // Possible Error values:
 //    - EmptyIterableError
@@ -846,11 +847,11 @@ func TakeWhileIterator[TKey any, TValue any](original compounditerators.ReadForI
 	return iteratoradapters.NewTakeWhile[TKey, TValue](original, unaryPredicate), nil
 }
 
-// DropWhileSlice returns a copy of original starting from first element not satisfying unary_predicate(element) == true).
+// DropWhileSlice returns a copy of original starting from first element not satisfying unaryPredicate(element) == true).
 //
 // Possible Error values:
 //    - EmptyIterableError
-func DropWhileSlice[T comparable](original []T, unary_predicate func(T) bool) ([]T, error) {
+func DropWhileSlice[T comparable](original []T, unaryPredicate func(T) bool) ([]T, error) {
 	var zeroVal []T
 
 	if len(original) == 0 {
@@ -861,7 +862,7 @@ func DropWhileSlice[T comparable](original []T, unary_predicate func(T) bool) ([
 
 	i := 0
 	for _, value := range original {
-		if !unary_predicate(value) {
+		if !unaryPredicate(value) {
 			break
 		}
 
@@ -873,11 +874,11 @@ func DropWhileSlice[T comparable](original []T, unary_predicate func(T) bool) ([
 	return newContainer, nil
 }
 
-// DropWhileString returns a copy of original starting from first element not satisfying unary_predicate(element) == true).
+// DropWhileString returns a copy of original starting from first element not satisfying unaryPredicate(element) == true).
 //
 // Possible Error values:
 //    - EmptyIterableError
-func DropWhileString(original string, unary_predicate func(rune) bool) (string, error) {
+func DropWhileString(original string, unaryPredicate func(rune) bool) (string, error) {
 	if len(original) == 0 {
 		return "", EmptyIterableError{}
 	}
@@ -886,7 +887,7 @@ func DropWhileString(original string, unary_predicate func(rune) bool) (string, 
 	var value rune
 
 	for i, value = range original {
-		if unary_predicate(value) {
+		if unaryPredicate(value) {
 			return original[i-1:], nil
 		}
 
@@ -895,7 +896,7 @@ func DropWhileString(original string, unary_predicate func(rune) bool) (string, 
 	return "", nil
 }
 
-// DropWhileIterator returns a copy of original until the first element satisfying unary_predicate(element) == true).
+// DropWhileIterator returns a copy of original until the first element satisfying unaryPredicate(element) == true).
 //
 // Possible Error values:
 //    - EmptyIterableError
@@ -907,11 +908,11 @@ func DropWhileIterator[TKey any, TValue any](original compounditerators.ReadForI
 	return iteratoradapters.NewDropWhile[TKey, TValue](original, unaryPredicate), nil
 }
 
-// CopyIfSlice returns a copy of original with all element satisfying unary_predicate(element) == true).
+// CopyIfSlice returns a copy of original with all element satisfying unaryPredicate(element) == true).
 //
 // Possible Error values:
 //    - EmptyIterableError
-func CopyIfSlice[T comparable](original []T, unary_predicate func(T) bool) ([]T, error) {
+func CopyIfSlice[T comparable](original []T, unaryPredicate func(T) bool) ([]T, error) {
 	var zeroVal []T
 
 	if len(original) == 0 {
@@ -921,7 +922,7 @@ func CopyIfSlice[T comparable](original []T, unary_predicate func(T) bool) ([]T,
 	newContainer := make([]T, 0, len(original))
 
 	for _, value := range original {
-		if unary_predicate(value) {
+		if unaryPredicate(value) {
 			newContainer = append(newContainer, value)
 		}
 	}
@@ -929,12 +930,12 @@ func CopyIfSlice[T comparable](original []T, unary_predicate func(T) bool) ([]T,
 	return newContainer, nil
 }
 
-// CopyIfMap returns a copy of original with all key-value pairs satisfying unary_predicate(value) == true).
+// CopyIfMap returns a copy of original with all key-value pairs satisfying unaryPredicate(value) == true).
 // Note that the iteration order of a map is not stable.
 //
 // Possible Error values:
 //    - EmptyIterableError
-func CopyIfMap[TKey comparable, TValue comparable](original map[TKey]TValue, unary_predicate func(TValue) bool) (map[TKey]TValue, error) {
+func CopyIfMap[TKey comparable, TValue comparable](original map[TKey]TValue, unaryPredicate func(TValue) bool) (map[TKey]TValue, error) {
 	var zeroVal map[TKey]TValue
 
 	if len(original) == 0 {
@@ -944,7 +945,7 @@ func CopyIfMap[TKey comparable, TValue comparable](original map[TKey]TValue, una
 	newContainer := make(map[TKey]TValue, len(original))
 
 	for key, value := range original {
-		if unary_predicate(value) {
+		if unaryPredicate(value) {
 			newContainer[key] = value
 		}
 	}
@@ -952,11 +953,11 @@ func CopyIfMap[TKey comparable, TValue comparable](original map[TKey]TValue, una
 	return newContainer, nil
 }
 
-// CopyIfString returns a copy of original with all element satisfying unary_predicate(element) == true).
+// CopyIfString returns a copy of original with all element satisfying unaryPredicate(element) == true).
 //
 // Possible Error values:
 //    - EmptyIterableError
-func CopyIfString(original string, unary_predicate func(rune) bool) (string, error) {
+func CopyIfString(original string, unaryPredicate func(rune) bool) (string, error) {
 	var out bytes.Buffer
 
 	if len(original) == 0 {
@@ -964,7 +965,7 @@ func CopyIfString(original string, unary_predicate func(rune) bool) (string, err
 	}
 
 	for _, value := range original {
-		if unary_predicate(value) {
+		if unaryPredicate(value) {
 			out.WriteRune(value)
 		}
 	}
@@ -972,13 +973,24 @@ func CopyIfString(original string, unary_predicate func(rune) bool) (string, err
 	return out.String(), nil
 }
 
-// TODO: implement CopyIfIterator
-
-// CopyReplaceIfSlice returns a copy of original where each element satisfying unary_predicate(element) == true is replaced with replacement.
+// CopyIfString returns a copy of original with all element satisfying unaryPredicate(element) == true).
 //
 // Possible Error values:
 //    - EmptyIterableError
-func CopyReplaceIfSlice[T comparable](original []T, unary_predicate func(T) bool, replacement T) ([]T, error) {
+func CopyIfIterator[TKey any, TValue any](original ds.ReadForIndexIterator[TKey, TValue], unaryPredicate func(TValue) bool) (ds.ReadForIndexIterator[TKey, TValue], error) {
+
+	if original.IsEnd() {
+		return original, EmptyIterableError{}
+	}
+
+	return iteratoradapters.NewCopyIf[TKey, TValue](original, unaryPredicate), nil
+}
+
+// CopyReplaceIfSlice returns a copy of original where each element satisfying unaryPredicate(element) == true is replaced with replacement.
+//
+// Possible Error values:
+//    - EmptyIterableError
+func CopyReplaceIfSlice[T comparable](original []T, unaryPredicate func(T) bool, replacement T) ([]T, error) {
 	var zeroVal []T
 
 	if len(original) == 0 {
@@ -988,7 +1000,7 @@ func CopyReplaceIfSlice[T comparable](original []T, unary_predicate func(T) bool
 	newContainer := make([]T, 0, len(original))
 
 	for _, value := range original {
-		if unary_predicate(value) {
+		if unaryPredicate(value) {
 			newContainer = append(newContainer, replacement)
 		} else {
 			newContainer = append(newContainer, value)
@@ -998,12 +1010,12 @@ func CopyReplaceIfSlice[T comparable](original []T, unary_predicate func(T) bool
 	return newContainer, nil
 }
 
-// CopyReplaceIfMap returns a copy of original where each value of a key-value pair satisfying unary_predicate(value) == true is replaced with replacement.
+// CopyReplaceIfMap returns a copy of original where each value of a key-value pair satisfying unaryPredicate(value) == true is replaced with replacement.
 // Note that the iteration order of a map is not stable.
 //
 // Possible Error values:
 //    - EmptyIterableError
-func CopyReplaceIfMap[TKey comparable, TValue comparable](original map[TKey]TValue, unary_predicate func(TValue) bool, replacement TValue) (map[TKey]TValue, error) {
+func CopyReplaceIfMap[TKey comparable, TValue comparable](original map[TKey]TValue, unaryPredicate func(TValue) bool, replacement TValue) (map[TKey]TValue, error) {
 	var zeroVal map[TKey]TValue
 
 	if len(original) == 0 {
@@ -1013,7 +1025,7 @@ func CopyReplaceIfMap[TKey comparable, TValue comparable](original map[TKey]TVal
 	newContainer := make(map[TKey]TValue, len(original))
 
 	for key, value := range original {
-		if unary_predicate(value) {
+		if unaryPredicate(value) {
 			newContainer[key] = replacement
 		} else {
 			newContainer[key] = value
@@ -1023,11 +1035,11 @@ func CopyReplaceIfMap[TKey comparable, TValue comparable](original map[TKey]TVal
 	return newContainer, nil
 }
 
-// CopyReplaceIfString returns a copy of original with all element satisfying unary_predicate(element) == true).
+// CopyReplaceIfString returns a copy of original with all element satisfying unaryPredicate(element) == true).
 //
 // Possible Error values:
 //    - EmptyIterableError
-func CopyReplaceIfString(original string, unary_predicate func(rune) bool, replacement rune) (string, error) {
+func CopyReplaceIfString(original string, unaryPredicate func(rune) bool, replacement rune) (string, error) {
 	var out bytes.Buffer
 
 	if len(original) == 0 {
@@ -1035,7 +1047,7 @@ func CopyReplaceIfString(original string, unary_predicate func(rune) bool, repla
 	}
 
 	for _, value := range original {
-		if unary_predicate(value) {
+		if unaryPredicate(value) {
 			out.WriteRune(replacement)
 		} else {
 			out.WriteRune(value)
@@ -1047,13 +1059,13 @@ func CopyReplaceIfString(original string, unary_predicate func(rune) bool, repla
 
 // TODO: implement CopyReplaceIfIterator
 
-// TODO: All not functions should be implemented in terms of a negated unary_predicate and the original function
+// TODO: All not functions should be implemented in terms of a negated unaryPredicate and the original function
 
-// CopyReplaceIfNotSlice returns a copy of original where each element satisfying unary_predicate(element) != true is replaced with replacement.
+// CopyReplaceIfNotSlice returns a copy of original where each element satisfying unaryPredicate(element) != true is replaced with replacement.
 //
 // Possible Error values:
 //    - EmptyIterableError
-func CopyReplaceIfNotSlice[T comparable](original []T, unary_predicate func(T) bool, replacement T) ([]T, error) {
+func CopyReplaceIfNotSlice[T comparable](original []T, unaryPredicate func(T) bool, replacement T) ([]T, error) {
 	var zeroVal []T
 
 	if len(original) == 0 {
@@ -1063,7 +1075,7 @@ func CopyReplaceIfNotSlice[T comparable](original []T, unary_predicate func(T) b
 	newContainer := make([]T, 0, len(original))
 
 	for _, value := range original {
-		if !unary_predicate(value) {
+		if !unaryPredicate(value) {
 			newContainer = append(newContainer, replacement)
 		} else {
 			newContainer = append(newContainer, value)
@@ -1073,12 +1085,12 @@ func CopyReplaceIfNotSlice[T comparable](original []T, unary_predicate func(T) b
 	return newContainer, nil
 }
 
-// CopyReplaceIfNotMap returns a copy of original where each element satisfying unary_predicate(element) != true is replaced with replacement.
+// CopyReplaceIfNotMap returns a copy of original where each element satisfying unaryPredicate(element) != true is replaced with replacement.
 // Note that the iteration order of a map is not stable.
 //
 // Possible Error values:
 //    - EmptyIterableError
-func CopyReplaceIfNotMap[TKey comparable, TValue comparable](original map[TKey]TValue, unary_predicate func(TValue) bool, replacement TValue) (map[TKey]TValue, error) {
+func CopyReplaceIfNotMap[TKey comparable, TValue comparable](original map[TKey]TValue, unaryPredicate func(TValue) bool, replacement TValue) (map[TKey]TValue, error) {
 	var zeroVal map[TKey]TValue
 
 	if len(original) == 0 {
@@ -1088,7 +1100,7 @@ func CopyReplaceIfNotMap[TKey comparable, TValue comparable](original map[TKey]T
 	newContainer := make(map[TKey]TValue, len(original))
 
 	for key, value := range original {
-		if !unary_predicate(value) {
+		if !unaryPredicate(value) {
 			newContainer[key] = replacement
 		} else {
 			newContainer[key] = value
@@ -1098,11 +1110,11 @@ func CopyReplaceIfNotMap[TKey comparable, TValue comparable](original map[TKey]T
 	return newContainer, nil
 }
 
-// CopyReplaceIfNotString returns a copy of original with all element satisfying unary_predicate(element) == false).
+// CopyReplaceIfNotString returns a copy of original with all element satisfying unaryPredicate(element) == false).
 //
 // Possible Error values:
 //    - EmptyIterableError
-func CopyReplaceIfNotString(original string, unary_predicate func(rune) bool, replacement rune) (string, error) {
+func CopyReplaceIfNotString(original string, unaryPredicate func(rune) bool, replacement rune) (string, error) {
 	var out bytes.Buffer
 
 	if len(original) == 0 {
@@ -1110,7 +1122,7 @@ func CopyReplaceIfNotString(original string, unary_predicate func(rune) bool, re
 	}
 
 	for _, value := range original {
-		if !unary_predicate(value) {
+		if !unaryPredicate(value) {
 			out.WriteRune(replacement)
 		} else {
 			out.WriteRune(value)
@@ -1124,11 +1136,11 @@ func CopyReplaceIfNotString(original string, unary_predicate func(rune) bool, re
 
 // TODO: aren't thse functions just CopyIf but inverted
 
-// CopyExceptIfSlice returns a copy of original without all element satisfying unary_predicate(element) == true).
+// CopyExceptIfSlice returns a copy of original without all element satisfying unaryPredicate(element) == true).
 //
 // Possible Error values:
 //    - EmptyIterableError
-func CopyExceptIfSlice[T comparable](original []T, unary_predicate func(T) bool) ([]T, error) {
+func CopyExceptIfSlice[T comparable](original []T, unaryPredicate func(T) bool) ([]T, error) {
 	var zeroVal []T
 
 	if len(original) == 0 {
@@ -1138,7 +1150,7 @@ func CopyExceptIfSlice[T comparable](original []T, unary_predicate func(T) bool)
 	newContainer := make([]T, 0, len(original))
 
 	for _, value := range original {
-		if !unary_predicate(value) {
+		if !unaryPredicate(value) {
 			newContainer = append(newContainer, value)
 		}
 	}
@@ -1146,12 +1158,12 @@ func CopyExceptIfSlice[T comparable](original []T, unary_predicate func(T) bool)
 	return newContainer, nil
 }
 
-// CopyExceptIfMap returns a copy of original without all key-value pairs satisfying unary_predicate(value) == true).
+// CopyExceptIfMap returns a copy of original without all key-value pairs satisfying unaryPredicate(value) == true).
 // Note that the iteration order of a map is not stable.
 //
 // Possible Error values:
 //    - EmptyIterableError
-func CopyExceptIfMap[TKey comparable, TValue comparable](original map[TKey]TValue, unary_predicate func(TValue) bool) (map[TKey]TValue, error) {
+func CopyExceptIfMap[TKey comparable, TValue comparable](original map[TKey]TValue, unaryPredicate func(TValue) bool) (map[TKey]TValue, error) {
 	var zeroVal map[TKey]TValue
 
 	if len(original) == 0 {
@@ -1161,7 +1173,7 @@ func CopyExceptIfMap[TKey comparable, TValue comparable](original map[TKey]TValu
 	newContainer := make(map[TKey]TValue, len(original))
 
 	for key, value := range original {
-		if !unary_predicate(value) {
+		if !unaryPredicate(value) {
 			newContainer[key] = value
 		}
 	}
@@ -1169,11 +1181,11 @@ func CopyExceptIfMap[TKey comparable, TValue comparable](original map[TKey]TValu
 	return newContainer, nil
 }
 
-// CopyExceptIfNotSlice returns a copy of original without all element satisfying unary_predicate(element) == false).
+// CopyExceptIfNotSlice returns a copy of original without all element satisfying unaryPredicate(element) == false).
 //
 // Possible Error values:
 //    - EmptyIterableError
-func CopyExceptIfNotSlice[T comparable](original []T, unary_predicate func(T) bool) ([]T, error) {
+func CopyExceptIfNotSlice[T comparable](original []T, unaryPredicate func(T) bool) ([]T, error) {
 	var zeroVal []T
 
 	if len(original) == 0 {
@@ -1183,7 +1195,7 @@ func CopyExceptIfNotSlice[T comparable](original []T, unary_predicate func(T) bo
 	newContainer := make([]T, 0, len(original))
 
 	for _, value := range original {
-		if unary_predicate(value) {
+		if unaryPredicate(value) {
 			newContainer = append(newContainer, value)
 		}
 	}
@@ -1191,12 +1203,12 @@ func CopyExceptIfNotSlice[T comparable](original []T, unary_predicate func(T) bo
 	return newContainer, nil
 }
 
-// CopyExceptIfNotMap returns a copy of original without all key-value pairs satisfying unary_predicate(value) == false).
+// CopyExceptIfNotMap returns a copy of original without all key-value pairs satisfying unaryPredicate(value) == false).
 // Note that the iteration order of a map is not stable.
 //
 // Possible Error values:
 //    - EmptyIterableError
-func CopyExceptIfNotMap[TKey comparable, TValue comparable](original map[TKey]TValue, unary_predicate func(TValue) bool) (map[TKey]TValue, error) {
+func CopyExceptIfNotMap[TKey comparable, TValue comparable](original map[TKey]TValue, unaryPredicate func(TValue) bool) (map[TKey]TValue, error) {
 	var zeroVal map[TKey]TValue
 
 	if len(original) == 0 {
@@ -1206,7 +1218,7 @@ func CopyExceptIfNotMap[TKey comparable, TValue comparable](original map[TKey]TV
 	newContainer := make(map[TKey]TValue, len(original))
 
 	for key, value := range original {
-		if unary_predicate(value) {
+		if unaryPredicate(value) {
 			newContainer[key] = value
 		}
 	}
