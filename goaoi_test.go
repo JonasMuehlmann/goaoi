@@ -1078,6 +1078,36 @@ func Test_TransformMapUnsafe(t *testing.T) {
 	}
 }
 
+func Test_TransformIteratorUnsafe(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		original    []int
+		transformer func(int) int
+		exp         []int
+		err         error
+		name        string
+	}{
+		{[]int{1, 2}, func(i int) int { return i + 1 }, []int{2, 3}, nil, "Found"},
+		{[]int{}, func(i int) int { return i + 1 }, []int{}, goaoi.EmptyIterableError{}, "Empty"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			it := arraylist.NewFromSlice(tc.original).Begin()
+			outIter, err := goaoi.TransformIteratorUnsafe[int, int](it, tc.transformer)
+			res := arraylist.NewFromIterator[int](outIter).GetSlice()
+
+			assert.Equal(t, tc.exp, res)
+			if tc.err == nil {
+				assert.Nil(t, err)
+			} else {
+				assert.ErrorAs(t, err, &tc.err)
+			}
+
+		})
+	}
+}
+
 func Test_FillSlice(t *testing.T) {
 	t.Parallel()
 

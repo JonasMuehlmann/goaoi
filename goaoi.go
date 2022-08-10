@@ -1179,7 +1179,19 @@ func TransformSliceUnsafe[T any](container []T, transformer func(*T)) error {
 	return nil
 }
 
-// TODO: implement TransformIteratorUnsafe
+// TransformIteratorUnsafe applies transformer(&container[i]) for all i in [0, len(container)[ and stores them at container[i].
+// Errors returned by transformer are propagated to the caller of TransformSlice.
+//
+// Possible Error values:
+//    - EmptyIterableError
+//    - ExecutionError
+func TransformIteratorUnsafe[TKey any, TValue any](container ds.ReadForIndexIterator[TKey, TValue], transformer func(TValue) TValue) (ds.ReadForIndexIterator[TKey, TValue], error) {
+	if container.IsEnd() {
+		return container, EmptyIterableError{}
+	}
+
+	return iteratoradapters.NewTransformUnsafeIterator[TKey, TValue](container, transformer), nil
+}
 
 // TransformCopyMap applies transformer(value) for all key-value pairs in container and and returns the newly created container.
 // Note that the iteration order of a map is not stable.
@@ -1260,8 +1272,6 @@ func TransformCopyString(container string, transformer func(rune) (rune, error))
 	return res.String(), nil
 }
 
-// TODO: implement TransformCopyIterator
-
 // TransformCopyMapUnsafe applies transformer(value) for all key-value pairs in container and and returns the newly created container.
 // Note that the transformer can return a different type than it's input.
 // Note that the iteration order of a map is not stable.
@@ -1323,8 +1333,6 @@ func TransformCopyStringUnsafe(container string, transformer func(rune) rune) (s
 
 	return res.String(), nil
 }
-
-// TODO: implement TransformCopyIteratorUnsafe
 
 // MinSlicePred finds the smallest value in haystack.
 // The elements are compared with binary_predicate.
