@@ -954,6 +954,18 @@ func TakeIfSlice[T comparable](original []T, unaryPredicate func(T) bool) ([]T, 
 	return newContainer, nil
 }
 
+// StridedIterator returns a copy of original including every nth element.
+//
+// Possible Error values:
+//    - EmptyIterableError
+func StridedIterator[TKey any, TValue any](original compounditerators.ReadForIndexIterator[TKey, TValue], n int) (compounditerators.ReadForIndexIterator[TKey, TValue], error) {
+	if original.IsEnd() {
+		return original, EmptyIterableError{}
+	}
+
+	return iteratoradapters.NewStrided[TKey, TValue](original, n), nil
+}
+
 // TakeIfMap returns a copy of original with all key-value pairs satisfying unaryPredicate(value) == true).
 // Note that the iteration order of a map is not stable.
 //

@@ -706,6 +706,38 @@ func Test_DropNIterator(t *testing.T) {
 	}
 }
 
+func TestStridedIterator(t *testing.T) {
+	tcs := []struct {
+		original []int
+		n        int
+		exp      []int
+		err      error
+		name     string
+	}{
+		{[]int{1, 2}, 0, []int{}, nil, "zero stride"},
+		{[]int{1, 2, 3, 4, 5}, 2, []int{1, 3, 5}, nil, "every second"},
+		{[]int{1, 2, 3, 4, 5}, 1, []int{1, 2, 3, 4, 5}, nil, "regual stride"},
+		{[]int{1, 2, 3}, 6, []int{1}, nil, "stride larger than count"},
+	}
+	for _, tc := range tcs {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+			it := arraylist.NewFromSlice(tc.original).Begin()
+			outIter, err := goaoi.StridedIterator[int, int](it, tc.n)
+			res := arraylist.NewFromIterator[int](outIter).GetSlice()
+
+			assert.Equal(t, tc.exp, res)
+			if tc.err == nil {
+				assert.Nil(t, err)
+			} else {
+				assert.ErrorAs(t, err, &tc.err)
+			}
+
+		})
+	}
+}
+
 func Test_TakeIfSlice(t *testing.T) {
 	tcs := []struct {
 		original   []int
