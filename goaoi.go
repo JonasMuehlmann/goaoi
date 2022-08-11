@@ -847,6 +847,18 @@ func TakeWhileIterator[TKey any, TValue any](original compounditerators.ReadForI
 	return iteratoradapters.NewTakeWhile[TKey, TValue](original, unaryPredicate), nil
 }
 
+// TakeNIterator returns a copy of original including up to the first n elements
+//
+// Possible Error values:
+//    - EmptyIterableError
+func TakeNIterator[TKey any, TValue any](original compounditerators.ReadForIndexIterator[TKey, TValue], n int) (compounditerators.ReadForIndexIterator[TKey, TValue], error) {
+	if original.IsEnd() {
+		return original, EmptyIterableError{}
+	}
+
+	return iteratoradapters.NewTakeN[TKey, TValue](original, n), nil
+}
+
 // DropWhileSlice returns a copy of original starting from first element not satisfying unaryPredicate(element) == true).
 //
 // Possible Error values:

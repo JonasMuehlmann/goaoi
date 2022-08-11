@@ -580,6 +580,38 @@ func Test_TakeWhileIterator(t *testing.T) {
 	}
 }
 
+func Test_TakeNIterator(t *testing.T) {
+	t.Parallel()
+
+	tcs := []struct {
+		original []int
+		n        int
+		exp      []int
+		err      error
+		name     string
+	}{
+		{[]int{1, 2}, 0, []int{}, nil, "take 0"},
+		{[]int{1, 2}, 2, []int{1,2}, nil, "take all"},
+		{[]int{1, 2, 3, 4, 5, 6}, 3, []int{1, 2, 3}, nil, "take half"},
+		{[]int{1, 2, 3}, 6, []int{1, 2, 3}, nil, "take more than exists"},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			it := arraylist.NewFromSlice(tc.original).Begin()
+			outIter, err := goaoi.TakeNIterator[int, int](it, tc.n)
+			res := arraylist.NewFromIterator[int](outIter).GetSlice()
+
+			assert.Equal(t, tc.exp, res)
+			if tc.err == nil {
+				assert.Nil(t, err)
+			} else {
+				assert.ErrorAs(t, err, &tc.err)
+			}
+
+		})
+	}
+}
+
 func Test_DropWhileSlice(t *testing.T) {
 	t.Parallel()
 
