@@ -6,7 +6,6 @@ import (
 	"bytes"
 
 	"github.com/JonasMuehlmann/datastructures.go/ds"
-	compounditerators "github.com/JonasMuehlmann/goaoi/compound_iterators"
 	iteratoradapters "github.com/JonasMuehlmann/goaoi/iterator_adapters"
 	"golang.org/x/exp/constraints"
 )
@@ -76,7 +75,7 @@ func FindIfString(haystack string, unaryPredicate func(rune) bool) (int, error) 
 // Possible Error values:
 //    - EmptyIterableError
 //    - ElementNotFoundError
-func FindIfIterator[TKey any, TValue comparable](haystack compounditerators.ReadForIndexIterator[TKey, TValue], unaryPredicate func(TValue) bool) (int, error) {
+func FindIfIterator[TKey any, TValue comparable](haystack ds.ReadForIndexIterator[TKey, TValue], unaryPredicate func(TValue) bool) (int, error) {
 	if haystack.IsEnd() {
 		return 0, EmptyIterableError{}
 	}
@@ -272,7 +271,7 @@ func AllOfString(container string, unaryPredicate func(rune) bool) error {
 // Possible Error values:
 //    - EmptyIterableError
 //    - ComparisonError
-func AllOfIterator[TKey any, TValue any](container compounditerators.ReadForIndexIterator[TKey, TValue], unaryPredicate func(TValue) bool) error {
+func AllOfIterator[TKey any, TValue any](container ds.ReadForIndexIterator[TKey, TValue], unaryPredicate func(TValue) bool) error {
 	if container.IsEnd() {
 		return EmptyIterableError{}
 	}
@@ -351,7 +350,7 @@ func AnyOfString(container string, unaryPredicate func(rune) bool) error {
 // Possible Error values:
 //    - EmptyIterableError
 //    - ElementNotFoundError
-func AnyOfIterator[TKey any, TValue any](container compounditerators.ReadForIndexIterator[TKey, TValue], unaryPredicate func(TValue) bool) error {
+func AnyOfIterator[TKey any, TValue any](container ds.ReadForIndexIterator[TKey, TValue], unaryPredicate func(TValue) bool) error {
 	if container.IsEnd() {
 		return EmptyIterableError{}
 	}
@@ -429,7 +428,7 @@ func NoneOfString(container string, unaryPredicate func(rune) bool) error {
 // Possible Error values:
 //    - EmptyIterableError
 //    - ComparisonError
-func NoneOfIterator[TKey any, TValue any](container compounditerators.ReadForIndexIterator[TKey, TValue], unaryPredicate func(TValue) bool) error {
+func NoneOfIterator[TKey any, TValue any](container ds.ReadForIndexIterator[TKey, TValue], unaryPredicate func(TValue) bool) error {
 	if container.IsEnd() {
 		return EmptyIterableError{}
 	}
@@ -515,7 +514,7 @@ func ForeachString(container string, unary_func func(rune) error) error {
 // Possible Error values:
 //    - EmptyIterableError
 //    - ExecutionError
-func ForeachIterator[TKey any, TValue any](container compounditerators.ReadForIndexIterator[TKey, TValue], unary_func func(TValue) error) error {
+func ForeachIterator[TKey any, TValue any](container ds.ReadForIndexIterator[TKey, TValue], unary_func func(TValue) error) error {
 	if container.IsEnd() {
 		return EmptyIterableError{}
 	}
@@ -588,7 +587,7 @@ func ForeachStringUnsafe(container string, unary_func func(rune)) error {
 // Possible Error values:
 //    - EmptyIterableError
 //    - ExecutionError
-func ForeachIteratorUnsafe[TKey any, TValue any](container compounditerators.ReadForIndexIterator[TKey, TValue], unary_func func(TValue)) error {
+func ForeachIteratorUnsafe[TKey any, TValue any](container ds.ReadForIndexIterator[TKey, TValue], unary_func func(TValue)) error {
 	if container.IsEnd() {
 		return EmptyIterableError{}
 	}
@@ -663,7 +662,7 @@ func CountIfString(container string, unaryPredicate func(rune) bool) (int, error
 //
 // Possible Error values:
 //    - EmptyIterableError
-func CountIfIterator[TKey any, TValue comparable](container compounditerators.ReadForIndexIterator[TKey, TValue], unaryPredicate func(TValue) bool) (int, error) {
+func CountIfIterator[TKey any, TValue comparable](container ds.ReadForIndexIterator[TKey, TValue], unaryPredicate func(TValue) bool) (int, error) {
 	if container.IsEnd() {
 		return 0, EmptyIterableError{}
 	}
@@ -764,7 +763,7 @@ func AdjacentFindStringPred(container string, binary_predicate func(byte, byte) 
 // Possible Error values:
 //    - EmptyIterableError
 //    - ElementNotFoundError
-func AdjacentFindIteratorPred[TKey any, TValue comparable](container compounditerators.ReadForIndexIterator[TKey, TValue], binary_predicate func(TValue, TValue) bool) (int, error) {
+func AdjacentFindIteratorPred[TKey any, TValue comparable](container ds.ReadForIndexIterator[TKey, TValue], binary_predicate func(TValue, TValue) bool) (int, error) {
 	if container.IsEnd() {
 		return 0, EmptyIterableError{}
 	}
@@ -839,7 +838,7 @@ func TakeWhileString(original string, unaryPredicate func(rune) bool) (string, e
 //
 // Possible Error values:
 //    - EmptyIterableError
-func TakeWhileIterator[TKey any, TValue any](original compounditerators.ReadForIndexIterator[TKey, TValue], unaryPredicate func(TValue) bool) (compounditerators.ReadForIndexIterator[TKey, TValue], error) {
+func TakeWhileIterator[TKey any, TValue any](original ds.ReadForIndexIterator[TKey, TValue], unaryPredicate func(TValue) bool) (ds.ReadForIndexIterator[TKey, TValue], error) {
 	if original.IsEnd() {
 		return original, EmptyIterableError{}
 	}
@@ -851,7 +850,7 @@ func TakeWhileIterator[TKey any, TValue any](original compounditerators.ReadForI
 //
 // Possible Error values:
 //    - EmptyIterableError
-func TakeNIterator[TKey any, TValue any](original compounditerators.ReadForIndexIterator[TKey, TValue], n int) (compounditerators.ReadForIndexIterator[TKey, TValue], error) {
+func TakeNIterator[TKey any, TValue any](original ds.ReadForIndexIterator[TKey, TValue], n int) (ds.ReadForIndexIterator[TKey, TValue], error) {
 	if original.IsEnd() {
 		return original, EmptyIterableError{}
 	}
@@ -912,7 +911,7 @@ func DropWhileString(original string, unaryPredicate func(rune) bool) (string, e
 //
 // Possible Error values:
 //    - EmptyIterableError
-func DropWhileIterator[TKey any, TValue any](original compounditerators.ReadForIndexIterator[TKey, TValue], unaryPredicate func(TValue) bool) (compounditerators.ReadForIndexIterator[TKey, TValue], error) {
+func DropWhileIterator[TKey any, TValue any](original ds.ReadForIndexIterator[TKey, TValue], unaryPredicate func(TValue) bool) (ds.ReadForIndexIterator[TKey, TValue], error) {
 	if original.IsEnd() {
 		return original, EmptyIterableError{}
 	}
@@ -924,7 +923,7 @@ func DropWhileIterator[TKey any, TValue any](original compounditerators.ReadForI
 //
 // Possible Error values:
 //    - EmptyIterableError
-func DropNIterator[TKey any, TValue any](original compounditerators.ReadForIndexIterator[TKey, TValue], n int) (compounditerators.ReadForIndexIterator[TKey, TValue], error) {
+func DropNIterator[TKey any, TValue any](original ds.ReadForIndexIterator[TKey, TValue], n int) (ds.ReadForIndexIterator[TKey, TValue], error) {
 	if original.IsEnd() {
 		return original, EmptyIterableError{}
 	}
@@ -958,12 +957,20 @@ func TakeIfSlice[T comparable](original []T, unaryPredicate func(T) bool) ([]T, 
 //
 // Possible Error values:
 //    - EmptyIterableError
-func StridedIterator[TKey any, TValue any](original compounditerators.ReadForIndexIterator[TKey, TValue], n int) (compounditerators.ReadForIndexIterator[TKey, TValue], error) {
+func StridedIterator[TKey any, TValue any](original ds.ReadForIndexIterator[TKey, TValue], n int) (ds.ReadForIndexIterator[TKey, TValue], error) {
 	if original.IsEnd() {
 		return original, EmptyIterableError{}
 	}
 
 	return iteratoradapters.NewStrided[TKey, TValue](original, n), nil
+}
+
+// JoinIterator returns a copy of original including every element of every iterator.
+//
+// Possible Error values:
+//    - EmptyIterableError
+func JoinIterator[TKey any, TValue any](originals ...ds.ReadForIndexIterator[TKey, TValue]) (ds.ReadForIndexIterator[TKey, TValue], error) {
+	return iteratoradapters.NewJoin[TKey, TValue](originals...), nil
 }
 
 // TakeIfMap returns a copy of original with all key-value pairs satisfying unaryPredicate(value) == true).

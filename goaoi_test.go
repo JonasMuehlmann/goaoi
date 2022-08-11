@@ -3,6 +3,7 @@ package goaoi_test
 import (
 	"testing"
 
+	"github.com/JonasMuehlmann/datastructures.go/ds"
 	"github.com/JonasMuehlmann/datastructures.go/lists/arraylist"
 	"github.com/JonasMuehlmann/goaoi"
 	"github.com/stretchr/testify/assert"
@@ -725,6 +726,44 @@ func TestStridedIterator(t *testing.T) {
 			t.Parallel()
 			it := arraylist.NewFromSlice(tc.original).Begin()
 			outIter, err := goaoi.StridedIterator[int, int](it, tc.n)
+			res := arraylist.NewFromIterator[int](outIter).GetSlice()
+
+			assert.Equal(t, tc.exp, res)
+			if tc.err == nil {
+				assert.Nil(t, err)
+			} else {
+				assert.ErrorAs(t, err, &tc.err)
+			}
+
+		})
+	}
+}
+
+func TestJoinIterator(t *testing.T) {
+	tcs := []struct {
+		originals [][]int
+		exp       []int
+		err       error
+		name      string
+	}{
+		{[][]int{}, []int{}, nil, "empty"},
+		{[][]int{{}, {}, {}}, []int{}, nil, "empty originals"},
+		{[][]int{{1, 2, 3}}, []int{1, 2, 3}, nil, "single original"},
+		{[][]int{{1}, {2}, {3}}, []int{1, 2, 3}, nil, "three originals with one element each"},
+		{[][]int{{1, 2}, {3}, {4, 5, 6}}, []int{1, 2, 3, 4, 5, 6}, nil, "three originals with different number of elements"},
+	}
+	for _, tc := range tcs {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+			iterators := make([]ds.ReadForIndexIterator[int, int], 0)
+
+			for _, original := range tc.originals {
+				it := arraylist.NewFromSlice(original).Begin()
+				iterators = append(iterators, it)
+			}
+
+			outIter, err := goaoi.JoinIterator[int, int](iterators...)
 			res := arraylist.NewFromIterator[int](outIter).GetSlice()
 
 			assert.Equal(t, tc.exp, res)
