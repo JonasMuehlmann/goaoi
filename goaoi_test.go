@@ -674,6 +674,38 @@ func Test_DropWhileIterator(t *testing.T) {
 	}
 }
 
+func Test_DropNIterator(t *testing.T) {
+	tcs := []struct {
+		original []int
+		n        int
+		exp      []int
+		err      error
+		name     string
+	}{
+		{[]int{1, 2}, 2, []int{}, nil, "drop all"},
+		{[]int{1, 2}, 0, []int{1, 2}, nil, "drop none"},
+		{[]int{1, 2, 3, 4, 5, 6}, 3, []int{4, 5, 6}, nil, "drop half"},
+		{[]int{1, 2, 3}, 6, []int{}, nil, "drop more than exists"},
+	}
+	for _, tc := range tcs {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+			it := arraylist.NewFromSlice(tc.original).Begin()
+			outIter, err := goaoi.DropNIterator[int, int](it, tc.n)
+			res := arraylist.NewFromIterator[int](outIter).GetSlice()
+
+			assert.Equal(t, tc.exp, res)
+			if tc.err == nil {
+				assert.Nil(t, err)
+			} else {
+				assert.ErrorAs(t, err, &tc.err)
+			}
+
+		})
+	}
+}
+
 func Test_TakeIfSlice(t *testing.T) {
 	tcs := []struct {
 		original   []int
