@@ -9,8 +9,6 @@ import (
 )
 
 func Test_FindIfSlice(t *testing.T) {
-	t.Parallel()
-
 	tcs := []struct {
 		haystack   []int
 		comparator func(int) bool
@@ -23,7 +21,9 @@ func Test_FindIfSlice(t *testing.T) {
 		{[]int{}, func(i int) bool { return i == 0 }, 0, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			res, err := goaoi.FindIfSlice(tc.haystack, tc.comparator)
 
 			assert.Equal(t, tc.exp, res)
@@ -38,8 +38,6 @@ func Test_FindIfSlice(t *testing.T) {
 }
 
 func Test_FindIfMap(t *testing.T) {
-	t.Parallel()
-
 	tcs := []struct {
 		haystack   map[string]int
 		comparator func(int) bool
@@ -52,7 +50,9 @@ func Test_FindIfMap(t *testing.T) {
 		{map[string]int{}, func(i int) bool { return i == 0 }, "", goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			res, err := goaoi.FindIfMap(tc.haystack, tc.comparator)
 
 			assert.Equal(t, tc.exp, res)
@@ -67,8 +67,6 @@ func Test_FindIfMap(t *testing.T) {
 }
 
 func Test_FindEndSlicePred(t *testing.T) {
-	t.Parallel()
-
 	tcs := []struct {
 		super      []int
 		sub        []int
@@ -86,7 +84,9 @@ func Test_FindEndSlicePred(t *testing.T) {
 		{[]int{1, 2, 3}, []int{}, goaoi.AreEqual[int], 0, goaoi.EmptyIterableError{}, "Sub empty"},
 	}
 	for _, tc := range tcs {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			res, err := goaoi.FindEndSlicePred(tc.super, tc.sub, tc.comparator)
 
 			assert.Equal(t, tc.exp, res)
@@ -101,8 +101,6 @@ func Test_FindEndSlicePred(t *testing.T) {
 }
 
 func Test_FindFirstOfSlicePred(t *testing.T) {
-	t.Parallel()
-
 	tcs := []struct {
 		haystack   []int
 		needles    []int
@@ -120,7 +118,9 @@ func Test_FindFirstOfSlicePred(t *testing.T) {
 		{[]int{1, 2, 3}, []int{}, goaoi.AreEqual[int], 0, goaoi.EmptyIterableError{}, "Sub empty"},
 	}
 	for _, tc := range tcs {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			res, err := goaoi.FindFirstOfSlicePred(tc.haystack, tc.needles, tc.comparator)
 
 			assert.Equal(t, tc.exp, res)
@@ -135,8 +135,6 @@ func Test_FindFirstOfSlicePred(t *testing.T) {
 }
 
 func Test_FindFirstOfMapPred(t *testing.T) {
-	t.Parallel()
-
 	tcs := []struct {
 		haystack   map[string]int
 		needles    []int
@@ -154,7 +152,9 @@ func Test_FindFirstOfMapPred(t *testing.T) {
 		{map[string]int{"a": 1, "b": 2, "c": 3}, []int{}, goaoi.AreEqual[int], "", goaoi.EmptyIterableError{}, "Sub empty"},
 	}
 	for _, tc := range tcs {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			res, err := goaoi.FindFirstOfMapPred(tc.haystack, tc.needles, tc.comparator)
 
 			assert.Equal(t, tc.exp, res)
@@ -169,8 +169,6 @@ func Test_FindFirstOfMapPred(t *testing.T) {
 }
 
 func Test_AllOfSlice(t *testing.T) {
-	t.Parallel()
-
 	tcs := []struct {
 		haystack   []int
 		comparator func(int) bool
@@ -182,7 +180,9 @@ func Test_AllOfSlice(t *testing.T) {
 		{[]int{}, func(i int) bool { return i > 0 }, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			err := goaoi.AllOfSlice(tc.haystack, tc.comparator)
 
 			assert.Equal(t, tc.exp, err)
@@ -191,8 +191,6 @@ func Test_AllOfSlice(t *testing.T) {
 }
 
 func Test_AllOfMap(t *testing.T) {
-	t.Parallel()
-
 	tcs := []struct {
 		haystack   map[string]int
 		comparator func(int) bool
@@ -204,7 +202,9 @@ func Test_AllOfMap(t *testing.T) {
 		{map[string]int{}, func(i int) bool { return i > 0 }, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			err := goaoi.AllOfMap(tc.haystack, tc.comparator)
 
 			if tc.exp == nil {
@@ -217,8 +217,6 @@ func Test_AllOfMap(t *testing.T) {
 }
 
 func Test_AnyOfSlice(t *testing.T) {
-	t.Parallel()
-
 	tcs := []struct {
 		haystack   []int
 		comparator func(int) bool
@@ -230,7 +228,9 @@ func Test_AnyOfSlice(t *testing.T) {
 		{[]int{}, func(i int) bool { return i > 0 }, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			err := goaoi.AnyOfSlice(tc.haystack, tc.comparator)
 
 			assert.Equal(t, tc.exp, err)
@@ -239,8 +239,6 @@ func Test_AnyOfSlice(t *testing.T) {
 }
 
 func Test_AnyOfMap(t *testing.T) {
-	t.Parallel()
-
 	tcs := []struct {
 		haystack   map[string]int
 		comparator func(int) bool
@@ -252,7 +250,9 @@ func Test_AnyOfMap(t *testing.T) {
 		{map[string]int{}, func(i int) bool { return i > 0 }, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			err := goaoi.AnyOfMap(tc.haystack, tc.comparator)
 
 			assert.Equal(t, tc.exp, err)
@@ -261,8 +261,6 @@ func Test_AnyOfMap(t *testing.T) {
 }
 
 func Test_NoneOfSlice(t *testing.T) {
-	t.Parallel()
-
 	tcs := []struct {
 		haystack   []int
 		comparator func(int) bool
@@ -274,7 +272,9 @@ func Test_NoneOfSlice(t *testing.T) {
 		{[]int{}, func(i int) bool { return i > 0 }, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			err := goaoi.NoneOfSlice(tc.haystack, tc.comparator)
 
 			assert.Equal(t, tc.exp, err)
@@ -283,8 +283,6 @@ func Test_NoneOfSlice(t *testing.T) {
 }
 
 func Test_NoneOfMap(t *testing.T) {
-	t.Parallel()
-
 	tcs := []struct {
 		haystack   map[string]int
 		comparator func(int) bool
@@ -296,7 +294,9 @@ func Test_NoneOfMap(t *testing.T) {
 		{map[string]int{}, func(i int) bool { return i > 0 }, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			err := goaoi.NoneOfMap(tc.haystack, tc.comparator)
 
 			assert.Equal(t, tc.exp, err)
@@ -305,8 +305,6 @@ func Test_NoneOfMap(t *testing.T) {
 }
 
 func Test_ForeachSlice(t *testing.T) {
-	t.Parallel()
-
 	tcs := []struct {
 		haystack   []int
 		comparator func(int) error
@@ -318,7 +316,9 @@ func Test_ForeachSlice(t *testing.T) {
 		{[]int{}, func(i int) error { return nil }, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			err := goaoi.ForeachSlice(tc.haystack, tc.comparator)
 
 			assert.Equal(t, err, tc.exp)
@@ -327,8 +327,6 @@ func Test_ForeachSlice(t *testing.T) {
 }
 
 func Test_ForeachMap(t *testing.T) {
-	t.Parallel()
-
 	tcs := []struct {
 		haystack   map[string]int
 		comparator func(int) error
@@ -340,7 +338,9 @@ func Test_ForeachMap(t *testing.T) {
 		{map[string]int{}, func(i int) error { return nil }, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			err := goaoi.ForeachMap(tc.haystack, tc.comparator)
 
 			if tc.err == nil {
@@ -353,8 +353,6 @@ func Test_ForeachMap(t *testing.T) {
 }
 
 func Test_ForeachSliceUnsafe(t *testing.T) {
-	t.Parallel()
-
 	tcs := []struct {
 		haystack   []int
 		comparator func(int)
@@ -365,7 +363,9 @@ func Test_ForeachSliceUnsafe(t *testing.T) {
 		{[]int{}, func(i int) {}, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			err := goaoi.ForeachSliceUnsafe(tc.haystack, tc.comparator)
 
 			assert.Equal(t, err, tc.exp)
@@ -374,8 +374,6 @@ func Test_ForeachSliceUnsafe(t *testing.T) {
 }
 
 func Test_ForeachMapUnsafe(t *testing.T) {
-	t.Parallel()
-
 	tcs := []struct {
 		haystack   map[string]int
 		comparator func(int)
@@ -386,7 +384,9 @@ func Test_ForeachMapUnsafe(t *testing.T) {
 		{map[string]int{}, func(i int) {}, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			err := goaoi.ForeachMapUnsafe(tc.haystack, tc.comparator)
 
 			if tc.err == nil {
@@ -399,8 +399,6 @@ func Test_ForeachMapUnsafe(t *testing.T) {
 }
 
 func Test_CountIfSlice(t *testing.T) {
-	t.Parallel()
-
 	tcs := []struct {
 		haystack   []int
 		comparator func(int) bool
@@ -413,7 +411,9 @@ func Test_CountIfSlice(t *testing.T) {
 		{[]int{}, func(i int) bool { return i == 0 }, 0, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			res, err := goaoi.CountIfSlice(tc.haystack, tc.comparator)
 
 			assert.Equal(t, tc.exp, res)
@@ -428,8 +428,6 @@ func Test_CountIfSlice(t *testing.T) {
 }
 
 func Test_CountIfMap(t *testing.T) {
-	t.Parallel()
-
 	tcs := []struct {
 		haystack   map[string]int
 		comparator func(int) bool
@@ -442,7 +440,9 @@ func Test_CountIfMap(t *testing.T) {
 		{map[string]int{}, func(i int) bool { return i == 0 }, 0, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			res, err := goaoi.CountIfMap(tc.haystack, tc.comparator)
 
 			assert.Equal(t, tc.exp, res)
@@ -457,8 +457,6 @@ func Test_CountIfMap(t *testing.T) {
 }
 
 func Test_MismatchSlicePred(t *testing.T) {
-	t.Parallel()
-
 	tcs := []struct {
 		iterable1  []int
 		iterable2  []int
@@ -472,7 +470,9 @@ func Test_MismatchSlicePred(t *testing.T) {
 		{[]int{}, []int{1, 2}, goaoi.AreEqual[int], 0, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			res, err := goaoi.MismatchSlicePred(tc.iterable1, tc.iterable2, tc.comparator)
 
 			assert.Equal(t, tc.exp, res)
@@ -487,8 +487,6 @@ func Test_MismatchSlicePred(t *testing.T) {
 }
 
 func Test_AdjacentFindPred(t *testing.T) {
-	t.Parallel()
-
 	tcs := []struct {
 		haystack   []int
 		comparator func(int, int) bool
@@ -504,7 +502,9 @@ func Test_AdjacentFindPred(t *testing.T) {
 		{[]int{1}, goaoi.AreEqual[int], 0, goaoi.ElementNotFoundError{}, "Only one element"},
 	}
 	for _, tc := range tcs {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			res, err := goaoi.AdjacentFindSlicePred(tc.haystack, tc.comparator)
 
 			assert.Equal(t, tc.exp, res)
@@ -519,8 +519,6 @@ func Test_AdjacentFindPred(t *testing.T) {
 }
 
 func Test_TakeWhileSlice(t *testing.T) {
-	t.Parallel()
-
 	tcs := []struct {
 		original   []int
 		comparator func(int) bool
@@ -534,7 +532,9 @@ func Test_TakeWhileSlice(t *testing.T) {
 		{[]int{}, func(x int) bool { return x == -1 }, []int(nil), goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			res, err := goaoi.TakeWhileSlice(tc.original, tc.comparator)
 
 			assert.Equal(t, tc.exp, res)
@@ -549,8 +549,6 @@ func Test_TakeWhileSlice(t *testing.T) {
 }
 
 func Test_TakeWhileIterator(t *testing.T) {
-	t.Parallel()
-
 	tcs := []struct {
 		original   []int
 		comparator func(int) bool
@@ -564,7 +562,9 @@ func Test_TakeWhileIterator(t *testing.T) {
 		{[]int{}, func(x int) bool { return x == -1 }, []int{}, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			it := arraylist.NewFromSlice(tc.original).Begin()
 			outIter, err := goaoi.TakeWhileIterator[int, int](it, tc.comparator)
 			res := arraylist.NewFromIterator[int](outIter).GetSlice()
@@ -581,8 +581,6 @@ func Test_TakeWhileIterator(t *testing.T) {
 }
 
 func Test_TakeNIterator(t *testing.T) {
-	t.Parallel()
-
 	tcs := []struct {
 		original []int
 		n        int
@@ -591,12 +589,14 @@ func Test_TakeNIterator(t *testing.T) {
 		name     string
 	}{
 		{[]int{1, 2}, 0, []int{}, nil, "take 0"},
-		{[]int{1, 2}, 2, []int{1,2}, nil, "take all"},
+		{[]int{1, 2}, 2, []int{1, 2}, nil, "take all"},
 		{[]int{1, 2, 3, 4, 5, 6}, 3, []int{1, 2, 3}, nil, "take half"},
 		{[]int{1, 2, 3}, 6, []int{1, 2, 3}, nil, "take more than exists"},
 	}
 	for _, tc := range tcs {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			it := arraylist.NewFromSlice(tc.original).Begin()
 			outIter, err := goaoi.TakeNIterator[int, int](it, tc.n)
 			res := arraylist.NewFromIterator[int](outIter).GetSlice()
@@ -613,8 +613,6 @@ func Test_TakeNIterator(t *testing.T) {
 }
 
 func Test_DropWhileSlice(t *testing.T) {
-	t.Parallel()
-
 	tcs := []struct {
 		original   []int
 		comparator func(int) bool
@@ -628,7 +626,9 @@ func Test_DropWhileSlice(t *testing.T) {
 		{[]int{}, func(x int) bool { return x == -1 }, []int(nil), goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			res, err := goaoi.DropWhileSlice(tc.original, tc.comparator)
 
 			assert.Equal(t, tc.exp, res)
@@ -643,8 +643,6 @@ func Test_DropWhileSlice(t *testing.T) {
 }
 
 func Test_DropWhileIterator(t *testing.T) {
-	t.Parallel()
-
 	tcs := []struct {
 		original   []int
 		comparator func(int) bool
@@ -658,7 +656,9 @@ func Test_DropWhileIterator(t *testing.T) {
 		{[]int{}, func(x int) bool { return x == -1 }, []int{}, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			it := arraylist.NewFromSlice(tc.original).Begin()
 			outIter, err := goaoi.DropWhileIterator[int, int](it, tc.comparator)
 			res := arraylist.NewFromIterator[int](outIter).GetSlice()
@@ -675,8 +675,6 @@ func Test_DropWhileIterator(t *testing.T) {
 }
 
 func Test_TakeIfSlice(t *testing.T) {
-	t.Parallel()
-
 	tcs := []struct {
 		original   []int
 		comparator func(int) bool
@@ -689,7 +687,9 @@ func Test_TakeIfSlice(t *testing.T) {
 		{[]int{}, func(x int) bool { return x != -1 }, []int(nil), goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			res, err := goaoi.TakeIfSlice(tc.original, tc.comparator)
 
 			assert.Equal(t, tc.exp, res)
@@ -704,8 +704,6 @@ func Test_TakeIfSlice(t *testing.T) {
 }
 
 func Test_TakeIfMap(t *testing.T) {
-	t.Parallel()
-
 	tcs := []struct {
 		original   map[string]int
 		comparator func(int) bool
@@ -718,7 +716,9 @@ func Test_TakeIfMap(t *testing.T) {
 		{map[string]int{}, func(x int) bool { return x != -1 }, map[string]int(nil), goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			res, err := goaoi.TakeIfMap(tc.original, tc.comparator)
 
 			assert.Equal(t, tc.exp, res)
@@ -733,8 +733,6 @@ func Test_TakeIfMap(t *testing.T) {
 }
 
 func Test_TakeIfIterator(t *testing.T) {
-	t.Parallel()
-
 	tcs := []struct {
 		original   []int
 		comparator func(int) bool
@@ -748,7 +746,9 @@ func Test_TakeIfIterator(t *testing.T) {
 		{[]int{}, func(x int) bool { return x == -1 }, []int{}, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			it := arraylist.NewFromSlice(tc.original).Begin()
 			outIter, err := goaoi.TakeIfIterator[int, int](it, tc.comparator)
 			res := arraylist.NewFromIterator[int](outIter).GetSlice()
@@ -766,8 +766,6 @@ func Test_TakeIfIterator(t *testing.T) {
 }
 
 func Test_ReplaceIfSlice(t *testing.T) {
-	t.Parallel()
-
 	tcs := []struct {
 		original    []int
 		comparator  func(int) bool
@@ -781,7 +779,9 @@ func Test_ReplaceIfSlice(t *testing.T) {
 		{[]int{}, func(x int) bool { return x == -1 }, 0, []int(nil), goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			res, err := goaoi.ReplaceIfSlice(tc.original, tc.comparator, tc.replacement)
 
 			assert.Equal(t, tc.exp, res)
@@ -796,8 +796,6 @@ func Test_ReplaceIfSlice(t *testing.T) {
 }
 
 func Test_ReplaceIfMap(t *testing.T) {
-	t.Parallel()
-
 	tcs := []struct {
 		original    map[string]int
 		comparator  func(int) bool
@@ -811,7 +809,9 @@ func Test_ReplaceIfMap(t *testing.T) {
 		{map[string]int{}, func(x int) bool { return x == -1 }, 0, map[string]int(nil), goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			res, err := goaoi.ReplaceIfMap(tc.original, tc.comparator, tc.replacement)
 
 			assert.Equal(t, tc.exp, res)
@@ -825,8 +825,6 @@ func Test_ReplaceIfMap(t *testing.T) {
 	}
 }
 func Test_ReplaceIfIterator(t *testing.T) {
-	t.Parallel()
-
 	tcs := []struct {
 		original    []int
 		comparator  func(int) bool
@@ -840,7 +838,9 @@ func Test_ReplaceIfIterator(t *testing.T) {
 		{[]int{}, func(x int) bool { return x == -1 }, 0, []int{}, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			it := arraylist.NewFromSlice(tc.original).Begin()
 			outIter, err := goaoi.ReplaceIfIterator[int, int](it, tc.comparator, tc.replacement)
 			res := arraylist.NewFromIterator[int](outIter).GetSlice()
@@ -857,8 +857,6 @@ func Test_ReplaceIfIterator(t *testing.T) {
 }
 
 func Test_TransformSlice(t *testing.T) {
-	t.Parallel()
-
 	tcs := []struct {
 		original    []int
 		transformer func(*int) error
@@ -870,7 +868,9 @@ func Test_TransformSlice(t *testing.T) {
 		{[]int{}, func(i *int) error { *i++; return nil }, []int{}, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			err := goaoi.TransformSlice(tc.original, tc.transformer)
 
 			assert.Equal(t, tc.exp, tc.original)
@@ -885,8 +885,6 @@ func Test_TransformSlice(t *testing.T) {
 }
 
 func Test_TransformIterator(t *testing.T) {
-	t.Parallel()
-
 	tcs := []struct {
 		original    []int
 		transformer func(int) (int, error)
@@ -898,7 +896,9 @@ func Test_TransformIterator(t *testing.T) {
 		{[]int{}, func(i int) (int, error) { return i + 1, nil }, []int{}, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			it := arraylist.NewFromSlice(tc.original).Begin()
 			outIter, err := goaoi.TransformIterator[int, int](it, tc.transformer)
 			res := arraylist.NewFromIterator[int](outIter).GetSlice()
@@ -915,8 +915,6 @@ func Test_TransformIterator(t *testing.T) {
 }
 
 func Test_TransformCopySlice(t *testing.T) {
-	t.Parallel()
-
 	tcs := []struct {
 		original    []int
 		transformer func(int) (float32, error)
@@ -928,7 +926,9 @@ func Test_TransformCopySlice(t *testing.T) {
 		{[]int{}, func(i int) (float32, error) { return float32(i) + 1.0, nil }, []float32{}, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			res, err := goaoi.TransformCopySlice(tc.original, tc.transformer)
 
 			assert.Equal(t, tc.exp, res)
@@ -943,8 +943,6 @@ func Test_TransformCopySlice(t *testing.T) {
 }
 
 func Test_TransformMCopyap(t *testing.T) {
-	t.Parallel()
-
 	tcs := []struct {
 		original    map[string]int
 		transformer func(int) (float32, error)
@@ -956,7 +954,9 @@ func Test_TransformMCopyap(t *testing.T) {
 		{map[string]int{}, func(i int) (float32, error) { return float32(i) + 1, nil }, map[string]float32{}, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			res, err := goaoi.TransformCopyMap(tc.original, tc.transformer)
 
 			assert.Equal(t, tc.exp, res)
@@ -971,8 +971,6 @@ func Test_TransformMCopyap(t *testing.T) {
 }
 
 func Test_TransformSCopyliceUnsafe(t *testing.T) {
-	t.Parallel()
-
 	tcs := []struct {
 		original    []int
 		transformer func(int) float32
@@ -984,7 +982,9 @@ func Test_TransformSCopyliceUnsafe(t *testing.T) {
 		{[]int{}, func(i int) float32 { return float32(i) + 1 }, []float32{}, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			res, err := goaoi.TransformCopySliceUnsafe(tc.original, tc.transformer)
 
 			assert.Equal(t, tc.exp, res)
@@ -999,8 +999,6 @@ func Test_TransformSCopyliceUnsafe(t *testing.T) {
 }
 
 func Test_TransformMCopyapUnsafe(t *testing.T) {
-	t.Parallel()
-
 	tcs := []struct {
 		original    map[string]int
 		transformer func(int) float32
@@ -1012,7 +1010,9 @@ func Test_TransformMCopyapUnsafe(t *testing.T) {
 		{map[string]int{}, func(i int) float32 { return float32(i) + 1 }, map[string]float32{}, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			res, err := goaoi.TransformCopyMapUnsafe(tc.original, tc.transformer)
 
 			assert.Equal(t, tc.exp, res)
@@ -1027,8 +1027,6 @@ func Test_TransformMCopyapUnsafe(t *testing.T) {
 }
 
 func Test_TransformMap(t *testing.T) {
-	t.Parallel()
-
 	tcs := []struct {
 		original    map[string]int
 		transformer func(int) (int, error)
@@ -1040,7 +1038,9 @@ func Test_TransformMap(t *testing.T) {
 		{map[string]int{}, func(i int) (int, error) { return i + 1, nil }, map[string]int{}, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			err := goaoi.TransformMap(tc.original, tc.transformer)
 
 			assert.Equal(t, tc.exp, tc.original)
@@ -1055,8 +1055,6 @@ func Test_TransformMap(t *testing.T) {
 }
 
 func Test_TransformSliceUnsafe(t *testing.T) {
-	t.Parallel()
-
 	tcs := []struct {
 		original    []int
 		transformer func(*int)
@@ -1068,7 +1066,9 @@ func Test_TransformSliceUnsafe(t *testing.T) {
 		{[]int{}, func(i *int) { *i++ }, []int{}, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			err := goaoi.TransformSliceUnsafe(tc.original, tc.transformer)
 
 			assert.Equal(t, tc.exp, tc.original)
@@ -1083,8 +1083,6 @@ func Test_TransformSliceUnsafe(t *testing.T) {
 }
 
 func Test_TransformMapUnsafe(t *testing.T) {
-	t.Parallel()
-
 	tcs := []struct {
 		original    map[string]int
 		transformer func(int) int
@@ -1096,7 +1094,9 @@ func Test_TransformMapUnsafe(t *testing.T) {
 		{map[string]int{}, func(i int) int { return i + 1 }, map[string]int{}, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			err := goaoi.TransformMapUnsafe(tc.original, tc.transformer)
 
 			assert.Equal(t, tc.exp, tc.original)
@@ -1111,8 +1111,6 @@ func Test_TransformMapUnsafe(t *testing.T) {
 }
 
 func Test_TransformIteratorUnsafe(t *testing.T) {
-	t.Parallel()
-
 	tcs := []struct {
 		original    []int
 		transformer func(int) int
@@ -1124,7 +1122,9 @@ func Test_TransformIteratorUnsafe(t *testing.T) {
 		{[]int{}, func(i int) int { return i + 1 }, []int{}, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			it := arraylist.NewFromSlice(tc.original).Begin()
 			outIter, err := goaoi.TransformIteratorUnsafe[int, int](it, tc.transformer)
 			res := arraylist.NewFromIterator[int](outIter).GetSlice()
@@ -1141,8 +1141,6 @@ func Test_TransformIteratorUnsafe(t *testing.T) {
 }
 
 func Test_FillSlice(t *testing.T) {
-	t.Parallel()
-
 	tcs := []struct {
 		original []int
 		filler   int
@@ -1154,7 +1152,9 @@ func Test_FillSlice(t *testing.T) {
 		{make([]int, 0), 1, []int{}, "Empty"},
 	}
 	for _, tc := range tcs {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			res := goaoi.FillSlice(&tc.original, tc.filler)
 
 			assert.Equal(t, tc.original, res)
@@ -1164,8 +1164,6 @@ func Test_FillSlice(t *testing.T) {
 }
 
 func Test_MinSlicePred(t *testing.T) {
-	t.Parallel()
-
 	tcs := []struct {
 		haystack   []int
 		comparator func(int, int) bool
@@ -1178,7 +1176,9 @@ func Test_MinSlicePred(t *testing.T) {
 		{[]int{}, goaoi.IsLessThan[int], 0, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			_, res, err := goaoi.MinSlicePred(tc.haystack, tc.comparator)
 
 			assert.Equal(t, tc.exp, res)
@@ -1193,8 +1193,6 @@ func Test_MinSlicePred(t *testing.T) {
 }
 
 func Test_MinMapPred(t *testing.T) {
-	t.Parallel()
-
 	tcs := []struct {
 		haystack   map[string]int
 		comparator func(int, int) bool
@@ -1207,7 +1205,9 @@ func Test_MinMapPred(t *testing.T) {
 		{map[string]int{}, goaoi.IsLessThan[int], 0, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			_, res, err := goaoi.MinMapPred(tc.haystack, tc.comparator)
 
 			assert.Equal(t, tc.exp, res)
@@ -1222,8 +1222,6 @@ func Test_MinMapPred(t *testing.T) {
 }
 
 func Test_MaxSlicePred(t *testing.T) {
-	t.Parallel()
-
 	tcs := []struct {
 		haystack   []int
 		comparator func(int, int) bool
@@ -1236,7 +1234,9 @@ func Test_MaxSlicePred(t *testing.T) {
 		{[]int{}, goaoi.IsGreaterThan[int], 0, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			_, res, err := goaoi.MaxSlicePred(tc.haystack, tc.comparator)
 
 			assert.Equal(t, tc.exp, res)
@@ -1251,8 +1251,6 @@ func Test_MaxSlicePred(t *testing.T) {
 }
 
 func Test_MaxMapPred(t *testing.T) {
-	t.Parallel()
-
 	tcs := []struct {
 		haystack   map[string]int
 		comparator func(int, int) bool
@@ -1265,7 +1263,9 @@ func Test_MaxMapPred(t *testing.T) {
 		{map[string]int{}, goaoi.IsGreaterThan[int], 0, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			_, res, err := goaoi.MaxMapPred(tc.haystack, tc.comparator)
 
 			assert.Equal(t, tc.exp, res)
@@ -1280,8 +1280,6 @@ func Test_MaxMapPred(t *testing.T) {
 }
 
 func Test_MinMaxSlicePred(t *testing.T) {
-	t.Parallel()
-
 	tcs := []struct {
 		haystack       []int
 		comparator_min func(int, int) bool
@@ -1296,7 +1294,9 @@ func Test_MinMaxSlicePred(t *testing.T) {
 		{[]int{}, goaoi.IsLessThan[int], goaoi.IsGreaterThan[int], 0, 0, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			_, _, min, max, err := goaoi.MinMaxSlicePred(tc.haystack, tc.comparator_min, tc.comparator_max)
 
 			assert.Equal(t, tc.exp_min, min)
@@ -1312,8 +1312,6 @@ func Test_MinMaxSlicePred(t *testing.T) {
 }
 
 func Test_MinMaxMapPred(t *testing.T) {
-	t.Parallel()
-
 	tcs := []struct {
 		haystack       map[string]int
 		comparator_min func(int, int) bool
@@ -1328,7 +1326,9 @@ func Test_MinMaxMapPred(t *testing.T) {
 		{map[string]int{}, goaoi.IsLessThan[int], goaoi.IsGreaterThan[int], 0, 0, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			_, _, min, max, err := goaoi.MinMaxMapPred(tc.haystack, tc.comparator_min, tc.comparator_max)
 
 			assert.Equal(t, tc.exp_min, min)
