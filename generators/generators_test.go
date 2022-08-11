@@ -45,13 +45,61 @@ func Test_RangeGenerator(t *testing.T) {
 			if tc.error != "" {
 				assert.PanicsWithValuef(t, tc.error, func() {
 					generators.NewRange(tc.args...)
-				}, tc.name, " construction error")
+				}, tc.name+", construction error")
 			} else {
 				out := generators.NewRange(tc.args...)
 				result := arraylist.NewFromIterator[int](out).GetSlice()
 
-				assert.Equalf(t, tc.output, result, tc.name, " output")
-				assert.Equalf(t, len(tc.output), out.Size(), tc.name, " suze")
+				assert.Equalf(t, tc.output, result, tc.name+", output")
+				assert.Equalf(t, len(tc.output), out.Size(), tc.name+", suze")
+			}
+		})
+	}
+}
+
+func Test_RepeatGenerator(t *testing.T) {
+	t.Parallel()
+
+	i := 0
+	j := 0
+
+	tcs := []struct {
+		name      string
+		generator func() (int, bool)
+		output    []int
+		limit     int
+		errorAtI  int
+	}{
+		{name: "no limit, stopped after 5", generator: func() (int, bool) { return 1, true }, output: []int{1, 1, 1, 1, 1}, limit: -1},
+		{name: "no limit, error after 5", generator: func() (int, bool) { i++; return 1, i == 5 }, output: []int{1, 1, 1, 1, 1}, limit: -1, errorAtI: 5},
+		{name: "limit 5", generator: func() (int, bool) { return 1, true }, output: []int{1, 1, 1, 1, 1}, limit: 5},
+		{name: "limit 5, increasing numbers", generator: func() (int, bool) { j++; return j, j == 5 }, output: []int{1, 2, 3, 4, 5}, limit: 5},
+	}
+	for _, tc := range tcs {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+			defer testCommon.HandlePanic(t, tc.name)
+
+			out := generators.NewRepeat(tc.generator, tc.limit)
+			result := make([]int, 0, 100)
+
+			if tc.limit == -1 {
+				for i := 0; i < 5 && out.Next(); i++ {
+					value, ok := out.Get()
+					if tc.errorAtI != 0 && i == tc.errorAtI {
+						assert.Falsef(t, ok, tc.name+", generator function caused stop")
+					}
+
+					result = append(result, value)
+				}
+			} else {
+				result = arraylist.NewFromIterator[int](out).GetSlice()
+			}
+
+			assert.Equalf(t, tc.output, result, tc.name+", output")
+			if tc.limit != -1 {
+				assert.Equalf(t, len(tc.output), out.Size(), tc.name+", size")
 			}
 		})
 	}
