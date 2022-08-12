@@ -14,3 +14,12 @@ require (
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
+
+retract (
+    v1.0.0
+    v1.0.1
+    v1.1.1
+    v1.2.0
+    v1.3.0
+    v1.4.0
+)
