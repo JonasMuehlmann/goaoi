@@ -3,6 +3,7 @@
 ![img](https://img.shields.io/badge/semver-2.0.0-green) [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
 
 Conventient algorithms for processing iterables, inspired by the algorithm header from the C++ standard template library (STL for short).
+Note that `*Iterator()` methods return lazy iterators wrapping the underlying ones instead of changing underlying data or allocation new data.
 
 Please do not expect a stable API at this point.
 
