@@ -14,8 +14,8 @@ import (
 // Note that the iteration order of a map is not stable.
 //
 // Possible Error values:
-//    - EmptyIterableError
-//    - ElementNotFoundError
+//   - EmptyIterableError
+//   - ElementNotFoundError
 func FindIfMap[TKey comparable, TValue comparable](haystack map[TKey]TValue, unaryPredicate func(TValue) bool) (TKey, error) {
 	var zeroVal TKey
 
@@ -35,8 +35,8 @@ func FindIfMap[TKey comparable, TValue comparable](haystack map[TKey]TValue, una
 // FindIfSlice finds the first index i where unaryPredicate(haystack[i]) == true.
 //
 // Possible Error values:
-//    - EmptyIterableError
-//    - ElementNotFoundError
+//   - EmptyIterableError
+//   - ElementNotFoundError
 func FindIfSlice[T comparable](haystack []T, unaryPredicate func(T) bool) (int, error) {
 	if len(haystack) == 0 {
 		return 0, EmptyIterableError{}
@@ -54,8 +54,8 @@ func FindIfSlice[T comparable](haystack []T, unaryPredicate func(T) bool) (int, 
 // FindIfString finds the first index i where unaryPredicate(haystack[i]) == true.
 //
 // Possible Error values:
-//    - EmptyIterableError
-//    - ElementNotFoundError
+//   - EmptyIterableError
+//   - ElementNotFoundError
 func FindIfString(haystack string, unaryPredicate func(rune) bool) (int, error) {
 	if len(haystack) == 0 {
 		return 0, EmptyIterableError{}
@@ -73,8 +73,8 @@ func FindIfString(haystack string, unaryPredicate func(rune) bool) (int, error) 
 // FindIfIterator finds the first index i where unaryPredicate(haystack[i]) == true.
 //
 // Possible Error values:
-//    - EmptyIterableError
-//    - ElementNotFoundError
+//   - EmptyIterableError
+//   - ElementNotFoundError
 func FindIfIterator[TKey any, TValue comparable](haystack ds.ReadForIndexIterator[TKey, TValue], unaryPredicate func(TValue) bool) (int, error) {
 	if haystack.IsEnd() {
 		return 0, EmptyIterableError{}
@@ -96,8 +96,8 @@ func FindIfIterator[TKey any, TValue comparable](haystack ds.ReadForIndexIterato
 // The elements are compared with binary_predicate.
 //
 // Possible Error values:
-//    - EmptyIterableError
-//    - ElementNotFoundError
+//   - EmptyIterableError
+//   - ElementNotFoundError
 func FindEndSlicePred[T comparable](super []T, sub []T, binary_predicate func(T, T) bool) (int, error) {
 	if len(super) == 0 || len(sub) == 0 {
 		return 0, EmptyIterableError{}
@@ -119,8 +119,8 @@ OUTER:
 // The elements are compared with binary_predicate.
 //
 // Possible Error values:
-//    - EmptyIterableError
-//    - ElementNotFoundError
+//   - EmptyIterableError
+//   - ElementNotFoundError
 func FindEndStringPred(super string, sub string, binary_predicate func(byte, byte) bool) (int, error) {
 	if len(super) == 0 || len(sub) == 0 {
 		return 0, EmptyIterableError{}
@@ -144,8 +144,8 @@ OUTER:
 // The elements are compared with binary_predicate.
 //
 // Possible Error values:
-//    - EmptyIterableError
-//    - ElementNotFoundError
+//   - EmptyIterableError
+//   - ElementNotFoundError
 func FindFirstOfSlicePred[T comparable](haystack []T, needles []T, binary_predicate func(T, T) bool) (int, error) {
 	if len(haystack) == 0 || len(needles) == 0 {
 		return 0, EmptyIterableError{}
@@ -167,8 +167,8 @@ func FindFirstOfSlicePred[T comparable](haystack []T, needles []T, binary_predic
 // The elements are compared with binary_predicate.
 //
 // Possible Error values:
-//    - EmptyIterableError
-//    - ElementNotFoundError
+//   - EmptyIterableError
+//   - ElementNotFoundError
 func FindFirstOfMapPred[TKey comparable, TValue comparable](haystack map[TKey]TValue, needles []TValue, binary_predicate func(TValue, TValue) bool) (TKey, error) {
 	var zeroVal TKey
 	if len(haystack) == 0 || len(needles) == 0 {
@@ -190,8 +190,8 @@ func FindFirstOfMapPred[TKey comparable, TValue comparable](haystack map[TKey]TV
 // The elements are compared with binary_predicate.
 //
 // Possible Error values:
-//    - EmptyIterableError
-//    - ElementNotFoundError
+//   - EmptyIterableError
+//   - ElementNotFoundError
 func FindFirstOfStringPred(haystack string, needles string, binary_predicate func(rune, rune) bool) (int, error) {
 	if len(haystack) == 0 || len(needles) == 0 {
 		return 0, EmptyIterableError{}
@@ -211,8 +211,8 @@ func FindFirstOfStringPred(haystack string, needles string, binary_predicate fun
 // AllOfSlice checks that unaryPredicate(val) == true for ALL val in container.
 //
 // Possible Error values:
-//    - EmptyIterableError
-//    - ComparisonError
+//   - EmptyIterableError
+//   - ComparisonError
 func AllOfSlice[T any](container []T, unaryPredicate func(T) bool) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
@@ -231,8 +231,8 @@ func AllOfSlice[T any](container []T, unaryPredicate func(T) bool) error {
 // Note that the iteration order of a map is not stable.
 //
 // Possible Error values:
-//    - EmptyIterableError
-//    - ComparisonError
+//   - EmptyIterableError
+//   - ComparisonError
 func AllOfMap[TKey comparable, TValue comparable](container map[TKey]TValue, unaryPredicate func(TValue) bool) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
@@ -250,8 +250,8 @@ func AllOfMap[TKey comparable, TValue comparable](container map[TKey]TValue, una
 // AllOfString checks that unaryPredicate(val) == true for ALL val in container.
 //
 // Possible Error values:
-//    - EmptyIterableError
-//    - ComparisonError
+//   - EmptyIterableError
+//   - ComparisonError
 func AllOfString(container string, unaryPredicate func(rune) bool) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
@@ -269,8 +269,8 @@ func AllOfString(container string, unaryPredicate func(rune) bool) error {
 // AllOfIterator checks that unaryPredicate(val) == true for ALL val in container.
 //
 // Possible Error values:
-//    - EmptyIterableError
-//    - ComparisonError
+//   - EmptyIterableError
+//   - ComparisonError
 func AllOfIterator[TKey any, TValue any](container ds.ReadForIndexIterator[TKey, TValue], unaryPredicate func(TValue) bool) error {
 	if container.IsEnd() {
 		return EmptyIterableError{}
@@ -290,8 +290,8 @@ func AllOfIterator[TKey any, TValue any](container ds.ReadForIndexIterator[TKey,
 // AnyOfSlice checks that unaryPredicate(val) == true for ANY val in container.
 //
 // Possible Error values:
-//    - EmptyIterableError
-//    - ElementNotFoundError
+//   - EmptyIterableError
+//   - ElementNotFoundError
 func AnyOfSlice[T any](container []T, unaryPredicate func(T) bool) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
@@ -310,8 +310,8 @@ func AnyOfSlice[T any](container []T, unaryPredicate func(T) bool) error {
 // Note that the iteration order of a map is not stable.
 //
 // Possible Error values:
-//    - EmptyIterableError
-//    - ElementNotFoundError
+//   - EmptyIterableError
+//   - ElementNotFoundError
 func AnyOfMap[TKey comparable, TValue comparable](container map[TKey]TValue, unaryPredicate func(TValue) bool) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
@@ -329,8 +329,8 @@ func AnyOfMap[TKey comparable, TValue comparable](container map[TKey]TValue, una
 // AnyOfString checks that unaryPredicate(val) == true for ANY val in container.
 //
 // Possible Error values:
-//    - EmptyIterableError
-//    - ElementNotFoundError
+//   - EmptyIterableError
+//   - ElementNotFoundError
 func AnyOfString(container string, unaryPredicate func(rune) bool) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
@@ -348,8 +348,8 @@ func AnyOfString(container string, unaryPredicate func(rune) bool) error {
 // AnyOfIterator checks that unaryPredicate(val) == true for ANY val in container.
 //
 // Possible Error values:
-//    - EmptyIterableError
-//    - ElementNotFoundError
+//   - EmptyIterableError
+//   - ElementNotFoundError
 func AnyOfIterator[TKey any, TValue any](container ds.ReadForIndexIterator[TKey, TValue], unaryPredicate func(TValue) bool) error {
 	if container.IsEnd() {
 		return EmptyIterableError{}
@@ -368,8 +368,8 @@ func AnyOfIterator[TKey any, TValue any](container ds.ReadForIndexIterator[TKey,
 // NoneOfSlice checks that unaryPredicate(val) == true for NO val in container.
 //
 // Possible Error values:
-//    - EmptyIterableError
-//    - ComparisonError
+//   - EmptyIterableError
+//   - ComparisonError
 func NoneOfSlice[T any](container []T, unaryPredicate func(T) bool) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
@@ -388,8 +388,8 @@ func NoneOfSlice[T any](container []T, unaryPredicate func(T) bool) error {
 // Note that the iteration order of a map is not stable.
 //
 // Possible Error values:
-//    - EmptyIterableError
-//    - ComparisonError
+//   - EmptyIterableError
+//   - ComparisonError
 func NoneOfMap[TKey comparable, TValue comparable](container map[TKey]TValue, unaryPredicate func(TValue) bool) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
@@ -407,8 +407,8 @@ func NoneOfMap[TKey comparable, TValue comparable](container map[TKey]TValue, un
 // NoneOfString checks that unaryPredicate(val) == true for NO val in container.
 //
 // Possible Error values:
-//    - EmptyIterableError
-//    - ComparisonError
+//   - EmptyIterableError
+//   - ComparisonError
 func NoneOfString(container string, unaryPredicate func(rune) bool) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
@@ -426,8 +426,8 @@ func NoneOfString(container string, unaryPredicate func(rune) bool) error {
 // NoneOfIterator checks that unaryPredicate(val) == true for ALL val in container.
 //
 // Possible Error values:
-//    - EmptyIterableError
-//    - ComparisonError
+//   - EmptyIterableError
+//   - ComparisonError
 func NoneOfIterator[TKey any, TValue any](container ds.ReadForIndexIterator[TKey, TValue], unaryPredicate func(TValue) bool) error {
 	if container.IsEnd() {
 		return EmptyIterableError{}
@@ -448,8 +448,8 @@ func NoneOfIterator[TKey any, TValue any](container ds.ReadForIndexIterator[TKey
 // Errors returned by unary_func are propagated to the caller of ForeachSlice.
 //
 // Possible Error values:
-//    - EmptyIterableError
-//    - ExecutionError
+//   - EmptyIterableError
+//   - ExecutionError
 func ForeachSlice[T any](container []T, unary_func func(T) error) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
@@ -470,8 +470,8 @@ func ForeachSlice[T any](container []T, unary_func func(T) error) error {
 // Errors returned by unary_func are propagated to the caller of ForeachMap.
 //
 // Possible Error values:
-//    - EmptyIterableError
-//    - ExecutionError
+//   - EmptyIterableError
+//   - ExecutionError
 func ForeachMap[TKey comparable, TValue comparable](container map[TKey]TValue, unary_func func(TValue) error) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
@@ -491,8 +491,8 @@ func ForeachMap[TKey comparable, TValue comparable](container map[TKey]TValue, u
 // Errors returned by unary_func are propagated to the caller of ForeachSlice.
 //
 // Possible Error values:
-//    - EmptyIterableError
-//    - ExecutionError
+//   - EmptyIterableError
+//   - ExecutionError
 func ForeachString(container string, unary_func func(rune) error) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
@@ -512,8 +512,8 @@ func ForeachString(container string, unary_func func(rune) error) error {
 // Errors returned by unary_func are propagated to the caller of ForeachSlice.
 //
 // Possible Error values:
-//    - EmptyIterableError
-//    - ExecutionError
+//   - EmptyIterableError
+//   - ExecutionError
 func ForeachIterator[TKey any, TValue any](container ds.ReadForIndexIterator[TKey, TValue], unary_func func(TValue) error) error {
 	if container.IsEnd() {
 		return EmptyIterableError{}
@@ -534,7 +534,7 @@ func ForeachIterator[TKey any, TValue any](container ds.ReadForIndexIterator[TKe
 // ForeachSliceUnsafe executes unary_func(val) for each val in container.
 //
 // Possible Error values:
-//    - EmptyIterableError
+//   - EmptyIterableError
 func ForeachSliceUnsafe[T any](container []T, unary_func func(T)) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
@@ -551,7 +551,7 @@ func ForeachSliceUnsafe[T any](container []T, unary_func func(T)) error {
 // Note that the iteration order of a map is not stable.
 //
 // Possible Error values:
-//    - EmptyIterableError
+//   - EmptyIterableError
 func ForeachMapUnsafe[TKey comparable, TValue comparable](container map[TKey]TValue, unary_func func(TValue)) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
@@ -568,7 +568,7 @@ func ForeachMapUnsafe[TKey comparable, TValue comparable](container map[TKey]TVa
 // Errors returned by unary_func are propagated to the caller of ForeachSlice.
 //
 // Possible Error values:
-//    - EmptyIterableError
+//   - EmptyIterableError
 func ForeachStringUnsafe(container string, unary_func func(rune)) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
@@ -585,8 +585,8 @@ func ForeachStringUnsafe(container string, unary_func func(rune)) error {
 // Errors returned by unary_func are propagated to the caller of ForeachSlice.
 //
 // Possible Error values:
-//    - EmptyIterableError
-//    - ExecutionError
+//   - EmptyIterableError
+//   - ExecutionError
 func ForeachIteratorUnsafe[TKey any, TValue any](container ds.ReadForIndexIterator[TKey, TValue], unary_func func(TValue)) error {
 	if container.IsEnd() {
 		return EmptyIterableError{}
@@ -603,7 +603,7 @@ func ForeachIteratorUnsafe[TKey any, TValue any](container ds.ReadForIndexIterat
 // CountIfSlice counts for how many val of container unaryPredicate(val) == true.
 //
 // Possible Error values:
-//    - EmptyIterableError
+//   - EmptyIterableError
 func CountIfSlice[T comparable](container []T, unaryPredicate func(T) bool) (int, error) {
 	if len(container) == 0 {
 		return 0, EmptyIterableError{}
@@ -623,7 +623,7 @@ func CountIfSlice[T comparable](container []T, unaryPredicate func(T) bool) (int
 // Note that the iteration order of a map is not stable.
 //
 // Possible Error values:
-//    - EmptyIterableError
+//   - EmptyIterableError
 func CountIfMap[TKey comparable, TValue comparable](container map[TKey]TValue, unaryPredicate func(TValue) bool) (int, error) {
 	if len(container) == 0 {
 		return 0, EmptyIterableError{}
@@ -642,7 +642,7 @@ func CountIfMap[TKey comparable, TValue comparable](container map[TKey]TValue, u
 // CountIfString counts for how many val of container unaryPredicate(val) == true.
 //
 // Possible Error values:
-//    - EmptyIterableError
+//   - EmptyIterableError
 func CountIfString(container string, unaryPredicate func(rune) bool) (int, error) {
 	if len(container) == 0 {
 		return 0, EmptyIterableError{}
@@ -661,7 +661,7 @@ func CountIfString(container string, unaryPredicate func(rune) bool) (int, error
 // CountIfIterator counts for how many val of container unaryPredicate(val) == true.
 //
 // Possible Error values:
-//    - EmptyIterableError
+//   - EmptyIterableError
 func CountIfIterator[TKey any, TValue comparable](container ds.ReadForIndexIterator[TKey, TValue], unaryPredicate func(TValue) bool) (int, error) {
 	if container.IsEnd() {
 		return 0, EmptyIterableError{}
@@ -681,8 +681,8 @@ func CountIfIterator[TKey any, TValue comparable](container ds.ReadForIndexItera
 // MismatchSlicePred finds the first index i where binary_predicate(iterable1[i], iterable2[i] == false).
 //
 // Possible Error values:
-//    - EmptyIterableError
-//    - EqualIteratorsError
+//   - EmptyIterableError
+//   - EqualIteratorsError
 func MismatchSlicePred[T comparable](iterable1 []T, iterable2 []T, binary_predicate func(T, T) bool) (int, error) {
 	if len(iterable1) == 0 || len(iterable2) == 0 {
 		return 0, EmptyIterableError{}
@@ -701,8 +701,8 @@ func MismatchSlicePred[T comparable](iterable1 []T, iterable2 []T, binary_predic
 // MismatchStringPred finds the first index i where binary_predicate(iterable1[i], iterable2[i] == false).
 //
 // Possible Error values:
-//    - EmptyIterableError
-//    - EqualIteratorsError
+//   - EmptyIterableError
+//   - EqualIteratorsError
 func MismatchStringPred(iterable1 string, iterable2 string, binary_predicate func(byte, byte) bool) (int, error) {
 	if len(iterable1) == 0 || len(iterable2) == 0 {
 		return 0, EmptyIterableError{}
@@ -723,8 +723,8 @@ func MismatchStringPred(iterable1 string, iterable2 string, binary_predicate fun
 // AdjacentFindSlicePred finds the first index i where binary_predicate(container[i], container[i+1]) == true.
 //
 // Possible Error values:
-//    - EmptyIterableError
-//    - ElementNotFoundError
+//   - EmptyIterableError
+//   - ElementNotFoundError
 func AdjacentFindSlicePred[T comparable](container []T, binary_predicate func(T, T) bool) (int, error) {
 	if len(container) == 0 {
 		return 0, EmptyIterableError{}
@@ -742,8 +742,8 @@ func AdjacentFindSlicePred[T comparable](container []T, binary_predicate func(T,
 // AdjacentFindStringPred finds the first index i where binary_predicate(container[i], container[i+1]) == true.
 //
 // Possible Error values:
-//    - EmptyIterableError
-//    - ElementNotFoundError
+//   - EmptyIterableError
+//   - ElementNotFoundError
 func AdjacentFindStringPred(container string, binary_predicate func(byte, byte) bool) (int, error) {
 	if len(container) == 0 {
 		return 0, EmptyIterableError{}
@@ -761,8 +761,8 @@ func AdjacentFindStringPred(container string, binary_predicate func(byte, byte) 
 // AdjacentFindIteratorPred finds the first index i where binary_predicate(container[i], container[i+1]) == true.
 //
 // Possible Error values:
-//    - EmptyIterableError
-//    - ElementNotFoundError
+//   - EmptyIterableError
+//   - ElementNotFoundError
 func AdjacentFindIteratorPred[TKey any, TValue comparable](container ds.ReadForIndexIterator[TKey, TValue], binary_predicate func(TValue, TValue) bool) (int, error) {
 	if container.IsEnd() {
 		return 0, EmptyIterableError{}
@@ -789,7 +789,7 @@ func AdjacentFindIteratorPred[TKey any, TValue comparable](container ds.ReadForI
 // TakeWhileSlice returns a copy of original until the first element not satisfying unaryPredicate(element) == true).
 //
 // Possible Error values:
-//    - EmptyIterableError
+//   - EmptyIterableError
 func TakeWhileSlice[T comparable](original []T, unaryPredicate func(T) bool) ([]T, error) {
 	var zeroVal []T
 
@@ -813,7 +813,7 @@ func TakeWhileSlice[T comparable](original []T, unaryPredicate func(T) bool) ([]
 // TakeWhileString returns a copy of original until the first element not satisfying unaryPredicate(element) == true).
 //
 // Possible Error values:
-//    - EmptyIterableError
+//   - EmptyIterableError
 func TakeWhileString(original string, unaryPredicate func(rune) bool) (string, error) {
 	var out bytes.Buffer
 
@@ -837,7 +837,7 @@ func TakeWhileString(original string, unaryPredicate func(rune) bool) (string, e
 // TakeWhileIterator returns a copy of original until the first element not satisfying unaryPredicate(element) == true).
 //
 // Possible Error values:
-//    - EmptyIterableError
+//   - EmptyIterableError
 func TakeWhileIterator[TKey any, TValue any](original ds.ReadForIndexIterator[TKey, TValue], unaryPredicate func(TValue) bool) (ds.ReadForIndexIterator[TKey, TValue], error) {
 	if original.IsEnd() {
 		return original, EmptyIterableError{}
@@ -849,7 +849,7 @@ func TakeWhileIterator[TKey any, TValue any](original ds.ReadForIndexIterator[TK
 // TakeNIterator returns a copy of original including up to the first n elements.
 //
 // Possible Error values:
-//    - EmptyIterableError
+//   - EmptyIterableError
 func TakeNIterator[TKey any, TValue any](original ds.ReadForIndexIterator[TKey, TValue], n int) (ds.ReadForIndexIterator[TKey, TValue], error) {
 	if original.IsEnd() {
 		return original, EmptyIterableError{}
@@ -861,7 +861,7 @@ func TakeNIterator[TKey any, TValue any](original ds.ReadForIndexIterator[TKey, 
 // DropWhileSlice returns a copy of original starting from first element not satisfying unaryPredicate(element) == true).
 //
 // Possible Error values:
-//    - EmptyIterableError
+//   - EmptyIterableError
 func DropWhileSlice[T comparable](original []T, unaryPredicate func(T) bool) ([]T, error) {
 	var zeroVal []T
 
@@ -888,7 +888,7 @@ func DropWhileSlice[T comparable](original []T, unaryPredicate func(T) bool) ([]
 // DropWhileString returns a copy of original starting from first element not satisfying unaryPredicate(element) == true).
 //
 // Possible Error values:
-//    - EmptyIterableError
+//   - EmptyIterableError
 func DropWhileString(original string, unaryPredicate func(rune) bool) (string, error) {
 	if len(original) == 0 {
 		return "", EmptyIterableError{}
@@ -910,7 +910,7 @@ func DropWhileString(original string, unaryPredicate func(rune) bool) (string, e
 // DropWhileIterator returns a copy of original until the first element satisfying unaryPredicate(element) == true).
 //
 // Possible Error values:
-//    - EmptyIterableError
+//   - EmptyIterableError
 func DropWhileIterator[TKey any, TValue any](original ds.ReadForIndexIterator[TKey, TValue], unaryPredicate func(TValue) bool) (ds.ReadForIndexIterator[TKey, TValue], error) {
 	if original.IsEnd() {
 		return original, EmptyIterableError{}
@@ -922,7 +922,7 @@ func DropWhileIterator[TKey any, TValue any](original ds.ReadForIndexIterator[TK
 // DropNIterator returns a copy of original except the first n elements.
 //
 // Possible Error values:
-//    - EmptyIterableError
+//   - EmptyIterableError
 func DropNIterator[TKey any, TValue any](original ds.ReadForIndexIterator[TKey, TValue], n int) (ds.ReadForIndexIterator[TKey, TValue], error) {
 	if original.IsEnd() {
 		return original, EmptyIterableError{}
@@ -934,7 +934,7 @@ func DropNIterator[TKey any, TValue any](original ds.ReadForIndexIterator[TKey, 
 // TakeIfSlice returns a copy of original with all element satisfying unaryPredicate(element) == true).
 //
 // Possible Error values:
-//    - EmptyIterableError
+//   - EmptyIterableError
 func TakeIfSlice[T comparable](original []T, unaryPredicate func(T) bool) ([]T, error) {
 	var zeroVal []T
 
@@ -956,7 +956,7 @@ func TakeIfSlice[T comparable](original []T, unaryPredicate func(T) bool) ([]T, 
 // StridedIterator returns a copy of original including every nth element.
 //
 // Possible Error values:
-//    - EmptyIterableError
+//   - EmptyIterableError
 func StridedIterator[TKey any, TValue any](original ds.ReadForIndexIterator[TKey, TValue], n int) (ds.ReadForIndexIterator[TKey, TValue], error) {
 	if original.IsEnd() {
 		return original, EmptyIterableError{}
@@ -968,7 +968,7 @@ func StridedIterator[TKey any, TValue any](original ds.ReadForIndexIterator[TKey
 // JoinIterator returns a copy of original including every element of every iterator.
 //
 // Possible Error values:
-//    - EmptyIterableError
+//   - EmptyIterableError
 func JoinIterator[TKey any, TValue any](originals ...ds.ReadForIndexIterator[TKey, TValue]) (ds.ReadForIndexIterator[TKey, TValue], error) {
 	return iteratoradapters.NewJoin[TKey, TValue](originals...), nil
 }
@@ -977,7 +977,7 @@ func JoinIterator[TKey any, TValue any](originals ...ds.ReadForIndexIterator[TKe
 // Note that the iteration order of a map is not stable.
 //
 // Possible Error values:
-//    - EmptyIterableError
+//   - EmptyIterableError
 func TakeIfMap[TKey comparable, TValue comparable](original map[TKey]TValue, unaryPredicate func(TValue) bool) (map[TKey]TValue, error) {
 	var zeroVal map[TKey]TValue
 
@@ -999,7 +999,7 @@ func TakeIfMap[TKey comparable, TValue comparable](original map[TKey]TValue, una
 // TakeIfString returns a copy of original with all element satisfying unaryPredicate(element) == true).
 //
 // Possible Error values:
-//    - EmptyIterableError
+//   - EmptyIterableError
 func TakeIfString(original string, unaryPredicate func(rune) bool) (string, error) {
 	var out bytes.Buffer
 
@@ -1019,7 +1019,7 @@ func TakeIfString(original string, unaryPredicate func(rune) bool) (string, erro
 // TakeIfString returns a copy of original with all element satisfying unaryPredicate(element) == true).
 //
 // Possible Error values:
-//    - EmptyIterableError
+//   - EmptyIterableError
 func TakeIfIterator[TKey any, TValue any](original ds.ReadForIndexIterator[TKey, TValue], unaryPredicate func(TValue) bool) (ds.ReadForIndexIterator[TKey, TValue], error) {
 
 	if original.IsEnd() {
@@ -1032,7 +1032,7 @@ func TakeIfIterator[TKey any, TValue any](original ds.ReadForIndexIterator[TKey,
 // ReplaceIfSlice returns a copy of original where each element satisfying unaryPredicate(element) == true is replaced with replacement.
 //
 // Possible Error values:
-//    - EmptyIterableError
+//   - EmptyIterableError
 func ReplaceIfSlice[T comparable](original []T, unaryPredicate func(T) bool, replacement T) ([]T, error) {
 	var zeroVal []T
 
@@ -1057,7 +1057,7 @@ func ReplaceIfSlice[T comparable](original []T, unaryPredicate func(T) bool, rep
 // Note that the iteration order of a map is not stable.
 //
 // Possible Error values:
-//    - EmptyIterableError
+//   - EmptyIterableError
 func ReplaceIfMap[TKey comparable, TValue comparable](original map[TKey]TValue, unaryPredicate func(TValue) bool, replacement TValue) (map[TKey]TValue, error) {
 	var zeroVal map[TKey]TValue
 
@@ -1081,7 +1081,7 @@ func ReplaceIfMap[TKey comparable, TValue comparable](original map[TKey]TValue, 
 // ReplaceIfString returns a copy of original with all element satisfying unaryPredicate(element) == true).
 //
 // Possible Error values:
-//    - EmptyIterableError
+//   - EmptyIterableError
 func ReplaceIfString(original string, unaryPredicate func(rune) bool, replacement rune) (string, error) {
 	var out bytes.Buffer
 
@@ -1103,7 +1103,7 @@ func ReplaceIfString(original string, unaryPredicate func(rune) bool, replacemen
 // ReplaceIfIterator returns a copy of original with all element satisfying unaryPredicate(element) == true).
 //
 // Possible Error values:
-//    - EmptyIterableError
+//   - EmptyIterableError
 func ReplaceIfIterator[TKey any, TValue any](original ds.ReadForIndexIterator[TKey, TValue], unaryPredicate func(TValue) bool, replacement TValue) (ds.ReadForIndexIterator[TKey, TValue], error) {
 
 	if original.IsEnd() {
@@ -1134,8 +1134,8 @@ func FillSlice[T any](arr *[]T, filler T) []T {
 // Errors returned by transformer are propagated to the caller of TransformMap.
 //
 // Possible Error values:
-//    - EmptyIterableError
-//    - ExecutionError
+//   - EmptyIterableError
+//   - ExecutionError
 func TransformMap[TKey comparable, TValue comparable](container map[TKey]TValue, transformer func(TValue) (TValue, error)) error {
 
 	if len(container) == 0 {
@@ -1158,8 +1158,8 @@ func TransformMap[TKey comparable, TValue comparable](container map[TKey]TValue,
 // Errors returned by transformer are propagated to the caller of TransformSlice.
 //
 // Possible Error values:
-//    - EmptyIterableError
-//    - ExecutionError
+//   - EmptyIterableError
+//   - ExecutionError
 func TransformSlice[T any](container []T, transformer func(*T) error) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
@@ -1179,8 +1179,8 @@ func TransformSlice[T any](container []T, transformer func(*T) error) error {
 // Errors returned by transformer are propagated to the caller of TransformSlice.
 //
 // Possible Error values:
-//    - EmptyIterableError
-//    - ExecutionError
+//   - EmptyIterableError
+//   - ExecutionError
 func TransformIterator[TKey any, TValue any](container ds.ReadForIndexIterator[TKey, TValue], transformer func(TValue) (TValue, error)) (ds.ReadForIndexIterator[TKey, TValue], error) {
 	if container.IsEnd() {
 		return container, EmptyIterableError{}
@@ -1193,7 +1193,7 @@ func TransformIterator[TKey any, TValue any](container ds.ReadForIndexIterator[T
 // Note that the iteration order of a map is not stable.
 //
 // Possible Error values:
-//    - EmptyIterableError
+//   - EmptyIterableError
 func TransformMapUnsafe[TKey comparable, TValue comparable](container map[TKey]TValue, transformer func(TValue) TValue) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
@@ -1209,7 +1209,7 @@ func TransformMapUnsafe[TKey comparable, TValue comparable](container map[TKey]T
 // TransformSliceUnsafe applies transformer(&container[i]) for all i in [0, len(container)[ and stores them at container[i].
 //
 // Possible Error values:
-//    - EmptyIterableError
+//   - EmptyIterableError
 func TransformSliceUnsafe[T any](container []T, transformer func(*T)) error {
 	if len(container) == 0 {
 		return EmptyIterableError{}
@@ -1226,8 +1226,8 @@ func TransformSliceUnsafe[T any](container []T, transformer func(*T)) error {
 // Errors returned by transformer are propagated to the caller of TransformSlice.
 //
 // Possible Error values:
-//    - EmptyIterableError
-//    - ExecutionError
+//   - EmptyIterableError
+//   - ExecutionError
 func TransformIteratorUnsafe[TKey any, TValue any](container ds.ReadForIndexIterator[TKey, TValue], transformer func(TValue) TValue) (ds.ReadForIndexIterator[TKey, TValue], error) {
 	if container.IsEnd() {
 		return container, EmptyIterableError{}
@@ -1242,8 +1242,8 @@ func TransformIteratorUnsafe[TKey any, TValue any](container ds.ReadForIndexIter
 // Errors returned by transformer are propagated to the caller of TransformCopyMap.
 //
 // Possible Error values:
-//    - EmptyIterableError
-//    - ExecutionError
+//   - EmptyIterableError
+//   - ExecutionError
 func TransformCopyMap[TKey comparable, TValue comparable, TValueOut any](container map[TKey]TValue, transformer func(TValue) (TValueOut, error)) (map[TKey]TValueOut, error) {
 	res := make(map[TKey]TValueOut)
 
@@ -1268,8 +1268,8 @@ func TransformCopyMap[TKey comparable, TValue comparable, TValueOut any](contain
 // Errors returned by transformer are propagated to the caller of TransformCopySlice.
 //
 // Possible Error values:
-//    - EmptyIterableError
-//    - ExecutionError
+//   - EmptyIterableError
+//   - ExecutionError
 func TransformCopySlice[T any, TOut any](container []T, transformer func(T) (TOut, error)) ([]TOut, error) {
 	res := make([]TOut, 0, len(container))
 
@@ -1294,8 +1294,8 @@ func TransformCopySlice[T any, TOut any](container []T, transformer func(T) (TOu
 // Errors returned by transformer are propagated to the caller of TransformCopySlice.
 //
 // Possible Error values:
-//    - EmptyIterableError
-//    - ExecutionError
+//   - EmptyIterableError
+//   - ExecutionError
 func TransformCopyString(container string, transformer func(rune) (rune, error)) (string, error) {
 	var res bytes.Buffer
 
@@ -1320,7 +1320,7 @@ func TransformCopyString(container string, transformer func(rune) (rune, error))
 // Note that the iteration order of a map is not stable.
 //
 // Possible Error values:
-//    - EmptyIterableError
+//   - EmptyIterableError
 func TransformCopyMapUnsafe[TKey comparable, TValue comparable, TValueOut any](container map[TKey]TValue, transformer func(TValue) TValueOut) (map[TKey]TValueOut, error) {
 	res := make(map[TKey]TValueOut)
 
@@ -1339,7 +1339,7 @@ func TransformCopyMapUnsafe[TKey comparable, TValue comparable, TValueOut any](c
 // Note that the transformer can return a different type than it's input.
 //
 // Possible Error values:
-//    - EmptyIterableError
+//   - EmptyIterableError
 func TransformCopySliceUnsafe[T any, TOut any](container []T, transformer func(T) TOut) ([]TOut, error) {
 	res := make([]TOut, 0, len(container))
 
@@ -1359,8 +1359,8 @@ func TransformCopySliceUnsafe[T any, TOut any](container []T, transformer func(T
 // Errors returned by transformer are propagated to the caller of TransformCopySlice.
 //
 // Possible Error values:
-//    - EmptyIterableError
-//    - ExecutionError
+//   - EmptyIterableError
+//   - ExecutionError
 func TransformCopyStringUnsafe(container string, transformer func(rune) rune) (string, error) {
 	var res bytes.Buffer
 
@@ -1381,7 +1381,7 @@ func TransformCopyStringUnsafe(container string, transformer func(rune) rune) (s
 // The elements are compared with binary_predicate.
 //
 // Possible Error values:
-//    - EmptyIterableError
+//   - EmptyIterableError
 func MinSlicePred[T constraints.Ordered](haystack []T, binary_predicate func(T, T) bool) (int, T, error) {
 	var min T
 	var iMin int
@@ -1405,7 +1405,7 @@ func MinSlicePred[T constraints.Ordered](haystack []T, binary_predicate func(T, 
 // The elements are compared with binary_predicate.
 //
 // Possible Error values:
-//    - EmptyIterableError
+//   - EmptyIterableError
 func MinMapPred[TKey comparable, TValue constraints.Ordered](haystack map[TKey]TValue, binary_predicate func(TValue, TValue) bool) (TKey, TValue, error) {
 	var min TValue
 	var val TValue
@@ -1434,7 +1434,7 @@ func MinMapPred[TKey comparable, TValue constraints.Ordered](haystack map[TKey]T
 // The elements are compared with binary_predicate.
 //
 // Possible Error values:
-//    - EmptyIterableError
+//   - EmptyIterableError
 func MinStringPred[T constraints.Ordered](haystack string, binary_predicate func(rune, rune) bool) (int, rune, error) {
 	var min rune
 	var iMin int
@@ -1459,7 +1459,7 @@ func MinStringPred[T constraints.Ordered](haystack string, binary_predicate func
 // The elements are compared with binary_predicate.
 //
 // Possible Error values:
-//    - EmptyIterableError
+//   - EmptyIterableError
 func MaxSlicePred[T constraints.Ordered](haystack []T, binary_predicate func(T, T) bool) (int, T, error) {
 	var max T
 	var IMax int
@@ -1483,7 +1483,7 @@ func MaxSlicePred[T constraints.Ordered](haystack []T, binary_predicate func(T, 
 // The elements are compared with binary_predicate.
 //
 // Possible Error values:
-//    - EmptyIterableError
+//   - EmptyIterableError
 func MaxMapPred[TKey comparable, TValue constraints.Ordered](haystack map[TKey]TValue, binary_predicate func(TValue, TValue) bool) (TKey, TValue, error) {
 	var max TValue
 	var keyMax TKey
@@ -1512,7 +1512,7 @@ func MaxMapPred[TKey comparable, TValue constraints.Ordered](haystack map[TKey]T
 // The elements are compared with binary_predicate.
 //
 // Possible Error values:
-//    - EmptyIterableError
+//   - EmptyIterableError
 func MaxStringPred[T constraints.Ordered](haystack string, binary_predicate func(rune, rune) bool) (int, rune, error) {
 	var max rune
 	var iMax int
@@ -1537,7 +1537,7 @@ func MaxStringPred[T constraints.Ordered](haystack string, binary_predicate func
 // The elements are compared with binary_predicate.
 //
 // Possible Error values:
-//    - EmptyIterableError
+//   - EmptyIterableError
 func MinMaxSlicePred[T constraints.Ordered](haystack []T, binary_predicate_min func(T, T) bool, binary_predicate_max func(T, T) bool) (int, int, T, T, error) {
 	var min T
 	var max T
@@ -1565,7 +1565,7 @@ func MinMaxSlicePred[T constraints.Ordered](haystack []T, binary_predicate_min f
 // The elements are compared with binary_predicate.
 //
 // Possible Error values:
-//    - EmptyIterableError
+//   - EmptyIterableError
 func MinMaxMapPred[TKey comparable, TValue constraints.Ordered](haystack map[TKey]TValue, binary_predicate_min func(TValue, TValue) bool, binary_predicate_max func(TValue, TValue) bool) (TKey, TKey, TValue, TValue, error) {
 	var min TValue
 	var max TValue
@@ -1603,7 +1603,7 @@ func MinMaxMapPred[TKey comparable, TValue constraints.Ordered](haystack map[TKe
 // The elements are compared with binary_predicate.
 //
 // Possible Error values:
-//    - EmptyIterableError
+//   - EmptyIterableError
 func MinMaxStringPred[T constraints.Ordered](haystack []T, binary_predicate_min func(T, T) bool, binary_predicate_max func(T, T) bool) (int, int, T, T, error) {
 	var min T
 	var max T
@@ -1630,3 +1630,42 @@ func MinMaxStringPred[T constraints.Ordered](haystack []T, binary_predicate_min 
 }
 
 // TODO: implement MinMaxIteratorPred
+
+// AccumulateSlice returns initialAccumulator after executing initialAccumulaator = binary_func(initialAccumulator, element) for each element.
+func AccumulateSlice[T any](container []T, initialAccumulator T, binary_func func(T, T) T) T {
+	for _, value := range container {
+		initialAccumulator = binary_func(initialAccumulator, value)
+	}
+
+	return initialAccumulator
+}
+
+// AccumulateMap returns initialAccumulator after executing initialAccumulaator = binary_func(initialAccumulator, element) for each element.
+// Note that the iteration order of a map is not stable.
+func AccumulateMap[TKey comparable, TValue comparable](container map[TKey]TValue, initialAccumulator TValue, binary_func func(TValue, TValue) TValue) TValue {
+	for _, value := range container {
+		initialAccumulator = binary_func(initialAccumulator, value)
+	}
+
+	return initialAccumulator
+}
+
+// AccumulateString returns initialAccumulator after executing initialAccumulaator = binary_func(initialAccumulator, element) for each element.
+func AccumulateString(container string, initialAccumulator rune, binary_func func(rune, rune) rune) rune {
+	for _, value := range container {
+		initialAccumulator = binary_func(initialAccumulator, value)
+	}
+
+	return initialAccumulator
+}
+
+// AccumulateIterator returns initialAccumulator after executing initialAccumulaator = binary_func(initialAccumulator, element) for each element.
+func AccumulateIterator[TKey any, TValue any](container ds.ReadForIndexIterator[TKey, TValue], initialAccumulator TValue, binary_func func(TValue, TValue) TValue) TValue {
+	for container.Next() {
+		value, _ := container.Get()
+		initialAccumulator = binary_func(initialAccumulator, value)
+
+	}
+
+	return initialAccumulator
+}
