@@ -62,12 +62,9 @@ parts := increased.SplitNthIterator(m)
 newParts := make([]goaoi.ReadForIndexIterator[int, int], len(parts))
 partsIter := parts.Beign()
 for partsIter.Next() {
-    // Pretend the input is larger and this actually makes sense.
-    go func() {
         part, _ := partsIter.Value()
         // O(1) because lazy, would be O(N) otherwise
         newparts = append(newParts, part.TransformIterator(functional.AddPartial(5))
-    }
 }
 
 // O(m) because lazy, would be O(N)
