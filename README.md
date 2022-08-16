@@ -15,181 +15,94 @@ Sister project: https://github.com/JonasMuehlmann/pyaoi
 
 ## How to use
 
-All functions live in the ```goaoi``` namespace, you can import it with ```import "goaoi"``` and then call the functions
-like this: ```goaoi.AllOf()```
-
-Documentation available at https://pkg.go.dev/github.com/JonasMuehlmann/goaoi.
-
-## Implemented functions
-
-The following list shows planned functions and whether they are implemented yet. Feel free to make a PR for a listed
-function's implementation. This list is subject to change at any time.
-<details> <summary>Click to expand!</summary>
-<p>
-
-### Non-modifying sequence operations
-
-- [x] all_of
-- [x] any_of
-- [x] none_of
-
-
-- [x] for_each
-
-- [x] count
-- [x] count_if
-
-- [x] mismatch
-
-- [x] find
-- [x] find_if
-- [x] find_end
-- [x] find_first_of
-- [x] adjacent_find
-
-
-- [x] copy_replace
-- [x] copy_replace_if
-- [x] copy_replace_if_not
-
-- [x] copy_except
-- [x] copy_except_if
-- [x] copy_except_if_not
-
-### Modifying sequence operations
-
-- [x] fill
-- [ ] fill_n
-
-
-- [x] transform
-
-
-- [ ] rotate
-
-
-- [ ] shift_left
-- [ ] shift_right
-
-
-- [ ] random_shuffle
-- [ ] shuffle
-
-
-- [ ] sample
-
-
-- [ ] unique
-- [ ] unique_copy
-
-### Partitioning operations
-
-- [ ] is_partitioned
-
-
-- [ ] partition
-- [ ] partition_copy
-
-
-- [ ] stable_partition
-
-
-- [ ] partition_point
-
-### Sorting operations
-
-- [ ] is_sorted
-- [ ] is_sorted_until
-
-
-- [ ] partial_sort
-- [ ] partial_sort_copy
-- [ ] stable_sort
-- [ ] nth_element
-
-### Binary search operations (on sorted ranges)
-
-- [ ] lower_bound
-- [ ] upper_bound
-
-
-- [ ] binary_search
-
-
-- [ ] equal_range
-
-### Other operations on sorted ranges
-
-- [ ] merge
-- [ ] implace_merge
-
-### Set operations (on sorted ranges)
-
-- [ ] includes
-
-
-- [ ] set_difference
-- [ ] set_intersection
-- [ ] set_symmetric_difference
-- [ ] set_union
-
-### Heap operations
-
-- [ ] is_heap
-- [ ] is_heap_until
-
-
-- [ ] make_heap
-
-
-- [ ] push_heap
-
-
-- [ ] pop_heap
-
-
-- [ ] sort_heap
-
-### Minimum/maximum operations
-
-- [x] max
-- [x] max_element
-- [x] min
-- [x] min_element
-- [x] minmax
-- [x] minmax_element
-
-
-- [ ] clamp
-
-### Comparison operations
-
-- [ ] lexicographical_compare
-- [ ] lexicographical_compare_threeway
-
-### Permutation operations
-
-- [ ] is_permutation
-
-
-- [ ] next_permutation
-- [ ] prev_permutation
-
-### Numeric operations (numeric header)
-
-- [ ] iota
-- [ ] accumulate
-- [ ] reduce
-- [ ] transform_reduce
-- [ ] inner_product
-- [ ] adjacent_difference
-- [ ] partial_sum
-- [ ] inclusive_scan
-- [ ] exclusive_scan
-- [ ] transform_inclusive_scan
-- [ ] transform_exclusive_scan
-</p>
-</details>
+All functions live in the ```goaoi``` namespace and most have separate implementations for maps, slices, strings and https://github.com/JonasMuehlmann/datastructures.go iterators.
+For usage examples, refer to the test files.
+
+API Documentation available at https://pkg.go.dev/github.com/JonasMuehlmann/goaoi.
+
+### Predicates and functional operators
+package [`functional`](https://pkg.go.dev/github.com/JonasMuehlmann/goaoi/functional) provides partially specializable predicates and functional operators.
+
+Example:
+```go
+import (
+	"github.com/JonasMuehlmann/goaoi"
+	"github.com/JonasMuehlmann/goaoi/functional"
+)
+
+
+// Result: 15
+sum := goaoi.AccumulateSlice([]int{1,2,3,4,5}, 0, functional.Add)
+// Result: 1, nil
+i, err := goaoi.FindIfSlice([]int{1,3,0,1,4,5}, 0, functional.AreEqualPartial(3))
+```
+
+### Lazy iterator adapters
+package [`iteratoradapters`](https://pkg.go.dev/github.com/JonasMuehlmann/goaoi/iterator_adapters) provides lazy iterator adapters for efficient iterator processing.
+The adapters wrap underlying ones and avoid altering, copying or allocating data.
+This is especially useful for chaining them on the same container like this (untested example without fully implemented API):
+```go
+import (
+	"github.com/JonasMuehlmann/goaoi"
+	"github.com/JonasMuehlmann/goaoi/functional"
+	"github.com/JonasMuehlmann/datastructures.go/lists/arraylist"
+)
+
+// NOTE: Complexities refer to space and or time
+
+// O(1)
+valuesOrig := arraylist.NewFromSlice([]int{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15})
+// O(1) because lazy, would be O(N) otherwise
+valid := valuesOrig.Begin().TakeWhileIterator(functional.IsLessThanEqualPartial(12))
+
+// O(m) because lazy, would be O(N) otherwise
+m := 4
+parts := increased.SplitNthIterator(m)
+
+newParts := make([]goaoi.ReadForIndexIterator[int, int], len(parts))
+partsIter := parts.Beign()
+for partsIter.Next() {
+    // Pretend the input is larger and this actually makes sense.
+    go func() {
+        part, _ := partsIter.Value()
+        // O(1) because lazy, would be O(N) otherwise
+        newparts = append(newParts, part.TransformIterator(functional.AddPartial(5))
+    }
+}
+
+// O(m) because lazy, would be O(N)
+joined := goaoi.JoinIterator(newParts...)
+// O(n) because the adapter's functionality need to be applied 
+// for materialization of the new data.
+// valuesOrig left unchanged
+valuesAfterCopy := arraylist.NewFromIterator(joined)
+```
+
+### Lazy generators
+package [`generators`](https://pkg.go.dev/github.com/JonasMuehlmann/goaoi/generators) provides lazy generators, which work similar to iterator adapters, but they do not reference existing data, instead they generate it themselves (lazily).
+Some generators have no defined end.
+
+Example:
+```go
+import (
+	"github.com/JonasMuehlmann/goaoi"
+	"github.com/JonasMuehlmann/goaoi/functional"
+	"github.com/JonasMuehlmann/goaoi/generators"
+	"github.com/JonasMuehlmann/datastructures.go/lists/arraylist"
+)
+
+// Generates 10 1s
+repeater := generators.NewRepeat(1, 10)
+
+// [1,1,1,1,1,1,1,1,1,1]
+firstValues := arraylist.NewFromIterator(repeater)
+
+// Generates infinite 1s
+infiniteRepeater := generators.NewRepeat(1, -1)
+
+// Infinite loop until OOM (Out of memory)
+firstValues := arraylist.NewFromIterator(infiniteRepeater)
+```
 
 ## License
 Copyright (C) 2021-2022 [Jonas Muehlmann](https://github.com/JonasMuehlmann)
