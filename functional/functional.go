@@ -1,4 +1,4 @@
-package goaoi
+package functional
 
 import "golang.org/x/exp/constraints"
 

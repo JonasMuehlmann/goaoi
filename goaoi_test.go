@@ -6,6 +6,7 @@ import (
 	"github.com/JonasMuehlmann/datastructures.go/ds"
 	"github.com/JonasMuehlmann/datastructures.go/lists/arraylist"
 	"github.com/JonasMuehlmann/goaoi"
+	"github.com/JonasMuehlmann/goaoi/functional"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -76,13 +77,13 @@ func Test_FindEndSlicePred(t *testing.T) {
 		err        error
 		name       string
 	}{
-		{[]int{1, 2, 3, 4}, []int{3, 4}, goaoi.AreEqual[int], 2, nil, "Found at end"},
-		{[]int{1, 2, 3, 4}, []int{1, 2}, goaoi.AreEqual[int], 0, nil, "Found at beginning"},
-		{[]int{1, 2, 3, 4}, []int{2, 3}, goaoi.AreEqual[int], 1, nil, "Found in middle"},
-		{[]int{1, 2, 3}, []int{1, 2, 3}, goaoi.AreEqual[int], 0, nil, "Found equal"},
-		{[]int{1, 2, 3}, []int{1, 4}, goaoi.AreEqual[int], 0, goaoi.ElementNotFoundError{}, "Not found"},
-		{[]int{}, []int{1, 2, 3}, goaoi.AreEqual[int], 0, goaoi.EmptyIterableError{}, "Super empty"},
-		{[]int{1, 2, 3}, []int{}, goaoi.AreEqual[int], 0, goaoi.EmptyIterableError{}, "Sub empty"},
+		{[]int{1, 2, 3, 4}, []int{3, 4}, functional.AreEqual[int], 2, nil, "Found at end"},
+		{[]int{1, 2, 3, 4}, []int{1, 2}, functional.AreEqual[int], 0, nil, "Found at beginning"},
+		{[]int{1, 2, 3, 4}, []int{2, 3}, functional.AreEqual[int], 1, nil, "Found in middle"},
+		{[]int{1, 2, 3}, []int{1, 2, 3}, functional.AreEqual[int], 0, nil, "Found equal"},
+		{[]int{1, 2, 3}, []int{1, 4}, functional.AreEqual[int], 0, goaoi.ElementNotFoundError{}, "Not found"},
+		{[]int{}, []int{1, 2, 3}, functional.AreEqual[int], 0, goaoi.EmptyIterableError{}, "Super empty"},
+		{[]int{1, 2, 3}, []int{}, functional.AreEqual[int], 0, goaoi.EmptyIterableError{}, "Sub empty"},
 	}
 	for _, tc := range tcs {
 		tc := tc
@@ -110,13 +111,13 @@ func Test_FindFirstOfSlicePred(t *testing.T) {
 		err        error
 		name       string
 	}{
-		{[]int{1, 2, 3, 4}, []int{4, 10}, goaoi.AreEqual[int], 3, nil, "Found at end"},
-		{[]int{1, 2, 3, 4}, []int{1, 2}, goaoi.AreEqual[int], 0, nil, "Found at beginning"},
-		{[]int{1, 2, 3, 4}, []int{3, 4}, goaoi.AreEqual[int], 2, nil, "Found in middle"},
-		{[]int{1}, []int{1}, goaoi.AreEqual[int], 0, nil, "Found equal"},
-		{[]int{1, 2, 3}, []int{4, 5}, goaoi.AreEqual[int], 0, goaoi.ElementNotFoundError{}, "Not found"},
-		{[]int{}, []int{1, 2, 3}, goaoi.AreEqual[int], 0, goaoi.EmptyIterableError{}, "Super empty"},
-		{[]int{1, 2, 3}, []int{}, goaoi.AreEqual[int], 0, goaoi.EmptyIterableError{}, "Sub empty"},
+		{[]int{1, 2, 3, 4}, []int{4, 10}, functional.AreEqual[int], 3, nil, "Found at end"},
+		{[]int{1, 2, 3, 4}, []int{1, 2}, functional.AreEqual[int], 0, nil, "Found at beginning"},
+		{[]int{1, 2, 3, 4}, []int{3, 4}, functional.AreEqual[int], 2, nil, "Found in middle"},
+		{[]int{1}, []int{1}, functional.AreEqual[int], 0, nil, "Found equal"},
+		{[]int{1, 2, 3}, []int{4, 5}, functional.AreEqual[int], 0, goaoi.ElementNotFoundError{}, "Not found"},
+		{[]int{}, []int{1, 2, 3}, functional.AreEqual[int], 0, goaoi.EmptyIterableError{}, "Super empty"},
+		{[]int{1, 2, 3}, []int{}, functional.AreEqual[int], 0, goaoi.EmptyIterableError{}, "Sub empty"},
 	}
 	for _, tc := range tcs {
 		tc := tc
@@ -144,13 +145,13 @@ func Test_FindFirstOfMapPred(t *testing.T) {
 		err        error
 		name       string
 	}{
-		{map[string]int{"a": 1, "b": 2, "c": 3, "d": 4}, []int{4, 10}, goaoi.AreEqual[int], "d", nil, "Found at end"},
-		{map[string]int{"a": 1, "b": 2, "c": 3, "d": 4}, []int{1, -1}, goaoi.AreEqual[int], "a", nil, "Found at beginning"},
-		{map[string]int{"a": 1, "b": 2, "c": 3, "d": 4}, []int{3, 5}, goaoi.AreEqual[int], "c", nil, "Found in middle"},
-		{map[string]int{"a": 1}, []int{1}, goaoi.AreEqual[int], "a", nil, "Found equal"},
-		{map[string]int{"a": 1, "b": 2, "c": 3}, []int{4, 5}, goaoi.AreEqual[int], "", goaoi.ElementNotFoundError{}, "Not found"},
-		{map[string]int{}, []int{1, 2, 3}, goaoi.AreEqual[int], "", goaoi.EmptyIterableError{}, "Super empty"},
-		{map[string]int{"a": 1, "b": 2, "c": 3}, []int{}, goaoi.AreEqual[int], "", goaoi.EmptyIterableError{}, "Sub empty"},
+		{map[string]int{"a": 1, "b": 2, "c": 3, "d": 4}, []int{4, 10}, functional.AreEqual[int], "d", nil, "Found at end"},
+		{map[string]int{"a": 1, "b": 2, "c": 3, "d": 4}, []int{1, -1}, functional.AreEqual[int], "a", nil, "Found at beginning"},
+		{map[string]int{"a": 1, "b": 2, "c": 3, "d": 4}, []int{3, 5}, functional.AreEqual[int], "c", nil, "Found in middle"},
+		{map[string]int{"a": 1}, []int{1}, functional.AreEqual[int], "a", nil, "Found equal"},
+		{map[string]int{"a": 1, "b": 2, "c": 3}, []int{4, 5}, functional.AreEqual[int], "", goaoi.ElementNotFoundError{}, "Not found"},
+		{map[string]int{}, []int{1, 2, 3}, functional.AreEqual[int], "", goaoi.EmptyIterableError{}, "Super empty"},
+		{map[string]int{"a": 1, "b": 2, "c": 3}, []int{}, functional.AreEqual[int], "", goaoi.EmptyIterableError{}, "Sub empty"},
 	}
 	for _, tc := range tcs {
 		tc := tc
@@ -466,9 +467,9 @@ func Test_MismatchSlicePred(t *testing.T) {
 		err        error
 		name       string
 	}{
-		{[]int{1, 2, 3, 4}, []int{1, 1, 3, 4}, goaoi.AreEqual[int], 1, nil, "Found"},
-		{[]int{1, 2, 3, 4}, []int{1, 2, 3, 4}, goaoi.AreEqual[int], 0, goaoi.ElementNotFoundError{}, "Not found"},
-		{[]int{}, []int{1, 2}, goaoi.AreEqual[int], 0, goaoi.EmptyIterableError{}, "Empty"},
+		{[]int{1, 2, 3, 4}, []int{1, 1, 3, 4}, functional.AreEqual[int], 1, nil, "Found"},
+		{[]int{1, 2, 3, 4}, []int{1, 2, 3, 4}, functional.AreEqual[int], 0, goaoi.ElementNotFoundError{}, "Not found"},
+		{[]int{}, []int{1, 2}, functional.AreEqual[int], 0, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
 		tc := tc
@@ -495,12 +496,12 @@ func Test_AdjacentFindPred(t *testing.T) {
 		err        error
 		name       string
 	}{
-		{[]int{1, 1, 2, 3}, goaoi.AreEqual[int], 0, nil, "Found at beginning"},
-		{[]int{1, 2, 2}, goaoi.AreEqual[int], 1, nil, "Found at end"},
-		{[]int{1, 2, 2, 3, 4}, goaoi.AreEqual[int], 1, nil, "Found in middle"},
-		{[]int{1, 2, 3, 4}, goaoi.AreEqual[int], 0, goaoi.ElementNotFoundError{}, "Not found"},
-		{[]int{}, goaoi.AreEqual[int], 0, goaoi.EmptyIterableError{}, "Empty"},
-		{[]int{1}, goaoi.AreEqual[int], 0, goaoi.ElementNotFoundError{}, "Only one element"},
+		{[]int{1, 1, 2, 3}, functional.AreEqual[int], 0, nil, "Found at beginning"},
+		{[]int{1, 2, 2}, functional.AreEqual[int], 1, nil, "Found at end"},
+		{[]int{1, 2, 2, 3, 4}, functional.AreEqual[int], 1, nil, "Found in middle"},
+		{[]int{1, 2, 3, 4}, functional.AreEqual[int], 0, goaoi.ElementNotFoundError{}, "Not found"},
+		{[]int{}, functional.AreEqual[int], 0, goaoi.EmptyIterableError{}, "Empty"},
+		{[]int{1}, functional.AreEqual[int], 0, goaoi.ElementNotFoundError{}, "Only one element"},
 	}
 	for _, tc := range tcs {
 		tc := tc
@@ -1274,9 +1275,9 @@ func Test_MinSlicePred(t *testing.T) {
 		err        error
 		name       string
 	}{
-		{[]int{1, 2, 3}, goaoi.IsLessThan[int], 1, nil, "Found at beginning"},
-		{[]int{2, 3, 1}, goaoi.IsLessThan[int], 1, nil, "Found at end"},
-		{[]int{}, goaoi.IsLessThan[int], 0, goaoi.EmptyIterableError{}, "Empty"},
+		{[]int{1, 2, 3}, functional.IsLessThan[int], 1, nil, "Found at beginning"},
+		{[]int{2, 3, 1}, functional.IsLessThan[int], 1, nil, "Found at end"},
+		{[]int{}, functional.IsLessThan[int], 0, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
 		tc := tc
@@ -1303,9 +1304,9 @@ func Test_MinMapPred(t *testing.T) {
 		err        error
 		name       string
 	}{
-		{map[string]int{"a": 1, "b": 2, "c": 3}, goaoi.IsLessThan[int], 1, nil, "Found at beginning"},
-		{map[string]int{"a": 2, "b": 3, "c": 1}, goaoi.IsLessThan[int], 1, nil, "Found at end"},
-		{map[string]int{}, goaoi.IsLessThan[int], 0, goaoi.EmptyIterableError{}, "Empty"},
+		{map[string]int{"a": 1, "b": 2, "c": 3}, functional.IsLessThan[int], 1, nil, "Found at beginning"},
+		{map[string]int{"a": 2, "b": 3, "c": 1}, functional.IsLessThan[int], 1, nil, "Found at end"},
+		{map[string]int{}, functional.IsLessThan[int], 0, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
 		tc := tc
@@ -1332,9 +1333,9 @@ func Test_MaxSlicePred(t *testing.T) {
 		err        error
 		name       string
 	}{
-		{[]int{1, 2, 3}, goaoi.IsGreaterThan[int], 3, nil, "Found at beginning"},
-		{[]int{2, 3, 1}, goaoi.IsGreaterThan[int], 3, nil, "Found at end"},
-		{[]int{}, goaoi.IsGreaterThan[int], 0, goaoi.EmptyIterableError{}, "Empty"},
+		{[]int{1, 2, 3}, functional.IsGreaterThan[int], 3, nil, "Found at beginning"},
+		{[]int{2, 3, 1}, functional.IsGreaterThan[int], 3, nil, "Found at end"},
+		{[]int{}, functional.IsGreaterThan[int], 0, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
 		tc := tc
@@ -1361,9 +1362,9 @@ func Test_MaxMapPred(t *testing.T) {
 		err        error
 		name       string
 	}{
-		{map[string]int{"a": 1, "b": 2, "c": 3}, goaoi.IsGreaterThan[int], 3, nil, "Found at beginning"},
-		{map[string]int{"a": 2, "b": 3, "c": 1}, goaoi.IsGreaterThan[int], 3, nil, "Found at end"},
-		{map[string]int{}, goaoi.IsGreaterThan[int], 0, goaoi.EmptyIterableError{}, "Empty"},
+		{map[string]int{"a": 1, "b": 2, "c": 3}, functional.IsGreaterThan[int], 3, nil, "Found at beginning"},
+		{map[string]int{"a": 2, "b": 3, "c": 1}, functional.IsGreaterThan[int], 3, nil, "Found at end"},
+		{map[string]int{}, functional.IsGreaterThan[int], 0, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
 		tc := tc
@@ -1392,9 +1393,9 @@ func Test_MinMaxSlicePred(t *testing.T) {
 		err            error
 		name           string
 	}{
-		{[]int{1, 2, 3}, goaoi.IsLessThan[int], goaoi.IsGreaterThan[int], 1, 3, nil, "Found at beginning"},
-		{[]int{2, 3, 1}, goaoi.IsLessThan[int], goaoi.IsGreaterThan[int], 1, 3, nil, "Found at end"},
-		{[]int{}, goaoi.IsLessThan[int], goaoi.IsGreaterThan[int], 0, 0, goaoi.EmptyIterableError{}, "Empty"},
+		{[]int{1, 2, 3}, functional.IsLessThan[int], functional.IsGreaterThan[int], 1, 3, nil, "Found at beginning"},
+		{[]int{2, 3, 1}, functional.IsLessThan[int], functional.IsGreaterThan[int], 1, 3, nil, "Found at end"},
+		{[]int{}, functional.IsLessThan[int], functional.IsGreaterThan[int], 0, 0, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
 		tc := tc
@@ -1424,9 +1425,9 @@ func Test_MinMaxMapPred(t *testing.T) {
 		err            error
 		name           string
 	}{
-		{map[string]int{"a": 1, "b": 2, "c": 3}, goaoi.IsLessThan[int], goaoi.IsGreaterThan[int], 1, 3, nil, "Found at beginning"},
-		{map[string]int{"a": 2, "b": 3, "c": 1}, goaoi.IsLessThan[int], goaoi.IsGreaterThan[int], 1, 3, nil, "Found at end"},
-		{map[string]int{}, goaoi.IsLessThan[int], goaoi.IsGreaterThan[int], 0, 0, goaoi.EmptyIterableError{}, "Empty"},
+		{map[string]int{"a": 1, "b": 2, "c": 3}, functional.IsLessThan[int], functional.IsGreaterThan[int], 1, 3, nil, "Found at beginning"},
+		{map[string]int{"a": 2, "b": 3, "c": 1}, functional.IsLessThan[int], functional.IsGreaterThan[int], 1, 3, nil, "Found at end"},
+		{map[string]int{}, functional.IsLessThan[int], functional.IsGreaterThan[int], 0, 0, goaoi.EmptyIterableError{}, "Empty"},
 	}
 	for _, tc := range tcs {
 		tc := tc
